@@ -468,6 +468,18 @@ impl Database {
         Ok(imported)
     }
 
+    pub fn mark_stale_runs_failed(&self) -> Result<usize> {
+        let conn = self.conn.lock().unwrap();
+        let now = chrono::Utc::now().to_rfc3339();
+
+        let affected = conn.execute(
+            "UPDATE runs SET status = 'failed', outcome = 'failed', completed_at = ? WHERE status = 'running'",
+            params![now],
+        )?;
+
+        Ok(affected)
+    }
+
     pub fn upsert_run_status(
         &self,
         run_id: &str,
@@ -481,13 +493,13 @@ impl Database {
         conn.execute(
             "INSERT INTO runs (run_id, status, started_at, completed_at, outcome, task_id, strategy_id, provider, model_slug, fixture_id, turn_count, raw_data)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-             ON CONFLICT(run_id) DO UPDATE SET status = excluded.status, raw_data = COALESCE(excluded.raw_data, runs.raw_data)",
+             ON CONFLICT(run_id) DO UPDATE SET status = excluded.status, outcome = excluded.outcome, completed_at = excluded.completed_at, raw_data = COALESCE(excluded.raw_data, runs.raw_data)",
             params![
                 run_id,
                 status,
                 now,
                 if status == "completed" || status == "failed" { now.clone() } else { String::new() },
-                if status == "failed" { "failed" } else { "running" },
+                status,  // outcome matches status
                 details.unwrap_or("benchmark"),
                 "benchmark",
                 "openrouter",

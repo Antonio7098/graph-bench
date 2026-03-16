@@ -54,6 +54,11 @@ async fn main() -> anyhow::Result<()> {
 
     let db_path = data_dir.join("graphbench.db");
     let db = Arc::new(Database::new(&db_path)?);
+    
+    // Mark any stale "running" runs as failed
+    if let Err(e) = db.mark_stale_runs_failed() {
+        tracing::warn!("Failed to mark stale runs as failed: {}", e);
+    }
 
     let event_stream = EventStream::with_db(db.clone());
 
