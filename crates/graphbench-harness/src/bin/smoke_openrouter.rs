@@ -1,14 +1,15 @@
+use clap::Parser;
 use graphbench_core::{
-    GraphWorkspace, RepresentationLevel, fixtures::FixtureRepository, load_task_spec,
+    fixtures::FixtureRepository, load_task_spec, GraphWorkspace, RepresentationLevel,
 };
 use graphbench_harness::{
-    HarnessEvent, HarnessInput, HarnessRunConfig, HarnessRunner, ObjectiveState, ToolRegistry,
     ensure_python_query_runtime_ready, graph_then_targeted_lexical_read,
     graph_tools::LiveGraphState,
     observability::{
-        BlobStore, CapturedEvent, RecordedModelInvocation, build_observability_bundle,
+        build_observability_bundle, BlobStore, CapturedEvent, RecordedModelInvocation,
     },
     openrouter::OpenRouterClient,
+    HarnessEvent, HarnessInput, HarnessRunConfig, HarnessRunner, ObjectiveState, ToolRegistry,
 };
 use sha2::Digest;
 use std::collections::BTreeMap;
@@ -16,6 +17,63 @@ use std::env;
 use std::fs;
 use std::path::PathBuf;
 use std::sync::{Arc, Mutex};
+
+#[derive(Parser, Debug)]
+#[command(name = "smoke_openrouter")]
+#[command(about = "Run a configurable benchmark with OpenRouter", long_about = None)]
+struct Args {
+    /// Path to the task spec JSON file
+    #[arg(long, default_value = "tasks/prepare-to-edit/task-01.task.json")]
+    task_spec: PathBuf,
+
+    /// Path to the fixture JSON file
+    #[arg(long, default_value = "fixtures/graphbench-internal/fixture.json")]
+    fixture: PathBuf,
+
+    /// Strategy to use (e.g., "graph_then_targeted_lexical_read")
+    #[arg(long, default_value = "graph_then_targeted_lexical_read")]
+    strategy: String,
+
+    /// OpenRouter model ID (e.g., "nvidia/nemotron-3-nano-30b-a3b:free")
+    #[arg(long)]
+    model: Option<String>,
+
+    /// Maximum number of turns
+    #[arg(long, default_value_t = 48)]
+    turn_budget: u32,
+
+    /// Timeout in milliseconds
+    #[arg(long, default_value_t = 300_000)]
+    timeout_ms: u64,
+
+    /// Token budget
+    #[arg(long, default_value_t = 2_000_000)]
+    token_budget: u32,
+
+    /// Prompt headroom
+    #[arg(long, default_value_t = 24576)]
+    prompt_headroom: u32,
+
+    /// Run ID (optional, auto-generated if not provided)
+    #[arg(long)]
+    run_id: Option<String>,
+
+    /// OpenRouter API key (optional, reads from OPENROUTER_API_KEY env if not provided)
+    #[arg(long)]
+    api_key: Option<String>,
+
+    /// Graph seed overview limit
+    #[arg(long, default_value_t = 2)]
+    seed_overview: u32,
+
+    /// Initial file to select
+    #[arg(long, default_value = "crates/graphbench-core/src/artifacts.rs")]
+    initial_select: String,
+
+    /// Representation level for initial select
+    #[arg(long, default_value = "L1")]
+    representation_level: String,
+}
 
 fn main() {
     if let Err(error) = run() {
@@ -25,43 +83,58 @@ fn main() {
 }
 
 fn run() -> Result<(), graphbench_core::AppError> {
+    let args = Args::parse();
+
     let dotenv = load_dotenv()?;
-    let api_key = read_env("OPENROUTER_API_KEY", &dotenv)?;
-    let model = read_env("OPENROUTER_MODEL_ID", &dotenv)?;
-    let task_spec_path = env::var("GRAPHBENCH_TASK_SPEC_PATH")
-        .ok()
-        .unwrap_or_else(|| "tasks/prepare-to-edit/task-01.task.json".to_owned());
+    let api_key = args
+        .api_key
+        .or_else(|| env::var("OPENROUTER_API_KEY").ok())
+        .or_else(|| dotenv.get("OPENROUTER_API_KEY").cloned())
+        .ok_or_else(|| missing_env("OPENROUTER_API_KEY"))?;
+
+    let model = args
+        .model
+        .or_else(|| env::var("OPENROUTER_MODEL_ID").ok())
+        .or_else(|| dotenv.get("OPENROUTER_MODEL_ID").cloned())
+        .unwrap_or_else(|| "nvidia/nemotron-3-nano-30b-a3b:free".to_owned());
 
     let fixture_repository = FixtureRepository;
-    let fixture_path = PathBuf::from("fixtures/graphbench-internal/fixture.json");
-    let (fixture, resolution) = fixture_repository.load(&fixture_path)?;
+    let (fixture, resolution) = fixture_repository.load(&args.fixture)?;
     let workspace = GraphWorkspace::load(fixture.clone(), &resolution)?;
     let mut graph_session = workspace.session();
     let events = Arc::new(Mutex::new(Vec::<CapturedEvent>::new()));
-    graph_session.seed_overview(Some(2));
+    graph_session.seed_overview(Some(args.seed_overview));
     record_event(
         &events,
         HarnessEvent::GraphSessionMutated {
-            mutation: "seed_overview(limit=2)".to_owned(),
+            mutation: format!("seed_overview(limit={})", args.seed_overview),
             graph_session_hash: hash_graph_session(&graph_session.session_json()?),
         },
     );
-    graph_session.select(
-        "crates/graphbench-core/src/artifacts.rs",
-        RepresentationLevel::L1,
-    )?;
+
+    let rep_level = match args.representation_level.to_uppercase().as_str() {
+        "L0" => RepresentationLevel::L0,
+        "L1" => RepresentationLevel::L1,
+        "L2" => RepresentationLevel::L2,
+        _ => RepresentationLevel::L1,
+    };
+
+    graph_session.select(&args.initial_select, rep_level)?;
     record_event(
         &events,
         HarnessEvent::GraphSessionMutated {
-            mutation: "select(crates/graphbench-core/src/artifacts.rs,L1)".to_owned(),
+            mutation: format!(
+                "select({},{})",
+                args.initial_select, args.representation_level
+            ),
             graph_session_hash: hash_graph_session(&graph_session.session_json()?),
         },
     );
-    graph_session.hydrate_exact_proof("crates/graphbench-core/src/artifacts.rs", 8)?;
+    graph_session.hydrate_exact_proof(&args.initial_select, 8)?;
     record_event(
         &events,
         HarnessEvent::GraphSessionMutated {
-            mutation: "hydrate_exact_proof(crates/graphbench-core/src/artifacts.rs,8)".to_owned(),
+            mutation: format!("hydrate_exact_proof({},8)", args.initial_select),
             graph_session_hash: hash_graph_session(&graph_session.session_json()?),
         },
     );
@@ -76,16 +149,26 @@ fn run() -> Result<(), graphbench_core::AppError> {
     let mut tools = ToolRegistry::default();
     live_graph_state.register_tools(&mut tools);
 
-    let task = load_task_spec(&task_spec_path)?;
+    let task = load_task_spec(&args.task_spec)?;
     let snapshot = live_graph_state.snapshot()?;
-    let input = HarnessInput {
-        run_id: format!(
+
+    let run_id = args.run_id.unwrap_or_else(|| {
+        format!(
             "smoke-openrouter-{}",
             std::time::SystemTime::now()
                 .duration_since(std::time::UNIX_EPOCH)
                 .expect("time should move forward")
                 .as_secs()
-        ),
+        )
+    });
+
+    let strategy = match args.strategy.as_str() {
+        "graph_then_targeted_lexical_read" => graph_then_targeted_lexical_read(),
+        _ => graph_then_targeted_lexical_read(),
+    };
+
+    let input = HarnessInput {
+        run_id: run_id.clone(),
         fixture_id: fixture.fixture_id,
         task_id: task.task_id.clone(),
         objective: ObjectiveState {
@@ -106,12 +189,12 @@ fn run() -> Result<(), graphbench_core::AppError> {
         graph_prompt: snapshot.graph_prompt,
         graph_session_snapshot: snapshot.graph_session_snapshot,
         config: HarnessRunConfig {
-            turn_budget: task.turn_budget.max(48),
-            timeout_ms: 300_000,
-            token_budget: 2_000_000,
-            prompt_headroom: 24_576,
+            turn_budget: args.turn_budget.max(48),
+            timeout_ms: args.timeout_ms,
+            token_budget: args.token_budget,
+            prompt_headroom: args.prompt_headroom,
             prompt_version: "v1".to_owned(),
-            strategy: graph_then_targeted_lexical_read(),
+            strategy,
             harness_version: "0.1.0".to_owned(),
         },
     };
@@ -200,17 +283,7 @@ fn load_dotenv() -> Result<BTreeMap<String, String>, graphbench_core::AppError> 
     Ok(values)
 }
 
-fn read_env(
-    key: &'static str,
-    dotenv: &BTreeMap<String, String>,
-) -> Result<String, graphbench_core::AppError> {
-    env::var(key)
-        .ok()
-        .or_else(|| dotenv.get(key).cloned())
-        .ok_or_else(|| missing_env(key))
-}
-
-fn missing_env(key: &'static str) -> graphbench_core::AppError {
+fn missing_env(key: &str) -> graphbench_core::AppError {
     graphbench_core::AppError::new(
         graphbench_core::ErrorCode::ConfigurationInvalid,
         format!("missing required environment variable {key}"),

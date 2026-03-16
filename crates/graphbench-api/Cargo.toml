@@ -1,0 +1,28 @@
+[package]
+name = "graphbench-api"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+
+[dependencies]
+axum = { version = "0.7", features = ["ws", "macros"] }
+tokio = { version = "1", features = ["full"] }
+tokio-tungstenite = "0.21"
+futures-util = "0.3"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+rusqlite = { version = "0.38", features = ["bundled"] }
+chrono = { version = "0.4", features = ["serde"] }
+uuid = { version = "1", features = ["v4"] }
+tower = "0.4"
+tower-http = { version = "0.5", features = ["cors"] }
+tracing = "0.1"
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+tracing-appender = "0.2"
+anyhow = "1"
+thiserror = "1"
+dotenv = "0.15"
+rand = "0.8"
+
+graphbench-core = { path = "../graphbench-core" }
+graphbench-harness = { path = "../graphbench-harness" }
