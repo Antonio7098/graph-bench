@@ -209,6 +209,7 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
   const [availableTasks, setAvailableTasks] = useState<string[]>([]);
   const [availableFixtures, setAvailableFixtures] = useState<string[]>([]);
   const [loadingOptions, setLoadingOptions] = useState(true);
+  const [optionsError, setOptionsError] = useState<string | null>(null);
   const logsEndRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
 
@@ -236,6 +237,7 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
         setAvailableTasks(tasks);
         setAvailableFixtures(fixtures);
       } catch (e) {
+        setOptionsError("API unavailable. Start the API server to load benchmark options.");
         console.error("Failed to load options:", e);
       } finally {
         setLoadingOptions(false);
@@ -393,9 +395,17 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
         
         {status === "idle" && (
           <div className="modal-body">
-            {loadingOptions ? (
+            {optionsError ? (
+              <div className="error-message" style={{ padding: "1rem", background: "rgba(239, 68, 68, 0.1)", border: "1px solid #ef4444", borderRadius: "8px", color: "#ef4444" }}>
+                {optionsError}
+              </div>
+            ) : loadingOptions ? (
               <div className="loading">
                 <div className="spinner" />
+              </div>
+            ) : availableTasks.length === 0 || availableFixtures.length === 0 || availableStrategies.length === 0 ? (
+              <div className="error-message" style={{ padding: "1rem", background: "rgba(239, 68, 68, 0.1)", border: "1px solid #ef4444", borderRadius: "8px", color: "#ef4444" }}>
+                No benchmark options loaded. Start the API server to load options.
               </div>
             ) : (
               <>
@@ -563,7 +573,7 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
             {status === "complete" ? "Done" : status === "running" ? "Cancel" : "Cancel"}
           </button>
           {status === "idle" && (
-            <button className="modal-btn primary" onClick={handleRun} disabled={loading}>
+            <button className="modal-btn primary" onClick={handleRun} disabled={loading || loadingOptions || !!optionsError || availableTasks.length === 0}>
               Run
             </button>
           )}
