@@ -406,7 +406,9 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
                     onChange={(e) => setTaskSpecPath(e.target.value)}
                   >
                     {availableTasks.map(task => (
-                      <option key={task} value={`tasks/${task}`}>{task}</option>
+                      <option key={task} value={`tasks/${task}`}>
+                        {task.split('/').pop()}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -418,7 +420,9 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
                     onChange={(e) => setFixturePath(e.target.value)}
                   >
                     {availableFixtures.map(fixture => (
-                      <option key={fixture} value={`fixtures/${fixture}`}>{fixture}</option>
+                      <option key={fixture} value={`fixtures/${fixture}`}>
+                        {fixture.split('/').pop()}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -429,9 +433,16 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
                     value={strategy}
                     onChange={(e) => setStrategy(e.target.value)}
                   >
-                    {availableStrategies.map(s => (
-                      <option key={s} value={s}>{s}</option>
-                    ))}
+                    {availableStrategies.map(s => {
+                      const displayName = s
+                        .replace(/-/g, ' ')
+                        .replace(/\b\w/g, l => l.toUpperCase());
+                      return (
+                        <option key={s} value={s}>
+                          {displayName}
+                        </option>
+                      );
+                    })}
                   </select>
                 </div>
 
