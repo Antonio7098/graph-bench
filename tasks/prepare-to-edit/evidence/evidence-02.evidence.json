@@ -1,0 +1,43 @@
+{
+  "evidence_spec_id": "evidence.prepare-edit.fixture-loading",
+  "schema_version": 1,
+  "required_facts": [
+    {
+      "fact_id": "fixture-manifest-stores-commit-sha",
+      "description": "The fixture manifest preserves a pinned commit SHA and mirror policy.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "fixtures/graphbench-internal/fixture.json" },
+        { "kind": "excerpt", "value": "\"commit_sha\"" }
+      ]
+    },
+    {
+      "fact_id": "fixture-loader-validates-snapshot-hash",
+      "description": "Fixture loading recomputes and validates the graph snapshot identity.",
+      "acceptable_proofs": [
+        { "kind": "coderef", "value": "crates/graphbench-core/src/fixtures.rs" },
+        { "kind": "symbol", "value": "graphbench_core::fixtures::validate_snapshot_identity" }
+      ]
+    }
+  ],
+  "supporting_facts": [
+    {
+      "fact_id": "fixture-loader-resolves-relative-paths",
+      "description": "Fixture repository and snapshot paths are resolved relative to the manifest directory.",
+      "acceptable_proofs": [
+        { "kind": "excerpt", "value": "manifest_dir.join" }
+      ]
+    }
+  ],
+  "distractor_facts": [
+    {
+      "fact_id": "trace-directory-is-a-fixture-input",
+      "description": "Trace outputs are not fixture inputs.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "traces/README.md" }
+      ]
+    }
+  ],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test internal_fixture_loads" }
+  ]
+}

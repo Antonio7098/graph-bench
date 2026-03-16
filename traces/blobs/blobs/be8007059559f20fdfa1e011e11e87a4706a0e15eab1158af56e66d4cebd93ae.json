@@ -1,0 +1,18 @@
+{
+  "text": "{\n\"acquired_fact_ids\": [\n    \"artifacts.rs:FIXTURE_MANIFEST_SCHEMA_VERSION\"\n  ],\n  \"assistant_message\": \"Located schema version constants in artifacts.rs\",\n  \"kind\": \"complete\",\n  \"model_slug\": \"openai\",\n  \"prompt_version\": \"v1\",\n  \"provider\": \"openai\",\n  \"readiness_state\": \"ready_to_edit\"\n}",
+  "thinking": null,
+  "tool_calls": null,
+  "usage": {
+    "completion_tokens": 982,
+    "completion_tokens_details": {
+      "audio_tokens": 0,
+      "reasoning_tokens": 916
+    },
+    "prompt_tokens": 926,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0
+    },
+    "total_tokens": 1908
+  }
+}

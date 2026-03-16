@@ -1,0 +1,89 @@
+{
+  "provider": "openrouter",
+  "request": {
+    "max_tokens": 2048,
+    "messages": [
+      {
+        "content": [
+          {
+            "text": "You are GraphBench's model runtime. Reply with JSON only. Do not use markdown fences.",
+            "type": "text"
+          }
+        ],
+        "role": "system"
+      },
+      {
+        "content": "## Base Runtime Instructions\nGraphBench runtime. Stay bounded, typed, and evidence-oriented.\n\n## UCL Command Reference\n\n## Rules\n1. Output ONLY the UCL command(s), no explanations or markdown\n2. Use exact block IDs as provided\n3. String values must be quoted with double quotes\n4. Block IDs are short numeric IDs (1, 2, 3, etc.)\n5. Do NOT use operators like + for string concatenation - just provide the full value\n6. Responses must be schema-valid.\n\n## Response Contract\nReturn JSON only with this exact shape: {{\"kind\":\"think|tool_call|complete\",\"assistant_message\":\"<brief status>\",\"tool_call\":{{\"tool_name\":\"<one registered tool name>\",\"payload\":{{}}}},\"acquired_fact_ids\":[\"<fact id>\"],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}}. Use null or omit tool_call unless kind is tool_call. When kind is tool_call, tool_call.tool_name must exactly match one of the registered tool names shown below. Do not invent helper tools, verifier tools, or meta tools.\n\n## Objective State\nTask: Gather the evidence required to edit fixture loading while preserving pinned commit validation, local path resolution, and graph snapshot identity checks.\nClass: prepare_to_edit\nAllowed Tools:\nread_file\nlist_dir\nsearch\nVerification Targets:\ncommand: cargo test internal_fixture_loads\n\n## Selected History\nGather the evidence required to edit fixture loading while preserving pinned commit validation, local path resolution, and graph snapshot identity checks. | searching for fixture-related evidence | tool_call_summary search {status:unknown,path:,line_count:0,match_count:0,fields:[pattern]}\ntool_result search {\"exit_code\":0,\"matches\":[\"./tasks/prepare-to-edit/task-04.task.json:4:  \\\"fixture_id\\\": \\\"graphbench.internal\\\",\",\"./docs/tasks-and-evidence.md:9:Every task runs against a reproducible fixture.\",\"./docs/tasks-and-evidence.md:11:A fixture should define:\",\"./docs/tasks-and-evidence.md:18:- optional fixture notes\",\"./docs/tasks-and-evidence.md:29:- `fixture_id`\",\"./docs/tasks-and-evidence.md:181:- one seed fixture repo\",\"./docs/artifacts-and-schemas.md:25:- fixture manifest\",\"./docs/artifacts-and-schemas.md:38:fixture_id: string\",\"./docs/artifacts-and-schemas.md:62:fixture_id: string\",\"./docs/artifacts-and-schemas.md:136:fixture_id: string\",\"./docs/artifacts-and-schemas.md:198:fixture_id: string\",\"./docs/artifacts-and-schemas.md:203:  fixture_manifest: integer\",\"./tasks/prepare-to-edit/evidence/evidence-07.evidence.json:6:      \\\"fact_id\\\": \\\"roadmap-tracks-foundation-schema-fixture-task-work\\\",\",\"./tasks/prepare-to-edit/evidence/evidence-07.evidence.json:7:      \\\"description\\\": \\\"The roadmap explicitly tracks foundation, schema, fixture, and task/evidence work items.\\\",\",\"./tasks/prepare-to-edit/evidence/evidence-07.evidence.json:18:        { \\\"kind\\\": \\\"excerpt\\\", \\\"value\\\": \\\"`schemas/`, `fixtures/`, `tasks/`, `strategies/`, `traces/`, `reports/`\\\" }\",\"./docs/harness.md:252:- fixture id\",\"./schemas/task-spec.schema.json:10:    \\\"fixture_id\\\",\",\"./schemas/task-spec.schema.json:28:    \\\"fixture_id\\\": { \\\"type\\\": \\\"string\\\" },\",\"./docs/development-plan.md:9:Do not start with a large external fixture zoo.\",\"./docs/development-plan.md:17:The priority is correctness of semantics, not breadth of fixtures.\"],\"path\":\".\",\"pattern\":\"fixture\",\"stderr\":\"\",\"truncated\":true}\nReading evidence file for fixture ID\ntool_call read_file {\"path\":\"./tasks/prepare-to-edit/evidence/evidence-07.evidence.json\"}\ntool_result read_file {\"contents\":\"{\\n  \\\"evidence_spec_id\\\": \\\"evidence.prepare-edit.foundation-checklist\\\",\\n  \\\"schema_version\\\": 1,\\n  \\\"required_facts\\\": [\\n    {\\n      \\\"fact_id\\\": \\\"roadmap-tracks-foundation-schema-fixture-task-work\\\",\\n      \\\"description\\\": \\\"The roadmap explicitly tracks foundation, schema, fixture, and task/evidence work items.\\\",\\n      \\\"acceptable_proofs\\\": [\\n        { \\\"kind\\\": \\\"path\\\", \\\"value\\\": \\\"ops/ROADMAP.md\\\" },\\n        { \\\"kind\\\": \\\"excerpt\\\", \\\"value\\\": \\\"## 1. Schema Layer\\\" }\\n      ]\\n    },\\n    {\\n      \\\"fact_id\\\": \\\"repo-map-points-to-domain-directories\\\",\\n      \\\"description\\\": \\\"The README repo map points to the crates, frontend, and benchmark directories.\\\",\\n      \\\"acceptable_proofs\\\": [\\n        { \\\"kind\\\": \\\"path\\\", \\\"value\\\": \\\"README.md\\\" },\\n        { \\\"kind\\\": \\\"excerpt\\\", \\\"value\\\": \\\"`schemas/`, `fixtures/`, `tasks/`, `strategies/`, `traces/`, `reports/`\\\" }\\n      ]\\n    }\\n  ],\\n  \\\"supporting_facts\\\": [\\n    {\\n      \\\"fact_id\\\": \\\"task-corpus-is-loaded-from-rust\\\",\\n      \\\"description\\\": \\\"The Rust task loader validates the initial corpus count.\\\",\\n      \\\"acceptable_proofs\\\": [\\n        { \\\"kind\\\": \\\"coderef\\\", \\\"value\\\": \\\"crates/graphbench-core/src/tasks.rs\\\" }\\n      ]\\n    }\\n  ],\\n  \\\"distractor_facts\\\": [\\n    {\\n      \\\"fact_id\\\": \\\"public-asset-folder-defines-roadmap-state\\\",\\n      \\\"description\\\": \\\"The frontend public folder is not the implementation tracker.\\\",\\n      \\\"acceptable_proofs\\\": [\\n        { \\\"kind\\\": \\\"path\\\", \\\"value\\\": \\\"frontend/public\\\" }\\n      ]\\n    }\\n  ],\\n  \\\"verification_targets\\\": [\\n    { \\\"kind\\\": \\\"command\\\", \\\"value\\\": \\\"cargo test task_specs_load_in_stable_count\\\" }\\n  ]\\n}\\n\",\"line_count\":43,\"path\":\"./tasks/prepare-to-edit/evidence/evidence-07.evidence.json\",\"status\":\"ok\",\"truncated\":false}\n\n## Active Code Windows\ncrates/graphbench-core/src/artifacts.rs\n   1 | use crate::error::{AppError, ErrorCode, ErrorContext};\n   2 | use serde::{Deserialize, Serialize};\n   3 | \n   4 | pub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;\n   5 | pub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;\n   6 | pub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;\n   7 | pub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;\n   8 | pub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;\n   9 | pub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;\n\n\n## Code-Navigation Items\n- crates/graphbench-core/src/artifacts.rs | kind=file | logical_key=file:crates/graphbench-core/src/artifacts.rs | path=crates/graphbench-core/src/artifacts.rs | detail=Source\n- crates | kind=directory | logical_key=directory:crates | path=crates | detail=Skeleton\n- frontend | kind=directory | logical_key=directory:frontend | path=frontend | detail=Skeleton\n- . | kind=repository | logical_key=repository:graph-bench | path=. | detail=Skeleton\n\n## Tool Contracts\n- list_dir@v1: Payload with path string\n- read_file@v1: Payload with path string\n- search@v1: Payload with pattern string and optional path",
+        "role": "user"
+      }
+    ],
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "parallel_tool_calls": false,
+    "response_format": {
+      "json_schema": {
+        "description": "Structured GraphBench harness response",
+        "name": "graphbench_harness_response",
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "acquired_fact_ids": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "assistant_message": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "think",
+                "tool_call",
+                "complete"
+              ],
+              "type": "string"
+            },
+            "readiness_state": {
+              "enum": [
+                "not_ready",
+                "evidence_visible",
+                "evidence_acquired",
+                "ready_to_edit"
+              ],
+              "type": "string"
+            },
+            "tool_call": {
+              "additionalProperties": false,
+              "properties": {
+                "payload": {
+                  "type": "object"
+                },
+                "tool_name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tool_name",
+                "payload"
+              ],
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "assistant_message",
+            "acquired_fact_ids",
+            "readiness_state"
+          ],
+          "type": "object"
+        },
+        "strict": true
+      },
+      "type": "json_schema"
+    },
+    "stream": false
+  }
+}

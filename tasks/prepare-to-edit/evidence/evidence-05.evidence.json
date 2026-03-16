@@ -1,0 +1,43 @@
+{
+  "evidence_spec_id": "evidence.prepare-edit.frontend-contracts",
+  "schema_version": 1,
+  "required_facts": [
+    {
+      "fact_id": "frontend-types-exist-for-artifact-families",
+      "description": "The frontend carries typed contracts for evidence and task artifacts.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "frontend/src/types/artifacts.ts" },
+        { "kind": "excerpt", "value": "export interface TaskSpec" }
+      ]
+    },
+    {
+      "fact_id": "ui-contracts-should-come-from-backend-schemas",
+      "description": "UI contracts are expected to derive from typed backend schemas.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "docs/storage-ui-and-reproducibility.md" },
+        { "kind": "excerpt", "value": "All UI contracts should come from typed backend schemas." }
+      ]
+    }
+  ],
+  "supporting_facts": [
+    {
+      "fact_id": "lockstep-manual-strategy-is-documented",
+      "description": "The current type-generation strategy is manual lockstep across backend and frontend.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "schemas/versioning.md" }
+      ]
+    }
+  ],
+  "distractor_facts": [
+    {
+      "fact_id": "app-shell-copy-defines-contracts",
+      "description": "The landing copy in the app component is not the backend contract surface.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "frontend/src/App.tsx" }
+      ]
+    }
+  ],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test initial_task_corpus_loads_and_validates" }
+  ]
+}

@@ -1,0 +1,101 @@
+{
+  "provider": "openrouter",
+  "request": {
+    "max_tokens": 2048,
+    "messages": [
+      {
+        "content": [
+          {
+            "text": "You are GraphBench's model runtime. Reply with JSON only. Do not use markdown fences.",
+            "type": "text"
+          }
+        ],
+        "role": "system"
+      },
+      {
+        "content": "## Base Runtime Instructions\nGraphBench runtime. Stay bounded, typed, and evidence-oriented.\n\n## UCL Command Reference\n\n## Rules\n1. Output ONLY the UCL command(s), no explanations or markdown\n2. Use exact block IDs as provided\n3. String values must be quoted with double quotes\n4. Block IDs have format: blk_XXXXXXXXXXXX (12 hex chars)\n5. Do NOT use operators like + for string concatenation - just provide the full value\n6. Responses must be schema-valid.\n\n## Response Contract\nReturn JSON only with this exact shape: {\"kind\":\"think|tool_call|complete\",\"prompt_version\":\"v1\",\"model_slug\":\"<provider model id>\",\"provider\":\"<provider slug>\",\"assistant_message\":\"<brief status>\",\"tool_call\":{\"tool_name\":\"<one registered tool name>\",\"payload\":{}},\"acquired_fact_ids\":[\"<fact id>\"],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}. Use null or omit tool_call unless kind is tool_call. When kind is tool_call, tool_call.tool_name must exactly match one of the registered tool names shown below. Do not invent helper tools, verifier tools, or meta tools.\n\n## Objective State\nTask: Gather the evidence required to edit fixture loading while preserving pinned commit validation, local path resolution, and graph snapshot identity checks.\nClass: prepare_to_edit\nAllowed Tools:\nread_file\nlist_dir\nsearch\nVerification Targets:\ncommand: cargo test internal_fixture_loads\n\n## Selected History\nGather the evidence required to edit fixture loading while preserving pinned commit validation, local path resolution, and graph snapshot identity checks.\nSearching for fixture loading references\ntool_call search {\"path\":\"crates/graphbench-core/src\",\"pattern\":\"fixture\"}\ntool_result search {\"exit_code\":0,\"matches\":[\"crates/graphbench-core/src/lib.rs:3:pub mod fixtures;\",\"crates/graphbench-core/src/lib.rs:18:pub use fixtures::{\",\"crates/graphbench-core/src/lib.rs:19:    FixtureRepository, FixtureResolution, load_fixture_manifest, load_fixture_manifests,\",\"crates/graphbench-core/src/error.rs:21:            Self::Fixture => \\\"fixture\\\",\",\"crates/graphbench-core/src/tasks.rs:21:    pub fixture_ids: BTreeSet<String>,\",\"crates/graphbench-core/src/tasks.rs:119:            fixture_ids: self\",\"crates/graphbench-core/src/tasks.rs:122:                .map(|task| task.fixture_id.clone())\",\"crates/graphbench-core/src/tasks.rs:314:        assert!(summary.fixture_ids.contains(\\\"graphbench.internal\\\"));\",\"crates/graphbench-core/src/fixtures.rs:22:        let manifest = load_fixture_manifest(manifest_path)?;\",\"crates/graphbench-core/src/fixtures.rs:23:        let resolution = resolve_fixture(manifest_path, &manifest)?;\",\"crates/graphbench-core/src/fixtures.rs:29:pub fn load_fixture_manifest(path: impl AsRef<Path>) -> Result<FixtureManifest, AppError> {\",\"crates/graphbench-core/src/fixtures.rs:34:            format!(\\\"failed to read fixture manifest at {}\\\", path.display()),\",\"crates/graphbench-core/src/fixtures.rs:36:                component: \\\"fixtures\\\",\",\"crates/graphbench-core/src/fixtures.rs:37:                operation: \\\"read_fixture_manifest\\\",\",\"crates/graphbench-core/src/fixtures.rs:46:            format!(\\\"failed to parse fixture manifest at {}\\\", path.display()),\",\"crates/graphbench-core/src/fixtures.rs:48:                component: \\\"fixtures\\\",\",\"crates/graphbench-core/src/fixtures.rs:49:                operation: \\\"parse_fixture_manifest\\\",\",\"crates/graphbench-core/src/fixtures.rs:59:pub fn load_fixture_manifests(\",\"crates/graphbench-core/src/fixtures.rs:64:        if path.file_name().and_then(std::ffi::OsStr::to_str) == Some(\\\"fixture.json\\\") {\",\"crates/graphbench-core/src/fixtures.rs:69:    manifests.sort_by(|left, right| left.0.fixture_id.cmp(&right.0.fixture_id));\",\"crates/graphbench-core/src/fixtures.rs:73:fn resolve_fixture(\",\"crates/graphbench-core/src/fixtures.rs:80:            \\\"fixture manifest must live in a directory\\\",\",\"crates/graphbench-core/src/fixtures.rs:82:                component: \\\"fixtures\\\",\",\"crates/graphbench-core/src/fixtures.rs:83:                operation: \\\"resolve_fixture\\\",\",\"crates/graphbench-core/src/fixtures.rs:95:                    \\\"fixture repository source '{}' could not be resolved\\\",\",\"crates/graphbench-core/src/fixtures.rs:99:                    component: \\\"fixtures\\\",\",\"crates/graphbench-core/src/fixtures.rs:100:                    operation: \\\"resolve_fixture_repository\\\",\",\"crates/graphbench-core/src/fixtures.rs:117:                    component: \\\"fixtures\\\",\",\"crates/graphbench-core/src/fixtures.rs:143:                component: \\\"fixtures\\\",\",\"crates/graphbench-core/src/fixtures.rs:159:                component: \\\"fixtures\\\",\",\"crates/graphbench-core/src/fixtures.rs:181:                component: \\\"fixtures\\\",\",\"crates/graphbench-core/src/fixtures.rs:192:                    component: \\\"fixtures\\\",\",\"crates/graphbench-core/src/fixtures.rs:304:    use super::{FixtureRepository, load_fixture_manifests, sha256_of};\",\"crates/graphbench-core/src/fixtures.rs:318:    fn internal_fixture_loads() {\",\"crates/graphbench-core/src/fixtures.rs:320:            .join(\\\"../../fixtures/graphbench-internal/fixture.json\\\");\",\"crates/graphbench-core/src/fixtures.rs:322:        let (manifest, resolution) = repository.load(manifest_path).expect(\\\"fixture should load\\\");\",\"crates/graphbench-core/src/fixtures.rs:323:        assert_eq!(manifest.fixture_id, \\\"graphbench.internal\\\");\",\"crates/graphbench-core/src/fixtures.rs:328:    fn fixture_repository_loads_all_manifests() {\",\"crates/graphbench-core/src/fixtures.rs:329:        let fixtures_root = Path::new(env!(\\\"CARGO_MANIFEST_DIR\\\")).join(\\\"../../fixtures\\\");\",\"crates/graphbench-core/src/fixtures.rs:330:        let manifests = load_fixture_manifests(fixtures_root).expect(\\\"fixtures should load\\\");\",\"crates/graphbench-core/src/fixtures.rs:340:        let temp_root = std::env::temp_dir().join(format!(\\\"graphbench-fixture-drift-{unique}\\\"));\",\"crates/graphbench-core/src/fixtures.rs:344:        fs::write(&snapshot_path, \\\"{\\\\\\\"fixture_id\\\\\\\":\\\\\\\"drift\\\\\\\"}\\\")\",\"crates/graphbench-core/src/fixtures.rs:347:        let manifest_path = temp_root.join(\\\"fixture.json\\\");\",\"crates/graphbench-core/src/fixtures.rs:353:                    \\\"\\\\\\\"fixture_id\\\\\\\":\\\\\\\"graphbench.internal\\\\\\\",\\\",\",\"crates/graphbench-core/src/artifacts.rs:53:    pub fixture_id: String,\",\"crates/graphbench-core/src/artifacts.rs:66:                \\\"fixture_manifest\\\",\",\"crates/graphbench-core/src/artifacts.rs:68:                \\\"unsupported fixture schema version\\\",\",\"crates/graphbench-core/src/artifacts.rs:72:        validate_identifier(&self.fixture_id, \\\"fixture.fixture_id\\\")?;\",\"crates/graphbench-core/src/artifacts.rs:74:        validate_non_empty(&self.repository.source, \\\"fixture.repository.source\\\")?;\",\"crates/graphbench-core/src/artifacts.rs:75:        validate_non_empty(&self.graph.snapshot_format, \\\"fixture.graph.snapshot_format\\\")?;\",\"crates/graphbench-core/src/artifacts.rs:76:        validate_non_empty(&self.graph.snapshot_ref, \\\"fixture.graph.snapshot_ref\\\")?;\",\"crates/graphbench-core/src/artifacts.rs:78:        validate_non_empty(&self.metadata.title, \\\"fixture.metadata.title\\\")?;\",\"crates/graphbench-core/src/artifacts.rs:83:                \\\"fixture_manifest\\\",\",\"crates/graphbench-core/src/artifacts.rs:85:                \\\"fixture.languages must not be empty\\\",\",\"crates/graphbench-core/src/artifacts.rs:126:    pub fixture_id: String,\",\"crates/graphbench-core/src/artifacts.rs:154:        validate_identifier(&self.fixture_id, \\\"task.fixture_id\\\")?;\",\"crates/graphbench-core/src/artifacts.rs:504:    pub fixture_id: String,\",\"crates/graphbench-core/src/artifacts.rs:532:        validate_identifier(&self.fixture_id, \\\"turn_trace.fixture_id\\\")?;\",\"crates/graphbench-core/src/artifacts.rs:651:    pub fixture_manifest: u32,\",\"crates/graphbench-core/src/artifacts.rs:664:    pub fixture_id: String,\",\"crates/graphbench-core/src/artifacts.rs:690:        validate_identifier(&self.fixture_id, \\\"run_manifest.fixture_id\\\")?;\",\"crates/graphbench-core/src/artifacts.rs:740:            \\\"fixture_manifest\\\",\",\"crates/graphbench-core/src/artifacts.rs:742:            \\\"fixture.repository.commit_sha must be a 40-character hex SHA\\\",\",\"crates/graphbench-core/src/artifacts.rs:810:    fn fixture_validation_requires_pinned_sha() {\",\"crates/graphbench-core/src/artifacts.rs:811:        let fixture = FixtureManifest {\",\"crates/graphbench-core/src/artifacts.rs:812:            fixture_id: \\\"graphbench.internal\\\".to_owned(),\",\"crates/graphbench-core/src/artifacts.rs:831:        assert!(fixture.validate().is_err());\",\"crates/graphbench-core/src/artifacts.rs:839:            fixture_id: \\\"fixture-1\\\".to_owned(),\",\"crates/graphbench-core/src/artifacts.rs:868:            fixture_id: \\\"fixture-1\\\".to_owned(),\",\"crates/graphbench-core/src/logging.rs:20:            Self::FixtureId => \\\"fixture_id\\\",\",\"crates/graphbench-core/src/graph.rs:7:use crate::fixtures::{FixtureResolution, sha256_of};\",\"crates/graphbench-core/src/graph.rs:32:    fixture: FixtureManifest,\",\"crates/graphbench-core/src/graph.rs:38:        fixture: FixtureManifest,\",\"crates/graphbench-core/src/graph.rs:41:        if fixture.graph.snapshot_format != \\\"codegraph_portable_document\\\" {\",\"crates/graphbench-core/src/graph.rs:46:                    fixture.graph.snapshot_format\",\"crates/graphbench-core/src/graph.rs:70:        if actual_hash != fixture.graph.snapshot_id {\",\"crates/graphbench-core/src/graph.rs:75:                    fixture.graph.snapshot_id, actual_hash\",\"crates/graphbench-core/src/graph.rs:109:            fixture,\",\"crates/graphbench-core/src/graph.rs:116:            fixture_id: self.fixture.fixture_id.clone(),\",\"crates/graphbench-core/src/graph.rs:130:    fixture_id: String,\",\"crates/graphbench-core/src/graph.rs:232:            .map(|node| context_object_from_export(&self.fixture_id, &self.graph_snapshot_id, node))\",\"crates/graphbench-core/src/graph.rs:388:    fixture_id: &str,\",\"crates/graphbench-core/src/graph.rs:395:            fixture_id,\",\"crates/graphbench-core/src/graph.rs:405:        context_object_id: format!(\\\"{}.{}\\\", fixture_id, node.short_id),\",\"crates/graphbench-core/src/graph.rs:467:    use crate::{RepresentationLevel, fixtures::FixtureRepository};\",\"crates/graphbench-core/src/graph.rs:471:    fn graph_workspace_loads_fixture_snapshot_and_exports_prompt_hooks() {\",\"crates/graphbench-core/src/graph.rs:473:            .join(\\\"../../fixtures/graphbench-internal/fixture.json\\\");\",\"crates/graphbench-core/src/graph.rs:474:        let fixture_repository = FixtureRepository;\",\"crates/graphbench-core/src/graph.rs:475:        let (fixture, resolution) = fixture_repository\",\"crates/graphbench-core/src/graph.rs:477:            .expect(\\\"fixture should load\\\");\",\"crates/graphbench-core/src/graph.rs:479:            GraphWorkspace::load(fixture, &resolution).expect(\\\"graph workspace should load\\\");\"],\"path\":\"crates/graphbench-core/src\",\"pattern\":\"fixture\",\"stderr\":\"\"}\n\n## Active Code Windows\ncrates/graphbench-core/src/artifacts.rs\n   1 | use crate::error::{AppError, ErrorCode, ErrorContext};\n   2 | use serde::{Deserialize, Serialize};\n   3 | \n   4 | pub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;\n   5 | pub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;\n   6 | pub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;\n   7 | pub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;\n   8 | pub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;\n   9 | pub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;\n\n\n## Code-Navigation Items\n- crates/graphbench-core/src/artifacts.rs | kind=file | logical_key=file:crates/graphbench-core/src/artifacts.rs | path=crates/graphbench-core/src/artifacts.rs | detail=Source\n- crates | kind=directory | logical_key=directory:crates | path=crates | detail=Skeleton\n- frontend | kind=directory | logical_key=directory:frontend | path=frontend | detail=Skeleton\n- . | kind=repository | logical_key=repository:graph-bench | path=. | detail=Skeleton\n\n## Tool Contracts\n- list_dir@v1: Payload with path string\n- read_file@v1: Payload with path string\n- search@v1: Payload with pattern string and optional path",
+        "role": "user"
+      }
+    ],
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "parallel_tool_calls": false,
+    "response_format": {
+      "json_schema": {
+        "description": "Structured GraphBench harness response",
+        "name": "graphbench_harness_response",
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "acquired_fact_ids": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "assistant_message": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "think",
+                "tool_call",
+                "complete"
+              ],
+              "type": "string"
+            },
+            "model_slug": {
+              "type": "string"
+            },
+            "prompt_version": {
+              "type": "string"
+            },
+            "provider": {
+              "type": "string"
+            },
+            "readiness_state": {
+              "enum": [
+                "not_ready",
+                "evidence_visible",
+                "evidence_acquired",
+                "ready_to_edit"
+              ],
+              "type": "string"
+            },
+            "tool_call": {
+              "additionalProperties": false,
+              "properties": {
+                "payload": {
+                  "type": "object"
+                },
+                "tool_name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tool_name",
+                "payload"
+              ],
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "prompt_version",
+            "model_slug",
+            "provider",
+            "assistant_message",
+            "acquired_fact_ids",
+            "readiness_state"
+          ],
+          "type": "object"
+        },
+        "strict": true
+      },
+      "type": "json_schema"
+    },
+    "stream": false
+  }
+}

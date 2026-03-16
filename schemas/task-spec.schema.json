@@ -1,0 +1,71 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "graphbench://schemas/task-spec.schema.json",
+  "title": "Task Spec",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "task_id",
+    "schema_version",
+    "fixture_id",
+    "title",
+    "statement",
+    "task_class",
+    "difficulty",
+    "allowed_tools",
+    "turn_budget",
+    "evidence_spec_ref",
+    "seed_paths",
+    "seed_selectors",
+    "verification_targets",
+    "known_distractor_regions",
+    "expected_edit_loci",
+    "review"
+  ],
+  "properties": {
+    "task_id": { "type": "string" },
+    "schema_version": { "const": 1 },
+    "fixture_id": { "type": "string" },
+    "title": { "type": "string" },
+    "statement": { "type": "string" },
+    "task_class": { "enum": ["locate", "explain", "prepare_to_edit"] },
+    "difficulty": { "enum": ["easy", "medium", "hard"] },
+    "allowed_tools": { "type": "array", "minItems": 1, "items": { "type": "string" } },
+    "turn_budget": { "type": "integer", "minimum": 1 },
+    "evidence_spec_ref": { "type": "string" },
+    "seed_paths": { "type": "array", "items": { "type": "string" } },
+    "seed_selectors": { "type": "array", "items": { "type": "string" } },
+    "verification_targets": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/verification_target" }
+    },
+    "known_distractor_regions": { "type": "array", "items": { "type": "string" } },
+    "expected_edit_loci": { "type": "array", "items": { "type": "string" } },
+    "review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_evidence_is_sufficient",
+        "distractors_are_realistic",
+        "multiple_valid_paths_considered"
+      ],
+      "properties": {
+        "required_evidence_is_sufficient": { "const": true },
+        "distractors_are_realistic": { "const": true },
+        "multiple_valid_paths_considered": { "const": true }
+      }
+    }
+  },
+  "$defs": {
+    "verification_target": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "value"],
+      "properties": {
+        "kind": { "type": "string" },
+        "value": { "type": "string" }
+      }
+    }
+  }
+}

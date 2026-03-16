@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "graphbench://schemas/turn-trace.schema.json",
+  "title": "Turn Trace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "turn_index",
+    "task_id",
+    "fixture_id",
+    "strategy_id",
+    "request",
+    "response",
+    "selection",
+    "telemetry",
+    "evidence_delta",
+    "readiness_state",
+    "readiness_reason",
+    "hashes"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "turn_index": { "type": "integer", "minimum": 0 },
+    "task_id": { "type": "string" },
+    "fixture_id": { "type": "string" },
+    "strategy_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_-]+\\.[a-z0-9_-]+(?:\\.[a-z0-9_-]+)*$"
+    },
+    "request": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["schema_version", "prompt_version", "prompt_hash", "context_hash"],
+      "properties": {
+        "schema_version": { "const": 1 },
+        "prompt_version": { "type": "string" },
+        "prompt_hash": { "type": "string", "pattern": "^sha256:[a-fA-F0-9]{64}$" },
+        "context_hash": { "type": "string", "pattern": "^sha256:[a-fA-F0-9]{64}$" }
+      }
+    },
+    "response": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["provider", "model_slug", "schema_version", "validated"],
+      "properties": {
+        "provider": { "type": "string" },
+        "model_slug": { "type": "string" },
+        "schema_version": { "const": 1 },
+        "validated": { "const": true }
+      }
+    },
+    "selection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selected_context_objects", "omitted_candidates", "rendered_sections"],
+      "properties": {
+        "selected_context_objects": { "type": "array", "items": { "type": "string" } },
+        "omitted_candidates": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["candidate_id", "reason"],
+            "properties": {
+              "candidate_id": { "type": "string" },
+              "reason": { "type": "string" }
+            }
+          }
+        },
+        "rendered_sections": {
+          "type": "array",
+          "items": { "$ref": "context-window-section.schema.json" }
+        }
+      }
+    },
+    "telemetry": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["prompt_bytes", "prompt_tokens", "latency_ms", "tool_calls"],
+      "properties": {
+        "prompt_bytes": { "type": "integer", "minimum": 0 },
+        "prompt_tokens": { "type": "integer", "minimum": 0 },
+        "latency_ms": { "type": "integer", "minimum": 0 },
+        "tool_calls": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "evidence_delta": { "type": "array", "items": { "type": "string" } },
+    "readiness_state": {
+      "enum": ["not_ready", "evidence_visible", "evidence_acquired", "ready_to_edit"]
+    },
+    "readiness_reason": { "type": "string" },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["turn_hash"],
+      "properties": {
+        "turn_hash": { "type": "string", "pattern": "^sha256:[a-fA-F0-9]{64}$" }
+      }
+    }
+  }
+}

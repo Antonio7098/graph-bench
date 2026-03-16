@@ -1,0 +1,302 @@
+schema_version: 1
+name: GraphBench Constitution
+status: active
+project:
+  name: GraphBench
+  purpose: >
+    A graph-first benchmark and development harness for code navigation,
+    evidence gathering, context-window reconstruction, and strategy evaluation.
+  benchmark_unit: evidence_acquired
+  source_of_truth: observability_artifacts
+
+technology:
+  backend:
+    language: rust
+    requirements:
+      - strict typing
+      - explicit error handling
+      - modular crate or module boundaries
+  frontend:
+    language: typescript
+    framework: react
+    build_tool: vite
+    requirements:
+      - strict typing
+      - schema-validated API boundaries
+      - modular feature-oriented structure
+
+operating_principles:
+  - graph_first
+  - evidence_centric
+  - deterministic_replay
+  - exact_context_reconstruction
+  - pinned_fixtures
+  - explicit_strategy_versioning
+
+rules:
+  - id: GB-001
+    category: mission
+    title: Evidence Is the Benchmark Unit
+    priority: critical
+    rule: >
+      The system must optimize for evidence acquisition quality and efficiency,
+      not file visitation counts or tool-call volume.
+    requirements:
+      - Tasks define required evidence, acceptable proof forms, supporting evidence, and distractors.
+      - Reports score evidence visibility, evidence acquisition, evidence efficiency, and synthesis quality separately.
+      - Readiness decisions are based on acquired evidence, not subjective intuition.
+    prohibited:
+      - Scoring task performance by file-count theater alone
+      - Treating broad repository traversal as success without evidence capture
+
+  - id: GB-002
+    category: typing
+    title: Strict Typing Is Mandatory
+    priority: critical
+    rule: >
+      All backend and frontend code must be strictly typed, with schemas defining
+      external contracts and serialized artifacts.
+    requirements:
+      - Rust types must model domain concepts explicitly.
+      - TypeScript must run in strict mode.
+      - Public payloads, persisted artifacts, and LLM outputs must have explicit schemas.
+      - Type assertions and escape hatches must be minimized and justified.
+    prohibited:
+      - Untyped or weakly typed production interfaces
+      - Implicit shape contracts between services, UI, and storage
+
+  - id: GB-003
+    category: failure
+    title: Fail Fast, Fail Hard
+    priority: critical
+    rule: >
+      Invalid state, schema mismatch, missing required evidence, or unreconstructable
+      context is a hard failure and must stop the relevant workflow immediately.
+    requirements:
+      - Validate inputs, outputs, configs, and persisted artifacts at system boundaries.
+      - Abort on invariant violations rather than silently degrading behavior.
+      - Surface failure causes with explicit machine-readable codes and human-readable context.
+    prohibited:
+      - Silent fallback that hides corruption, drift, or schema violations
+      - Best-effort continuation after benchmark-critical invariants are broken
+
+  - id: GB-004
+    category: architecture
+    title: SOLID and Modular Design
+    priority: critical
+    rule: >
+      The codebase must follow SOLID design principles and remain modular,
+      with clear boundaries between fixture management, task specs, tracing,
+      scoring, orchestration, persistence, and UI.
+    requirements:
+      - Components have single, well-defined responsibilities.
+      - Interfaces are explicit and small.
+      - Dependencies point inward toward stable domain concepts.
+      - Files and modules are organized by responsibility or feature.
+    prohibited:
+      - God files
+      - God modules
+      - Cross-cutting utility dumping grounds
+      - Hidden coupling between benchmark semantics and presentation logic
+
+  - id: GB-005
+    category: observability
+    title: Observability Is Truth
+    priority: critical
+    rule: >
+      The authoritative account of system behavior is the recorded trace:
+      events, context windows, selected objects, omissions, hashes, scores,
+      and version metadata.
+    requirements:
+      - Every benchmark run records a replayable turn ledger.
+      - Every turn records selected context objects, omitted candidates, rendered context, hashes, and evidence deltas.
+      - Context-window reconstruction must be exact, deterministic, and auditable.
+      - Debugging and evaluation decisions must defer to recorded artifacts over anecdotal interpretation.
+    prohibited:
+      - Relying on informal logs or memory as the primary explanation of behavior
+      - Shipping benchmark flows that cannot reconstruct exact context state
+
+  - id: GB-006
+    category: errors
+    title: Error Taxonomy Is Required
+    priority: high
+    rule: >
+      Errors must be classified into a stable taxonomy so failures can be
+      attributed, queried, aggregated, and acted on.
+    requirements:
+      - Define benchmark-domain error categories such as configuration, fixture, graph, context, schema, provider, persistence, and UI errors.
+      - Attach stable error codes to emitted failures.
+      - Preserve root cause and causal chain across boundaries.
+      - Distinguish user error, system error, and benchmark-semantic failure.
+    prohibited:
+      - Generic opaque errors as the primary interface
+      - String-matching logs as the error contract
+
+  - id: GB-007
+    category: logging
+    title: Structured Logging Only
+    priority: high
+    rule: >
+      Logs must be structured, machine-readable, correlated, and aligned with
+      the event model used for trace reconstruction.
+    requirements:
+      - Emit structured fields for run_id, task_id, turn_index, strategy_id, fixture_id, component, and error_code where applicable.
+      - Log important state transitions, validation failures, external calls, and persistence outcomes.
+      - Keep logs compatible with aggregation and filtering.
+    prohibited:
+      - Free-form print debugging as an operational dependency
+      - Logs that omit identifiers needed to join them to runs and traces
+
+  - id: GB-008
+    category: llm_contract
+    title: LLM Responses Must Be Self-Describing and Validated
+    priority: critical
+    rule: >
+      Every LLM response is a typed artifact and must carry enough metadata to
+      identify the prompt contract and execution source.
+    requirements:
+      - Every LLM response contains prompt_version, model_slug, and provider.
+      - Every LLM response is validated against a declared schema before downstream use.
+      - Validation failure is a hard stop, not a warning.
+      - Stored artifacts preserve both the validated payload and relevant response metadata.
+    prohibited:
+      - Consuming raw model text as trusted structured data
+      - Omitting prompt or model identity from persisted LLM artifacts
+
+  - id: GB-009
+    category: reproducibility
+    title: Reproducibility Over Convenience
+    priority: critical
+    rule: >
+      Benchmark results must be reproducible from pinned inputs, versioned harness
+      logic, and deterministic artifact serialization.
+    requirements:
+      - Repositories are benchmarked at pinned commits, never moving HEAD.
+      - Graph snapshots and fixture manifests have durable identities.
+      - Harness version, schema versions, scoring version, and strategy version are recorded for every run.
+      - Artifact serialization is stable enough for replay and comparison.
+    prohibited:
+      - Unpinned fixture inputs
+      - Result comparison across runs without version metadata
+
+  - id: GB-010
+    category: persistence
+    title: Runs Must Be Fully Stored
+    priority: high
+    rule: >
+      Every benchmark run must be persisted with enough detail to support replay,
+      analysis, regression detection, and UI inspection.
+    requirements:
+      - Store run metadata, turn ledgers, context-window artifacts, graph events, tool events, evidence matches, and score outputs.
+      - Preserve prior harness versions and their associated runs.
+      - Use the persistent store as the canonical source for comparative analysis.
+    prohibited:
+      - Summary-only persistence
+      - Throwaway traces that block later audit or replay
+
+  - id: GB-011
+    category: frontend
+    title: Visualization Is a Core Product Surface
+    priority: medium
+    rule: >
+      The UI is part of the benchmark system, not a decorative afterthought.
+      It must expose the state needed to inspect behavior and explain failures.
+    requirements:
+      - The frontend can display event streams, per-turn context state, evidence acquisition, and strategy comparisons.
+      - The graph is explorable as a graph, not only as text.
+      - UI state is driven by typed backend contracts.
+    prohibited:
+      - UI views that hide or distort benchmark truth
+      - Frontend-only derived semantics that diverge from stored artifacts
+
+  - id: GB-012
+    category: repository
+    title: Repository Structure Must Stay Coherent
+    priority: high
+    rule: >
+      The repository must remain well organized, with clear boundaries for
+      fixtures, tasks, strategies, traces, reports, schemas, scripts, docs,
+      backend code, and frontend code.
+    requirements:
+      - Directory layout reflects stable domain responsibilities.
+      - Shared abstractions live in deliberate modules, not miscellaneous folders.
+      - Large features are split into focused files with explicit ownership.
+    prohibited:
+      - Monolithic files accumulating unrelated responsibilities
+      - Ambiguous placement of schemas, domain logic, and presentation code
+
+  - id: GB-013
+    category: documentation
+    title: Documentation Must Be Thorough
+    priority: high
+    rule: >
+      Architecture, schemas, operational workflows, scoring semantics, and
+      domain concepts must be thoroughly documented alongside the code.
+    requirements:
+      - Public modules, schemas, and major workflows have durable documentation.
+      - Benchmark semantics and invariants are documented where they are defined.
+      - Documentation is updated with behavioral changes, not deferred indefinitely.
+    prohibited:
+      - Undocumented core flows
+      - Implicit operational knowledge held only by maintainers
+
+  - id: GB-014
+    category: testing
+    title: Testing Must Be Thorough
+    priority: critical
+    rule: >
+      The system must be thoroughly tested across schema validation, trace
+      reconstruction, scoring, persistence, and UI contract boundaries.
+    requirements:
+      - Core domain logic has deterministic automated tests.
+      - Schema validators and serializers have positive and negative coverage.
+      - Trace replay and exact context reconstruction are tested explicitly.
+      - Critical frontend flows and typed API integrations are covered.
+      - Regressions in scoring and artifact compatibility are caught by automated checks.
+    prohibited:
+      - Relying on manual testing for benchmark-critical behavior
+      - Shipping untested schema or scoring changes
+
+  - id: GB-015
+    category: benchmark_design
+    title: Graph State Is Durable, Selection Is Projection
+    priority: high
+    rule: >
+      Graph-backed state is the durable memory substrate. Selection ranks what
+      is surfaced each turn, but must not erase benchmark state.
+    requirements:
+      - Working-set state is represented as graph-backed context objects.
+      - Selection controls projection and lexical allocation, not destructive forgetting.
+      - Omission reasons are recorded whenever candidates are not surfaced.
+    prohibited:
+      - Destructive trimming that loses benchmark-critical provenance
+      - Conflating stored graph state with the currently rendered prompt only
+
+  - id: GB-016
+    category: evaluation
+    title: Deterministic Evidence Accounting Comes First
+    priority: high
+    rule: >
+      Primary scoring must come from deterministic or oracle-based evidence
+      accounting. Judgment models are secondary and cannot replace trace truth.
+    requirements:
+      - Required evidence lists and acceptable proofs exist for benchmark tasks.
+      - Evaluation distinguishes evidence visibility, acquisition, and application.
+      - Judge-assisted scoring is limited to synthesis quality and overclaim detection.
+    prohibited:
+      - Treating judge output as the sole source of truth
+      - Scoring final answers without checking whether evidence was actually gathered
+
+enforcement:
+  ci_gates:
+    - format
+    - lint
+    - typecheck
+    - test
+    - schema_validation
+    - documentation_review
+  release_requirements:
+    - versioned_harness_metadata
+    - replayable_trace_artifacts
+    - validated_llm_contracts
+    - changelog_or_equivalent_release_notes

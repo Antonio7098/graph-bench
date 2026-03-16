@@ -1,0 +1,42 @@
+GraphBench runtime. Stay bounded, typed, and evidence-oriented.
+
+## UCL Command Reference
+
+## Rules
+1. Output ONLY the UCL command(s), no explanations or markdown
+2. Use exact block IDs as provided
+3. String values must be quoted with double quotes
+4. Block IDs are short numeric IDs (1, 2, 3, etc.)
+5. Do NOT use operators like + for string concatenation - just provide the full value
+6. Responses must be schema-valid.
+Return JSON only with this exact shape: {{"kind":"think|tool_call|complete","assistant_message":"<brief status>","tool_call":{{"tool_name":"<one registered tool name>","payload":{{}}}},"acquired_fact_ids":["<fact id>"],"readiness_state":"not_ready|evidence_visible|evidence_acquired|ready_to_edit"}}. Use null or omit tool_call unless kind is tool_call. When kind is tool_call, tool_call.tool_name must exactly match one of the registered tool names shown below. Do not invent helper tools, verifier tools, or meta tools.
+Task: Gather the exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned.
+Class: prepare_to_edit
+Allowed Tools:
+read_file
+list_dir
+search
+Verification Targets:
+command: cargo test --workspace
+Gather the exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned.
+Reading artifacts.rs to gather schema version evidence
+tool_call read_file {"path":"crates/graphbench-core/src/artifacts.rs"}
+tool_result read_file {"contents":"use crate::error::{AppError, ErrorCode, ErrorContext};\nuse serde::{Deserialize, Serialize};\n\npub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;\npub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;\npub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;\npub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;\npub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;\npub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;\npub const SCORE_REPORT_SCHEMA_VERSION: u32 = 1;\npub const RUN_MANIFEST_SCHEMA_VERSION: u32 = 1;\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum MirrorPolicy {\n    Workspace,\n    LocalCacheOnly,\n    MirrorRequired,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct RepositoryRef {\n    pub source: String,\n    pub commit_sha: String,\n    pub mirror_policy: MirrorPolicy,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct GraphSnapshot {\n    pub snapshot_id: String,\n    pub snapshot_format: String,\n    pub snapshot_ref: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct FixtureMetadata {\n    pub title: String,\n    pub notes: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum FixtureLanguage {\n    Rust,\n    TypeScript,\n    Markdown,\n    Yaml,\n    Json,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct FixtureManifest {\n    pub fixture_id: String,\n    pub schema_version: u32,\n    pub repository: RepositoryRef,\n    pub graph: GraphSnapshot,\n    pub languages: Vec<FixtureLanguage>,\n    pub metadata: FixtureMetadata,\n}\n\nimpl FixtureManifest {\n    pub fn validate(&self) -> Result<(), AppError> {\n        if self.schema_version != FIXTURE_MANIFEST_SCHEMA_VERSION {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"fixture_manifest\",\n                \"validate\",\n                \"unsupported fixture schema version\",\n            ));\n        }\n\n        validate_identifier(&self.fixture_id, \"fixture.fixture_id\")?;\n        validate_commit_sha(&self.repository.commit_sha)?;\n        validate_non_empty(&self.repository.source, \"fixture.repository.source\")?;\n        validate_non_empty(&self.graph.snapshot_format, \"fixture.graph.snapshot_format\")?;\n        validate_non_empty(&self.graph.snapshot_ref, \"fixture.graph.snapshot_ref\")?;\n        validate_snapshot_id(&self.graph.snapshot_id)?;\n        validate_non_empty(&self.metadata.title, \"fixture.metadata.title\")?;\n\n        if self.languages.is_empty() {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"fixture_manifest\",\n                \"validate\",\n                \"fixture.languages must not be empty\",\n            ));\n        }\n\n        Ok(())\n    }\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum TaskClass {\n    Locate,\n    Explain,\n    PrepareToEdit,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum Difficulty {\n    Easy,\n    Medium,\n    Hard,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct VerificationTarget {\n    pub kind: String,\n    pub value: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TaskReview {\n    pub required_evidence_is_sufficient: bool,\n    pub distractors_are_realistic: bool,\n    pub multiple_valid_paths_considered: bool,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TaskSpec {\n    pub task_id: String,\n    pub schema_version: u32,\n    pub fixture_id: String,\n    pub title: String,\n    pub statement: String,\n    pub task_class: TaskClass,\n    pub difficulty: Difficulty,\n    pub allowed_tools: Vec<String>,\n    pub turn_budget: u32,\n    pub evidence_spec_ref: String,\n    pub seed_paths: Vec<String>,\n    pub seed_selectors: Vec<String\n...[truncated]","line_count":964,"path":"crates/graphbench-core/src/artifacts.rs","status":"ok","truncated":true}
+crates/graphbench-core/src/artifacts.rs
+   1 | use crate::error::{AppError, ErrorCode, ErrorContext};
+   2 | use serde::{Deserialize, Serialize};
+   3 | 
+   4 | pub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;
+   5 | pub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;
+   6 | pub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;
+   7 | pub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;
+   8 | pub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;
+   9 | pub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;
+
+- crates/graphbench-core/src/artifacts.rs | kind=file | logical_key=file:crates/graphbench-core/src/artifacts.rs | path=crates/graphbench-core/src/artifacts.rs | detail=Source
+- crates | kind=directory | logical_key=directory:crates | path=crates | detail=Skeleton
+- frontend | kind=directory | logical_key=directory:frontend | path=frontend | detail=Skeleton
+- . | kind=repository | logical_key=repository:graph-bench | path=. | detail=Skeleton
+- list_dir@v1: Payload with path string
+- read_file@v1: Payload with path string
+- search@v1: Payload with pattern string and optional path

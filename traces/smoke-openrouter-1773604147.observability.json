@@ -1,0 +1,1232 @@
+{
+  "run_manifest": {
+    "run_id": "smoke-openrouter-1773604147",
+    "schema_version": 1,
+    "fixture_id": "graphbench.internal",
+    "task_id": "prepare-edit.fixture-loading",
+    "strategy_id": "smoke-openrouter",
+    "harness_version": "0.1.0",
+    "schema_version_set": {
+      "fixture_manifest": 1,
+      "task_spec": 1,
+      "evidence_spec": 1,
+      "context_object": 1,
+      "context_window_section": 1,
+      "turn_trace": 1,
+      "score_report": 1
+    },
+    "provider": "openrouter",
+    "model_slug": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "prompt_version": "v1",
+    "graph_snapshot_id": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "started_at": "2026-03-15T19:49:06.620213381+00:00",
+    "completed_at": "2026-03-15T19:49:15.275029475+00:00",
+    "outcome": "done"
+  },
+  "events": [
+    {
+      "event_id": "event-0",
+      "captured_at": "2026-03-15T19:49:06.620213381+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:137906c5a43856cfbfcf3e83ac8946a05a2fac47d6408cfecfc617a285259e0e",
+        "mutation": "seed_overview(limit=2)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-1",
+      "captured_at": "2026-03-15T19:49:06.762879344+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:869350a1cd90c4d7e893453f4ff58ace82a49b74acd801f7106c21d7102f7477",
+        "mutation": "select(crates/graphbench-core/src/artifacts.rs,L1)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-2",
+      "captured_at": "2026-03-15T19:49:06.908339380+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:45d8f4dfc3a8dad37f5a7f8a2ed31b808df36440e22e69346191fde06a9d5447",
+        "mutation": "hydrate_exact_proof(crates/graphbench-core/src/artifacts.rs,8)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-3",
+      "captured_at": "2026-03-15T19:49:07.061012873+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": null,
+      "component": "harness",
+      "event_type": "run.started",
+      "details": {
+        "event": "run_started",
+        "run_id": "smoke-openrouter-1773604147"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-4",
+      "captured_at": "2026-03-15T19:49:07.061025637+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "think",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-5",
+      "captured_at": "2026-03-15T19:49:07.062829161+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:2f2378680e3aa48026b302c6254295811225f05d06bc91ef4baa47f57c18e619",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:8bea7e08f961b0b1c042de2ec950d2c3ad428e6675933fbfbdff20c5894c0f83",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-6",
+      "captured_at": "2026-03-15T19:49:07.062835704+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-7",
+      "captured_at": "2026-03-15T19:49:10.051819137+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": null,
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-8",
+      "captured_at": "2026-03-15T19:49:10.051849474+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-9",
+      "captured_at": "2026-03-15T19:49:10.051912101+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "search",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-10",
+      "captured_at": "2026-03-15T19:49:10.051914596+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "search",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-11",
+      "captured_at": "2026-03-15T19:49:10.056486425+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "search",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-12",
+      "captured_at": "2026-03-15T19:49:10.056553110+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "not_ready",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-30",
+      "captured_at": "2026-03-15T19:49:10.056553110+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": null,
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:ba55e377f6309a5449ae513ebb6ae1532a3ada4dea67f5be6ba1043cc33745fc",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/ba55e377f6309a5449ae513ebb6ae1532a3ada4dea67f5be6ba1043cc33745fc.json",
+          "byte_count": 4894
+        },
+        {
+          "blob_id": "sha256:44cf1efbf9008bf0c8dd489b4d4bce6732cfea7effbbd90fdcd699fc6fda940e",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/44cf1efbf9008bf0c8dd489b4d4bce6732cfea7effbbd90fdcd699fc6fda940e.json",
+          "byte_count": 7609
+        },
+        {
+          "blob_id": "sha256:58a0a39b1e0d39c2abafa1fceaea649a4d7d30d3d93b6687cc54b15b3b5693b6",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/58a0a39b1e0d39c2abafa1fceaea649a4d7d30d3d93b6687cc54b15b3b5693b6.json",
+          "byte_count": 428
+        },
+        {
+          "blob_id": "sha256:8bea7e08f961b0b1c042de2ec950d2c3ad428e6675933fbfbdff20c5894c0f83",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/8bea7e08f961b0b1c042de2ec950d2c3ad428e6675933fbfbdff20c5894c0f83.txt",
+          "byte_count": 2631
+        },
+        {
+          "blob_id": "sha256:2f2378680e3aa48026b302c6254295811225f05d06bc91ef4baa47f57c18e619",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/2f2378680e3aa48026b302c6254295811225f05d06bc91ef4baa47f57c18e619.txt",
+          "byte_count": 2470
+        }
+      ]
+    },
+    {
+      "event_id": "event-13",
+      "captured_at": "2026-03-15T19:49:10.057483556+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "act",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-14",
+      "captured_at": "2026-03-15T19:49:10.060563486+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:05cc8fd4b58935105ef625d77addc40700bf21bd0830d665c2978f1ab90c23cd",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:c00269aff76159366b1926b7007ae83e9f24f6513f9138ccb29cb0c7e596e2b4",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-15",
+      "captured_at": "2026-03-15T19:49:10.060570289+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-16",
+      "captured_at": "2026-03-15T19:49:12.816588063+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": null,
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-17",
+      "captured_at": "2026-03-15T19:49:12.816627447+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-18",
+      "captured_at": "2026-03-15T19:49:12.816678473+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "read_file",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-19",
+      "captured_at": "2026-03-15T19:49:12.816681128+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "read_file",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-20",
+      "captured_at": "2026-03-15T19:49:12.817302254+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "read_file",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-21",
+      "captured_at": "2026-03-15T19:49:12.817313715+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "evidence_visible",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-31",
+      "captured_at": "2026-03-15T19:49:12.817313715+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": null,
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:29c442ac508992be2e00f5abd89dba015b4e7468b73dbadd29c688e3235c648b",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/29c442ac508992be2e00f5abd89dba015b4e7468b73dbadd29c688e3235c648b.json",
+          "byte_count": 6544
+        },
+        {
+          "blob_id": "sha256:062b2bcadb780a381d21e27e7120bc20e0edce31cbd8f98074794c885ca3e0de",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/062b2bcadb780a381d21e27e7120bc20e0edce31cbd8f98074794c885ca3e0de.json",
+          "byte_count": 7915
+        },
+        {
+          "blob_id": "sha256:98c7bae848c6df1739b2bee76b8d3ea1f3bce06b99ce9ffaf4a975b14f449dc6",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/98c7bae848c6df1739b2bee76b8d3ea1f3bce06b99ce9ffaf4a975b14f449dc6.json",
+          "byte_count": 390
+        },
+        {
+          "blob_id": "sha256:c00269aff76159366b1926b7007ae83e9f24f6513f9138ccb29cb0c7e596e2b4",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/c00269aff76159366b1926b7007ae83e9f24f6513f9138ccb29cb0c7e596e2b4.txt",
+          "byte_count": 4156
+        },
+        {
+          "blob_id": "sha256:05cc8fd4b58935105ef625d77addc40700bf21bd0830d665c2978f1ab90c23cd",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/05cc8fd4b58935105ef625d77addc40700bf21bd0830d665c2978f1ab90c23cd.txt",
+          "byte_count": 3995
+        }
+      ]
+    },
+    {
+      "event_id": "event-22",
+      "captured_at": "2026-03-15T19:49:12.818016364+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "think",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-23",
+      "captured_at": "2026-03-15T19:49:12.822534432+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:8d0b977bae6ca2cc52a02b7f9c3591a5699e7ec3bbee830a212ff1801853a805",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:0af04404dabe78175e5af5ad197b3044281e77dd71521e8a8a1861c7ff1de4bb",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-24",
+      "captured_at": "2026-03-15T19:49:12.822543008+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-25",
+      "captured_at": "2026-03-15T19:49:15.273746928+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": null,
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-26",
+      "captured_at": "2026-03-15T19:49:15.273776233+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "complete",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-27",
+      "captured_at": "2026-03-15T19:49:15.273831918+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "evidence_acquired",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-32",
+      "captured_at": "2026-03-15T19:49:15.273831918+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": null,
+        "tool_calls": 0
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:9ed4a5b286ad559a0625bb1146a1a263b4b0863b420eed5e5044ed94cfcabcf0",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/9ed4a5b286ad559a0625bb1146a1a263b4b0863b420eed5e5044ed94cfcabcf0.json",
+          "byte_count": 11221
+        },
+        {
+          "blob_id": "sha256:d0a5cda18c59106ee0c43dfba25e81d24f2bd3bbcd285f6534b35a2a7e632411",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/d0a5cda18c59106ee0c43dfba25e81d24f2bd3bbcd285f6534b35a2a7e632411.json",
+          "byte_count": 6968
+        },
+        {
+          "blob_id": "sha256:40dc39d86bcacbac07f377e2d54abe78b1ecb07e890602b79738f82fddad69be",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/40dc39d86bcacbac07f377e2d54abe78b1ecb07e890602b79738f82fddad69be.json",
+          "byte_count": 331
+        },
+        {
+          "blob_id": "sha256:0af04404dabe78175e5af5ad197b3044281e77dd71521e8a8a1861c7ff1de4bb",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/0af04404dabe78175e5af5ad197b3044281e77dd71521e8a8a1861c7ff1de4bb.txt",
+          "byte_count": 8625
+        },
+        {
+          "blob_id": "sha256:8d0b977bae6ca2cc52a02b7f9c3591a5699e7ec3bbee830a212ff1801853a805",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/8d0b977bae6ca2cc52a02b7f9c3591a5699e7ec3bbee830a212ff1801853a805.txt",
+          "byte_count": 8464
+        }
+      ]
+    },
+    {
+      "event_id": "event-28",
+      "captured_at": "2026-03-15T19:49:15.273834983+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "scoring",
+      "event_type": "evidence.matched",
+      "details": {
+        "event": "evidence_matched",
+        "fact_ids": [
+          "fx_validations"
+        ],
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-29",
+      "captured_at": "2026-03-15T19:49:15.275029475+00:00",
+      "run_id": "smoke-openrouter-1773604147",
+      "task_id": "prepare-edit.fixture-loading",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": null,
+      "component": "harness",
+      "event_type": "run.completed",
+      "details": {
+        "event": "run_completed",
+        "run_id": "smoke-openrouter-1773604147",
+        "turns": 3
+      },
+      "blob_refs": []
+    }
+  ],
+  "turns": [
+    {
+      "turn_index": 0,
+      "request_blob": {
+        "blob_id": "sha256:ba55e377f6309a5449ae513ebb6ae1532a3ada4dea67f5be6ba1043cc33745fc",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/ba55e377f6309a5449ae513ebb6ae1532a3ada4dea67f5be6ba1043cc33745fc.json",
+        "byte_count": 4894
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:44cf1efbf9008bf0c8dd489b4d4bce6732cfea7effbbd90fdcd699fc6fda940e",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/44cf1efbf9008bf0c8dd489b4d4bce6732cfea7effbbd90fdcd699fc6fda940e.json",
+        "byte_count": 7609
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:58a0a39b1e0d39c2abafa1fceaea649a4d7d30d3d93b6687cc54b15b3b5693b6",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/58a0a39b1e0d39c2abafa1fceaea649a4d7d30d3d93b6687cc54b15b3b5693b6.json",
+        "byte_count": 428
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:8bea7e08f961b0b1c042de2ec950d2c3ad428e6675933fbfbdff20c5894c0f83",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/8bea7e08f961b0b1c042de2ec950d2c3ad428e6675933fbfbdff20c5894c0f83.txt",
+        "byte_count": 2631
+      },
+      "context_blob": {
+        "blob_id": "sha256:2f2378680e3aa48026b302c6254295811225f05d06bc91ef4baa47f57c18e619",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/2f2378680e3aa48026b302c6254295811225f05d06bc91ef4baa47f57c18e619.txt",
+        "byte_count": 2470
+      },
+      "provider_request_id": null,
+      "telemetry": {
+        "prompt_bytes": 2631,
+        "prompt_tokens": 321,
+        "latency_ms": 2993,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "search",
+          "latency_ms": 4,
+          "outcome": "ok",
+          "input_payload": {
+            "path": "crates/graphbench-core/src/artifacts.rs",
+            "pattern": "fixture"
+          },
+          "output_payload": {
+            "exit_code": 0,
+            "matches": [
+              "53:    pub fixture_id: String,",
+              "66:                \"fixture_manifest\",",
+              "68:                \"unsupported fixture schema version\",",
+              "72:        validate_identifier(&self.fixture_id, \"fixture.fixture_id\")?;",
+              "74:        validate_non_empty(&self.repository.source, \"fixture.repository.source\")?;",
+              "75:        validate_non_empty(&self.graph.snapshot_format, \"fixture.graph.snapshot_format\")?;",
+              "76:        validate_non_empty(&self.graph.snapshot_ref, \"fixture.graph.snapshot_ref\")?;",
+              "78:        validate_non_empty(&self.metadata.title, \"fixture.metadata.title\")?;",
+              "83:                \"fixture_manifest\",",
+              "85:                \"fixture.languages must not be empty\",",
+              "126:    pub fixture_id: String,",
+              "154:        validate_identifier(&self.fixture_id, \"task.fixture_id\")?;",
+              "504:    pub fixture_id: String,",
+              "532:        validate_identifier(&self.fixture_id, \"turn_trace.fixture_id\")?;",
+              "651:    pub fixture_manifest: u32,",
+              "664:    pub fixture_id: String,",
+              "690:        validate_identifier(&self.fixture_id, \"run_manifest.fixture_id\")?;",
+              "740:            \"fixture_manifest\",",
+              "742:            \"fixture.repository.commit_sha must be a 40-character hex SHA\",",
+              "810:    fn fixture_validation_requires_pinned_sha() {"
+            ],
+            "path": "crates/graphbench-core/src/artifacts.rs",
+            "pattern": "fixture",
+            "stderr": "",
+            "truncated": true
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 1,
+      "request_blob": {
+        "blob_id": "sha256:29c442ac508992be2e00f5abd89dba015b4e7468b73dbadd29c688e3235c648b",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/29c442ac508992be2e00f5abd89dba015b4e7468b73dbadd29c688e3235c648b.json",
+        "byte_count": 6544
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:062b2bcadb780a381d21e27e7120bc20e0edce31cbd8f98074794c885ca3e0de",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/062b2bcadb780a381d21e27e7120bc20e0edce31cbd8f98074794c885ca3e0de.json",
+        "byte_count": 7915
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:98c7bae848c6df1739b2bee76b8d3ea1f3bce06b99ce9ffaf4a975b14f449dc6",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/98c7bae848c6df1739b2bee76b8d3ea1f3bce06b99ce9ffaf4a975b14f449dc6.json",
+        "byte_count": 390
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:c00269aff76159366b1926b7007ae83e9f24f6513f9138ccb29cb0c7e596e2b4",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/c00269aff76159366b1926b7007ae83e9f24f6513f9138ccb29cb0c7e596e2b4.txt",
+        "byte_count": 4156
+      },
+      "context_blob": {
+        "blob_id": "sha256:05cc8fd4b58935105ef625d77addc40700bf21bd0830d665c2978f1ab90c23cd",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/05cc8fd4b58935105ef625d77addc40700bf21bd0830d665c2978f1ab90c23cd.txt",
+        "byte_count": 3995
+      },
+      "provider_request_id": null,
+      "telemetry": {
+        "prompt_bytes": 4156,
+        "prompt_tokens": 386,
+        "latency_ms": 2756,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "read_file",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "input_payload": {
+            "path": "crates/graphbench-core/src/artifacts.rs"
+          },
+          "output_payload": {
+            "contents": "use crate::error::{AppError, ErrorCode, ErrorContext};\nuse serde::{Deserialize, Serialize};\n\npub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;\npub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;\npub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;\npub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;\npub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;\npub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;\npub const SCORE_REPORT_SCHEMA_VERSION: u32 = 1;\npub const RUN_MANIFEST_SCHEMA_VERSION: u32 = 1;\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum MirrorPolicy {\n    Workspace,\n    LocalCacheOnly,\n    MirrorRequired,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct RepositoryRef {\n    pub source: String,\n    pub commit_sha: String,\n    pub mirror_policy: MirrorPolicy,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct GraphSnapshot {\n    pub snapshot_id: String,\n    pub snapshot_format: String,\n    pub snapshot_ref: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct FixtureMetadata {\n    pub title: String,\n    pub notes: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum FixtureLanguage {\n    Rust,\n    TypeScript,\n    Markdown,\n    Yaml,\n    Json,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct FixtureManifest {\n    pub fixture_id: String,\n    pub schema_version: u32,\n    pub repository: RepositoryRef,\n    pub graph: GraphSnapshot,\n    pub languages: Vec<FixtureLanguage>,\n    pub metadata: FixtureMetadata,\n}\n\nimpl FixtureManifest {\n    pub fn validate(&self) -> Result<(), AppError> {\n        if self.schema_version != FIXTURE_MANIFEST_SCHEMA_VERSION {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"fixture_manifest\",\n                \"validate\",\n                \"unsupported fixture schema version\",\n            ));\n        }\n\n        validate_identifier(&self.fixture_id, \"fixture.fixture_id\")?;\n        validate_commit_sha(&self.repository.commit_sha)?;\n        validate_non_empty(&self.repository.source, \"fixture.repository.source\")?;\n        validate_non_empty(&self.graph.snapshot_format, \"fixture.graph.snapshot_format\")?;\n        validate_non_empty(&self.graph.snapshot_ref, \"fixture.graph.snapshot_ref\")?;\n        validate_snapshot_id(&self.graph.snapshot_id)?;\n        validate_non_empty(&self.metadata.title, \"fixture.metadata.title\")?;\n\n        if self.languages.is_empty() {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"fixture_manifest\",\n                \"validate\",\n                \"fixture.languages must not be empty\",\n            ));\n        }\n\n        Ok(())\n    }\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum TaskClass {\n    Locate,\n    Explain,\n    PrepareToEdit,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum Difficulty {\n    Easy,\n    Medium,\n    Hard,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct VerificationTarget {\n    pub kind: String,\n    pub value: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TaskReview {\n    pub required_evidence_is_sufficient: bool,\n    pub distractors_are_realistic: bool,\n    pub multiple_valid_paths_considered: bool,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TaskSpec {\n    pub task_id: String,\n    pub schema_version: u32,\n    pub fixture_id: String,\n    pub title: String,\n    pub statement: String,\n    pub task_class: TaskClass,\n    pub difficulty: Difficulty,\n    pub allowed_tools: Vec<String>,\n    pub turn_budget: u32,\n    pub evidence_spec_ref: String,\n    pub seed_paths: Vec<String>,\n    pub seed_selectors: Vec<String\n...[truncated]",
+            "line_count": 964,
+            "path": "crates/graphbench-core/src/artifacts.rs",
+            "status": "ok",
+            "truncated": true
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 2,
+      "request_blob": {
+        "blob_id": "sha256:9ed4a5b286ad559a0625bb1146a1a263b4b0863b420eed5e5044ed94cfcabcf0",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/9ed4a5b286ad559a0625bb1146a1a263b4b0863b420eed5e5044ed94cfcabcf0.json",
+        "byte_count": 11221
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:d0a5cda18c59106ee0c43dfba25e81d24f2bd3bbcd285f6534b35a2a7e632411",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/d0a5cda18c59106ee0c43dfba25e81d24f2bd3bbcd285f6534b35a2a7e632411.json",
+        "byte_count": 6968
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:40dc39d86bcacbac07f377e2d54abe78b1ecb07e890602b79738f82fddad69be",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/40dc39d86bcacbac07f377e2d54abe78b1ecb07e890602b79738f82fddad69be.json",
+        "byte_count": 331
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:0af04404dabe78175e5af5ad197b3044281e77dd71521e8a8a1861c7ff1de4bb",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/0af04404dabe78175e5af5ad197b3044281e77dd71521e8a8a1861c7ff1de4bb.txt",
+        "byte_count": 8625
+      },
+      "context_blob": {
+        "blob_id": "sha256:8d0b977bae6ca2cc52a02b7f9c3591a5699e7ec3bbee830a212ff1801853a805",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/8d0b977bae6ca2cc52a02b7f9c3591a5699e7ec3bbee830a212ff1801853a805.txt",
+        "byte_count": 8464
+      },
+      "provider_request_id": null,
+      "telemetry": {
+        "prompt_bytes": 8625,
+        "prompt_tokens": 700,
+        "latency_ms": 2451,
+        "tool_calls": 0
+      },
+      "tool_traces": []
+    }
+  ],
+  "aggregation": {
+    "total_turns": 3,
+    "aggregate_prompt_bytes": 15412,
+    "aggregate_prompt_tokens": 1407,
+    "aggregate_latency_ms": 8200,
+    "aggregate_tool_calls": 2
+  },
+  "structured_logs": [
+    {
+      "captured_at": "2026-03-15T19:49:06.620213381+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-15T19:49:06.762879344+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-15T19:49:06.908339380+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-15T19:49:07.061012873+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "run.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-15T19:49:07.061025637+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T19:49:07.062829161+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T19:49:07.062835704+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T19:49:10.051819137+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T19:49:10.051849474+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T19:49:10.051912101+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.requested",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T19:49:10.051914596+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T19:49:10.056486425+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T19:49:10.056553110+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T19:49:10.056553110+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T19:49:10.057483556+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T19:49:10.060563486+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T19:49:10.060570289+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T19:49:12.816588063+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T19:49:12.816627447+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T19:49:12.816678473+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.requested",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T19:49:12.816681128+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T19:49:12.817302254+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T19:49:12.817313715+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T19:49:12.817313715+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T19:49:12.818016364+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-15T19:49:12.822534432+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-15T19:49:12.822543008+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-15T19:49:15.273746928+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-15T19:49:15.273776233+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-15T19:49:15.273831918+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-15T19:49:15.273831918+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-15T19:49:15.273834983+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "evidence.matched",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-15T19:49:15.275029475+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "run.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773604147",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.fixture-loading",
+      "turn_index": null
+    }
+  ]
+}

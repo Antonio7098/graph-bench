@@ -1,0 +1,39 @@
+GraphBench runtime. Stay bounded, typed, and evidence-oriented.
+
+## UCL Command Reference
+
+## Rules
+1. Output ONLY the UCL command(s), no explanations or markdown
+2. Use exact block IDs as provided
+3. String values must be quoted with double quotes
+4. Block IDs are short numeric IDs (1, 2, 3, etc.)
+5. Do NOT use operators like + for string concatenation - just provide the full value
+6. Responses must be schema-valid.
+Return JSON only with this exact shape: {{"kind":"think|tool_call|complete","assistant_message":"<brief status>","tool_call":{{"tool_name":"<one registered tool name>","payload":{{}}}},"acquired_fact_ids":["<fact id>"],"readiness_state":"not_ready|evidence_visible|evidence_acquired|ready_to_edit"}}. Use null or omit tool_call unless kind is tool_call. When kind is tool_call, tool_call.tool_name must exactly match one of the registered tool names shown below. Do not invent helper tools, verifier tools, or meta tools.
+Task: Gather the exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned.
+Class: prepare_to_edit
+Allowed Tools:
+read_file
+list_dir
+search
+Verification Targets:
+command: cargo test --workspace
+Gather the exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned.
+crates/graphbench-core/src/artifacts.rs
+   1 | use crate::error::{AppError, ErrorCode, ErrorContext};
+   2 | use serde::{Deserialize, Serialize};
+   3 | 
+   4 | pub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;
+   5 | pub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;
+   6 | pub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;
+   7 | pub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;
+   8 | pub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;
+   9 | pub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;
+
+- crates/graphbench-core/src/artifacts.rs | kind=file | logical_key=file:crates/graphbench-core/src/artifacts.rs | path=crates/graphbench-core/src/artifacts.rs | detail=Source
+- crates | kind=directory | logical_key=directory:crates | path=crates | detail=Skeleton
+- frontend | kind=directory | logical_key=directory:frontend | path=frontend | detail=Skeleton
+- . | kind=repository | logical_key=repository:graph-bench | path=. | detail=Skeleton
+- list_dir@v1: Payload with path string
+- read_file@v1: Payload with path string
+- search@v1: Payload with pattern string and optional path

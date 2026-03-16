@@ -1,0 +1,23 @@
+[package]
+name = "graphbench-harness"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+
+[dependencies]
+graphbench-core = { path = "../graphbench-core" }
+graphbench-store = { path = "../graphbench-store" }
+chrono = { version = "0.4", default-features = false, features = ["clock"] }
+regex = "1.11"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+sha2 = "0.10"
+ucp-llm = { path = "/home/antonio/programming/Hivemind/unified-content-protocol/crates/ucp-llm" }
+llm = { version = "1.3.7", default-features = false, features = ["openrouter", "rustls-tls"] }
+reqwest = { version = "0.12", default-features = false, features = ["json", "rustls-tls"] }
+tokio = { version = "1.48", features = ["rt", "time"] }
+ucm-core = { path = "/home/antonio/programming/Hivemind/unified-content-protocol/crates/ucm-core" }
+ucp-codegraph = { path = "/home/antonio/programming/Hivemind/unified-content-protocol/crates/ucp-codegraph" }
+
+[lints]
+workspace = true

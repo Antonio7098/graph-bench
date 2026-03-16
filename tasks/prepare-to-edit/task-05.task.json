@@ -1,0 +1,24 @@
+{
+  "task_id": "prepare-edit.frontend-contracts",
+  "schema_version": 1,
+  "fixture_id": "graphbench.internal",
+  "title": "Prepare to extend frontend artifact projections",
+  "statement": "Collect the evidence needed before editing frontend artifact projections so the UI remains aligned with the backend schema contracts.",
+  "task_class": "prepare_to_edit",
+  "difficulty": "medium",
+  "allowed_tools": ["read_file", "list_dir", "search"],
+  "turn_budget": 7,
+  "evidence_spec_ref": "evidence.prepare-edit.frontend-contracts",
+  "seed_paths": ["frontend/src/types/artifacts.ts", "docs/storage-ui-and-reproducibility.md"],
+  "seed_selectors": ["graphbench-core::artifacts"],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test initial_task_corpus_loads_and_validates" }
+  ],
+  "known_distractor_regions": ["frontend/src/styles.css", "README.md"],
+  "expected_edit_loci": ["frontend/src/types/artifacts.ts", "schemas/"],
+  "review": {
+    "required_evidence_is_sufficient": true,
+    "distractors_are_realistic": true,
+    "multiple_valid_paths_considered": true
+  }
+}

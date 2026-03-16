@@ -1,0 +1,77 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "graphbench://schemas/context-object.schema.json",
+  "title": "Context Object",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "context_object_id",
+    "schema_version",
+    "graph_snapshot_id",
+    "kind",
+    "identity",
+    "representation_level",
+    "provenance",
+    "relevance_score",
+    "lease_state",
+    "evidence_matches",
+    "hashes"
+  ],
+  "properties": {
+    "context_object_id": { "type": "string" },
+    "schema_version": { "const": 1 },
+    "graph_snapshot_id": { "type": "string", "pattern": "^sha256:[a-fA-F0-9]{64}$" },
+    "kind": {
+      "enum": [
+        "symbol",
+        "symbol_cluster",
+        "file_region",
+        "dependency_neighborhood",
+        "test_target",
+        "validation_artifact",
+        "tool_result_summary",
+        "dirty_edit_locus"
+      ]
+    },
+    "identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "logical_key": { "type": ["string", "null"] },
+        "path": { "type": ["string", "null"] },
+        "symbol": { "type": ["string", "null"] }
+      }
+    },
+    "representation_level": { "enum": ["l0", "l1", "l2", "l3", "l4", "l5"] },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source_kind", "anchor_id"],
+      "properties": {
+        "source_kind": { "type": "string" },
+        "anchor_id": { "type": "string" }
+      }
+    },
+    "relevance_score": { "type": "integer" },
+    "lease_state": { "enum": ["granted", "expiring", "denied"] },
+    "evidence_matches": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["fact_id"],
+        "properties": {
+          "fact_id": { "type": "string" }
+        }
+      }
+    },
+    "hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["object_hash"],
+      "properties": {
+        "object_hash": { "type": "string", "pattern": "^sha256:[a-fA-F0-9]{64}$" }
+      }
+    }
+  }
+}

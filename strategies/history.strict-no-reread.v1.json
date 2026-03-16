@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "strategy_id": "history.strict-no-reread",
+  "strategy_version": "v1",
+  "graph_discovery": "graph_then_targeted_lexical_read",
+  "projection": "balanced",
+  "reread_policy": "strict_no_reread",
+  "context_window": {
+    "compaction": {
+      "history_recent_items": 6,
+      "summary_max_chars": 2600,
+      "emergency_summary_max_chars": 900,
+      "deduplicate_tool_results": true
+    },
+    "section_budgets": [
+      { "section_id": "base_runtime_instructions", "max_tokens": 180, "trim_direction": "tail" },
+      { "section_id": "response_contract", "max_tokens": 140, "trim_direction": "tail" },
+      { "section_id": "objective_state", "max_tokens": 180, "trim_direction": "tail" },
+      { "section_id": "selected_history", "max_tokens": 320, "trim_direction": "head" },
+      { "section_id": "active_code_windows", "max_tokens": 260, "trim_direction": "tail" },
+      { "section_id": "code_navigation_items", "max_tokens": 240, "trim_direction": "tail" },
+      { "section_id": "graph_relations", "max_tokens": 160, "trim_direction": "tail" },
+      { "section_id": "graph_frontier", "max_tokens": 180, "trim_direction": "tail" },
+      { "section_id": "tool_contracts", "max_tokens": 180, "trim_direction": "tail" }
+    ]
+  }
+}

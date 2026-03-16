@@ -1,0 +1,24 @@
+{
+  "task_id": "prepare-edit.command-surface",
+  "schema_version": 1,
+  "fixture_id": "graphbench.internal",
+  "title": "Prepare to edit repo-wide command conventions",
+  "statement": "Gather the evidence required to change format, lint, typecheck, test, and build commands without drifting from the documented command surface.",
+  "task_class": "prepare_to_edit",
+  "difficulty": "easy",
+  "allowed_tools": ["read_file", "list_dir", "search"],
+  "turn_budget": 6,
+  "evidence_spec_ref": "evidence.prepare-edit.command-surface",
+  "seed_paths": ["Justfile", "README.md"],
+  "seed_selectors": [".cargo/config.toml"],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo fmt --all --check" }
+  ],
+  "known_distractor_regions": ["frontend/index.html", "docs/index.md"],
+  "expected_edit_loci": ["Justfile", "README.md", ".cargo/config.toml"],
+  "review": {
+    "required_evidence_is_sufficient": true,
+    "distractors_are_realistic": true,
+    "multiple_valid_paths_considered": true
+  }
+}

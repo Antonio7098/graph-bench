@@ -1,0 +1,43 @@
+{
+  "evidence_spec_id": "evidence.prepare-edit.harness-loop",
+  "schema_version": 1,
+  "required_facts": [
+    {
+      "fact_id": "harness-loop-has-explicit-states",
+      "description": "The harness loop is modeled with explicit init, think, act, and done states.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "crates/graphbench-harness/src/lib.rs" },
+        { "kind": "excerpt", "value": "Init" }
+      ]
+    },
+    {
+      "fact_id": "done-state-fails-fast",
+      "description": "Advancing the done state is treated as a hard failure.",
+      "acceptable_proofs": [
+        { "kind": "symbol", "value": "graphbench_harness::LoopState::advance" },
+        { "kind": "excerpt", "value": "loop is already complete" }
+      ]
+    }
+  ],
+  "supporting_facts": [
+    {
+      "fact_id": "harness-docs-require-bounded-state-machine",
+      "description": "The harness documentation requires an explicit and finite runtime state machine.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "docs/harness.md" }
+      ]
+    }
+  ],
+  "distractor_facts": [
+    {
+      "fact_id": "logging-events-control-state-machine",
+      "description": "Logging event names do not define loop transitions.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "crates/graphbench-core/src/logging.rs" }
+      ]
+    }
+  ],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test loop_state_advances_deterministically" }
+  ]
+}

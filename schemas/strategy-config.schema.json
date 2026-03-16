@@ -1,0 +1,98 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "graphbench://schemas/strategy-config.schema.json",
+  "title": "Strategy Config",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "strategy_id",
+    "strategy_version",
+    "graph_discovery",
+    "projection",
+    "reread_policy",
+    "context_window"
+  ],
+  "properties": {
+    "schema_version": { "const": 1 },
+    "strategy_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_-]+\\.[a-z0-9_-]+(?:\\.[a-z0-9_-]+)*$"
+    },
+    "strategy_version": {
+      "type": "string",
+      "pattern": "^v[0-9]+(?:\\.[0-9]+){0,2}$"
+    },
+    "graph_discovery": {
+      "enum": [
+        "broad_graph_discovery",
+        "graph_then_targeted_lexical_read"
+      ]
+    },
+    "projection": {
+      "enum": [
+        "balanced",
+        "high_recall",
+        "minimal"
+      ]
+    },
+    "reread_policy": {
+      "enum": [
+        "allow",
+        "strict_no_reread"
+      ]
+    },
+    "context_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "compaction",
+        "section_budgets"
+      ],
+      "properties": {
+        "compaction": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "history_recent_items",
+            "summary_max_chars",
+            "emergency_summary_max_chars",
+            "deduplicate_tool_results"
+          ],
+          "properties": {
+            "history_recent_items": { "type": "integer", "minimum": 1 },
+            "summary_max_chars": { "type": "integer", "minimum": 1 },
+            "emergency_summary_max_chars": { "type": "integer", "minimum": 1 },
+            "deduplicate_tool_results": { "type": "boolean" }
+          }
+        },
+        "section_budgets": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "section_id",
+              "max_tokens",
+              "trim_direction"
+            ],
+            "properties": {
+              "section_id": {
+                "type": "string",
+                "pattern": "^[A-Za-z0-9_-]+$"
+              },
+              "max_tokens": { "type": "integer", "minimum": 1 },
+              "trim_direction": {
+                "enum": [
+                  "head",
+                  "tail"
+                ]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

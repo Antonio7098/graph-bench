@@ -1,0 +1,19 @@
+{
+  "fixture_id": "graphbench.internal",
+  "schema_version": 1,
+  "repository": {
+    "source": "../..",
+    "commit_sha": "1111111111111111111111111111111111111111",
+    "mirror_policy": "workspace"
+  },
+  "graph": {
+    "snapshot_id": "sha256:c37df646d33c4e5ed39f91330633051ccc685986e2c98577eb6fb8c4efdc9bc7",
+    "snapshot_format": "codegraph_portable_document",
+    "snapshot_ref": "graph.snapshot.json"
+  },
+  "languages": ["rust", "type_script", "markdown", "yaml", "json"],
+  "metadata": {
+    "title": "GraphBench internal foundation fixture",
+    "notes": "Pinned local workspace fixture for schema, fixture, and task-authoring development."
+  }
+}

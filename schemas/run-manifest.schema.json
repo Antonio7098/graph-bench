@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "graphbench://schemas/run-manifest.schema.json",
+  "title": "Run Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "schema_version",
+    "fixture_id",
+    "task_id",
+    "strategy_id",
+    "strategy_config",
+    "harness_version",
+    "schema_version_set",
+    "provider",
+    "model_slug",
+    "prompt_version",
+    "graph_snapshot_id",
+    "started_at",
+    "completed_at",
+    "outcome"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "schema_version": { "const": 2 },
+    "fixture_id": { "type": "string" },
+    "task_id": { "type": "string" },
+    "strategy_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9_-]+\\.[a-z0-9_-]+(?:\\.[a-z0-9_-]+)*$"
+    },
+    "strategy_config": { "$ref": "strategy-config.schema.json" },
+    "harness_version": { "type": "string" },
+    "schema_version_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "fixture_manifest",
+        "task_spec",
+        "evidence_spec",
+        "strategy_config",
+        "context_object",
+        "context_window_section",
+        "turn_trace",
+        "score_report"
+      ],
+      "properties": {
+        "fixture_manifest": { "const": 1 },
+        "task_spec": { "const": 1 },
+        "evidence_spec": { "const": 1 },
+        "strategy_config": { "const": 1 },
+        "context_object": { "const": 1 },
+        "context_window_section": { "const": 1 },
+        "turn_trace": { "const": 1 },
+        "score_report": { "const": 1 }
+      }
+    },
+    "provider": { "type": "string" },
+    "model_slug": { "type": "string" },
+    "prompt_version": { "type": "string" },
+    "graph_snapshot_id": { "type": "string", "pattern": "^sha256:[a-fA-F0-9]{64}$" },
+    "started_at": { "type": "string" },
+    "completed_at": { "type": "string" },
+    "outcome": { "type": "string" }
+  }
+}

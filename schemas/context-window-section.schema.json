@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "graphbench://schemas/context-window-section.schema.json",
+  "title": "Context Window Section",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["section_id", "schema_version", "title", "content", "byte_count", "token_count"],
+  "properties": {
+    "section_id": { "type": "string" },
+    "schema_version": { "const": 1 },
+    "title": { "type": "string" },
+    "content": { "type": "string" },
+    "byte_count": { "type": "integer", "minimum": 0 },
+    "token_count": { "type": "integer", "minimum": 0 }
+  }
+}

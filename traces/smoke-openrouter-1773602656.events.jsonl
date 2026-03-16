@@ -1,0 +1,2 @@
+{"component":"turn","error_code":null,"event":"turn.completed","fixture_id":"graphbench.internal","run_id":"smoke-openrouter-1773602656","strategy_id":"smoke-openrouter","task_id":"prepare-edit.schema-boundaries","turn_index":0}
+{"component":"turn","error_code":null,"event":"turn.completed","fixture_id":"graphbench.internal","run_id":"smoke-openrouter-1773602656","strategy_id":"smoke-openrouter","task_id":"prepare-edit.schema-boundaries","turn_index":1}

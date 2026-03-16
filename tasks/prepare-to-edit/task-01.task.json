@@ -1,0 +1,24 @@
+{
+  "task_id": "prepare-edit.schema-boundaries",
+  "schema_version": 1,
+  "fixture_id": "graphbench.internal",
+  "title": "Prepare to extend artifact schemas without breaking version boundaries",
+  "statement": "Gather the exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned.",
+  "task_class": "prepare_to_edit",
+  "difficulty": "medium",
+  "allowed_tools": ["read_file", "list_dir", "search"],
+  "turn_budget": 8,
+  "evidence_spec_ref": "evidence.prepare-edit.schema-boundaries",
+  "seed_paths": ["schemas/fixture-manifest.schema.json", "docs/artifacts-and-schemas.md"],
+  "seed_selectors": ["graphbench-core::artifacts"],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test --workspace" }
+  ],
+  "known_distractor_regions": ["README.md", "docs/development-plan.md"],
+  "expected_edit_loci": ["schemas/", "crates/graphbench-core/src/artifacts.rs"],
+  "review": {
+    "required_evidence_is_sufficient": true,
+    "distractors_are_realistic": true,
+    "multiple_valid_paths_considered": true
+  }
+}

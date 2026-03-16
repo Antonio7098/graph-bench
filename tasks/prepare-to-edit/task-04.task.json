@@ -1,0 +1,24 @@
+{
+  "task_id": "prepare-edit.score-reporting",
+  "schema_version": 1,
+  "fixture_id": "graphbench.internal",
+  "title": "Prepare to change deterministic scoring fields",
+  "statement": "Before editing score calculations, gather the fields and bounds that define evidence visibility, acquisition, efficiency, and explanation scoring.",
+  "task_class": "prepare_to_edit",
+  "difficulty": "medium",
+  "allowed_tools": ["read_file", "list_dir", "search"],
+  "turn_budget": 7,
+  "evidence_spec_ref": "evidence.prepare-edit.score-reporting",
+  "seed_paths": ["schemas/score-report.schema.json", "docs/scoring-and-evaluation.md"],
+  "seed_selectors": ["graphbench-core::artifacts::ScoreReport"],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test score_report_validation_bounds_scores" }
+  ],
+  "known_distractor_regions": ["docs/context-window.md", "frontend/src/styles.css"],
+  "expected_edit_loci": ["crates/graphbench-core/src/artifacts.rs", "schemas/score-report.schema.json"],
+  "review": {
+    "required_evidence_is_sufficient": true,
+    "distractors_are_realistic": true,
+    "multiple_valid_paths_considered": true
+  }
+}

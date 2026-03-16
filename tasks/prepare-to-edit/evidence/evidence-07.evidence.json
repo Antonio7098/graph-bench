@@ -1,0 +1,43 @@
+{
+  "evidence_spec_id": "evidence.prepare-edit.foundation-checklist",
+  "schema_version": 1,
+  "required_facts": [
+    {
+      "fact_id": "roadmap-tracks-foundation-schema-fixture-task-work",
+      "description": "The roadmap explicitly tracks foundation, schema, fixture, and task/evidence work items.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "ops/ROADMAP.md" },
+        { "kind": "excerpt", "value": "## 1. Schema Layer" }
+      ]
+    },
+    {
+      "fact_id": "repo-map-points-to-domain-directories",
+      "description": "The README repo map points to the crates, frontend, and benchmark directories.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "README.md" },
+        { "kind": "excerpt", "value": "`schemas/`, `fixtures/`, `tasks/`, `strategies/`, `traces/`, `reports/`" }
+      ]
+    }
+  ],
+  "supporting_facts": [
+    {
+      "fact_id": "task-corpus-is-loaded-from-rust",
+      "description": "The Rust task loader validates the initial corpus count.",
+      "acceptable_proofs": [
+        { "kind": "coderef", "value": "crates/graphbench-core/src/tasks.rs" }
+      ]
+    }
+  ],
+  "distractor_facts": [
+    {
+      "fact_id": "public-asset-folder-defines-roadmap-state",
+      "description": "The frontend public folder is not the implementation tracker.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "frontend/public" }
+      ]
+    }
+  ],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test task_specs_load_in_stable_count" }
+  ]
+}

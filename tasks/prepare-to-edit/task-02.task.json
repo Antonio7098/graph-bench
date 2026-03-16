@@ -1,0 +1,24 @@
+{
+  "task_id": "prepare-edit.fixture-loading",
+  "schema_version": 1,
+  "fixture_id": "graphbench.internal",
+  "title": "Prepare to modify fixture loading and identity validation",
+  "statement": "Gather the evidence required to edit fixture loading while preserving pinned commit validation, local path resolution, and graph snapshot identity checks.",
+  "task_class": "prepare_to_edit",
+  "difficulty": "medium",
+  "allowed_tools": ["read_file", "list_dir", "search"],
+  "turn_budget": 8,
+  "evidence_spec_ref": "evidence.prepare-edit.fixture-loading",
+  "seed_paths": ["fixtures/graphbench-internal/fixture.json", "docs/tasks-and-evidence.md"],
+  "seed_selectors": ["graphbench-core::fixtures::FixtureRepository"],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test internal_fixture_loads" }
+  ],
+  "known_distractor_regions": ["docs/storage-ui-and-reproducibility.md", "reports/README.md"],
+  "expected_edit_loci": ["crates/graphbench-core/src/fixtures.rs", "fixtures/graphbench-internal/fixture.json"],
+  "review": {
+    "required_evidence_is_sufficient": true,
+    "distractors_are_realistic": true,
+    "multiple_valid_paths_considered": true
+  }
+}

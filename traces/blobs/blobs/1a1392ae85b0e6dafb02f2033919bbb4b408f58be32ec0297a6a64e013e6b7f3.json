@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\": [],\n  \"assistant_message\": \"Collected evidence on FixtureManifest dependencies\",\n  \"kind\": \"complete\",\n  \"readiness_state\": \"ready_to_edit\"\n}",
+          "reasoning": "We need to output JSON with kind \"complete\" maybe? The task: Gather evidence required to edit fixture loading while preserving pinned commit validation, local path resolution, and graph snapshot identity checks. We have done many steps already. The active code window shows artifacts.rs snippet. We need to produce UCL command(s) only. Must be schema-valid JSON with fields: kind, assistant_message, tool_call, acquired_fact_ids, readiness_state.\n\nWe have gathered evidence? The last steps show expansion of dependents of FixtureManifest and tool results ok. Probably now we are ready to edit. Readiness_state likely \"ready_to_edit\". We need to output JSON only. Probably kind: \"complete\" or \"ready_to_edit\"? The contract says readiness_state can be not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we have evidence, maybe \"evidence_acquired\". But we might be ready to edit, so readiness_state \"ready_to_edit\". The assistant_message brief status.\n\nWe need to include tool_call? If kind is \"complete\", tool_call should be omitted or null. The schema: If kind is not tool_call, tool_call can be omitted. So we can set kind: \"complete\", assistant_message: \"Collected evidence on FixtureManifest dependencies\", tool_call: null (or omit). acquired_fact_ids: list of fact IDs? We haven't referenced fact IDs; we can provide some placeholder IDs? Probably we can leave empty array. readiness_state: \"ready_to_edit\". Provide JSON with those fields.\n\nThus:\n\n{\n \"kind\":\"complete\",\n \"assistant_message\":\"Collected evidence on FixtureManifest dependencies\",\n \"tool_call\":null,\n \"acquired_fact_ids\":[],\n \"readiness_state\":\"ready_to_edit\"\n}\n\nBut must be valid JSON, no extra fields. No markdown. Ensure proper quoting. Use null for tool_call. Provide empty array for acquired_fact_ids.\n\nThus final.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to output JSON with kind \"complete\" maybe? The task: Gather evidence required to edit fixture loading while preserving pinned commit validation, local path resolution, and graph snapshot identity checks. We have done many steps already. The active code window shows artifacts.rs snippet. We need to produce UCL command(s) only. Must be schema-valid JSON with fields: kind, assistant_message, tool_call, acquired_fact_ids, readiness_state.\n\nWe have gathered evidence? The last steps show expansion of dependents of FixtureManifest and tool results ok. Probably now we are ready to edit. Readiness_state likely \"ready_to_edit\". We need to output JSON only. Probably kind: \"complete\" or \"ready_to_edit\"? The contract says readiness_state can be not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we have evidence, maybe \"evidence_acquired\". But we might be ready to edit, so readiness_state \"ready_to_edit\". The assistant_message brief status.\n\nWe need to include tool_call? If kind is \"complete\", tool_call should be omitted or null. The schema: If kind is not tool_call, tool_call can be omitted. So we can set kind: \"complete\", assistant_message: \"Collected evidence on FixtureManifest dependencies\", tool_call: null (or omit). acquired_fact_ids: list of fact IDs? We haven't referenced fact IDs; we can provide some placeholder IDs? Probably we can leave empty array. readiness_state: \"ready_to_edit\". Provide JSON with those fields.\n\nThus:\n\n{\n \"kind\":\"complete\",\n \"assistant_message\":\"Collected evidence on FixtureManifest dependencies\",\n \"tool_call\":null,\n \"acquired_fact_ids\":[],\n \"readiness_state\":\"ready_to_edit\"\n}\n\nBut must be valid JSON, no extra fields. No markdown. Ensure proper quoting. Use null for tool_call. Provide empty array for acquired_fact_ids.\n\nThus final.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773608780,
+    "id": "gen-1773608780-R7hdyZb70Zp788H2GW1Q",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 447,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 465
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 6200,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 6647
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dce7b3a99eced0e-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Sun, 15 Mar 2026 21:06:20 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

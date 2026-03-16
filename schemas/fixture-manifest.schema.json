@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "graphbench://schemas/fixture-manifest.schema.json",
+  "title": "Fixture Manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["fixture_id", "schema_version", "repository", "graph", "languages", "metadata"],
+  "properties": {
+    "fixture_id": { "type": "string" },
+    "schema_version": { "const": 1 },
+    "repository": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["source", "commit_sha", "mirror_policy"],
+      "properties": {
+        "source": { "type": "string" },
+        "commit_sha": { "type": "string", "pattern": "^[a-fA-F0-9]{40}$" },
+        "mirror_policy": { "enum": ["workspace", "local_cache_only", "mirror_required"] }
+      }
+    },
+    "graph": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["snapshot_id", "snapshot_format", "snapshot_ref"],
+      "properties": {
+        "snapshot_id": { "type": "string", "pattern": "^sha256:[a-fA-F0-9]{64}$" },
+        "snapshot_format": { "type": "string" },
+        "snapshot_ref": { "type": "string" }
+      }
+    },
+    "languages": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "enum": ["rust", "type_script", "markdown", "yaml", "json"] }
+    },
+    "metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["title", "notes"],
+      "properties": {
+        "title": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

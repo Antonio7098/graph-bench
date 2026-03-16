@@ -1,0 +1,24 @@
+{
+  "task_id": "prepare-edit.foundation-checklist",
+  "schema_version": 1,
+  "fixture_id": "graphbench.internal",
+  "title": "Prepare to continue roadmap execution after the foundation slice",
+  "statement": "Before editing more roadmap items, gather the exact artifact and directory boundaries created for foundation, schema work, fixture work, and task authoring.",
+  "task_class": "prepare_to_edit",
+  "difficulty": "easy",
+  "allowed_tools": ["read_file", "list_dir", "search"],
+  "turn_budget": 6,
+  "evidence_spec_ref": "evidence.prepare-edit.foundation-checklist",
+  "seed_paths": ["ops/ROADMAP.md", "README.md"],
+  "seed_selectors": ["graphbench-core::tasks::load_task_corpus"],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test task_specs_load_in_stable_count" }
+  ],
+  "known_distractor_regions": ["frontend/public", "reports/README.md"],
+  "expected_edit_loci": ["ops/ROADMAP.md", "README.md"],
+  "review": {
+    "required_evidence_is_sufficient": true,
+    "distractors_are_realistic": true,
+    "multiple_valid_paths_considered": true
+  }
+}

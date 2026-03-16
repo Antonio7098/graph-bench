@@ -1,0 +1,24 @@
+{
+  "task_id": "prepare-edit.constitution-compliance",
+  "schema_version": 1,
+  "fixture_id": "graphbench.internal",
+  "title": "Prepare to edit failure and observability behavior under the constitution",
+  "statement": "Gather the evidence needed before editing failure handling or structured logging so the implementation stays compliant with the constitution.",
+  "task_class": "prepare_to_edit",
+  "difficulty": "medium",
+  "allowed_tools": ["read_file", "list_dir", "search"],
+  "turn_budget": 7,
+  "evidence_spec_ref": "evidence.prepare-edit.constitution-compliance",
+  "seed_paths": ["constitution.yml", "crates/graphbench-core/src/error.rs"],
+  "seed_selectors": ["graphbench_core::logging::LogField"],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test error_code_maps_to_stable_category" }
+  ],
+  "known_distractor_regions": ["frontend/src/styles.css", "docs/index.md"],
+  "expected_edit_loci": ["crates/graphbench-core/src/error.rs", "crates/graphbench-core/src/logging.rs"],
+  "review": {
+    "required_evidence_is_sufficient": true,
+    "distractors_are_realistic": true,
+    "multiple_valid_paths_considered": true
+  }
+}

@@ -1,0 +1,55 @@
+:root {
+  color: #f3eee2;
+  background:
+    radial-gradient(circle at top left, rgba(208, 120, 74, 0.28), transparent 30%),
+    linear-gradient(160deg, #11212d 0%, #1b3947 48%, #1f6f78 100%);
+  font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+.app-shell {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 2rem;
+}
+
+.hero {
+  max-width: 48rem;
+  border: 1px solid rgba(243, 238, 226, 0.24);
+  border-radius: 24px;
+  padding: 3rem;
+  backdrop-filter: blur(18px);
+  background: rgba(17, 33, 45, 0.58);
+  box-shadow: 0 30px 80px rgba(0, 0, 0, 0.28);
+}
+
+.eyebrow {
+  margin: 0 0 1rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: #f2c57c;
+  font-size: 0.8rem;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(2.5rem, 6vw, 4.75rem);
+  line-height: 0.95;
+}
+
+.lede {
+  margin: 1.5rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.6;
+  color: rgba(243, 238, 226, 0.84);
+}

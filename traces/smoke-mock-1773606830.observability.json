@@ -1,0 +1,1246 @@
+{
+  "run_manifest": {
+    "run_id": "smoke-mock-1773606830",
+    "schema_version": 1,
+    "fixture_id": "graphbench.internal",
+    "task_id": "prepare-edit.schema-boundaries",
+    "strategy_id": "smoke-mock",
+    "harness_version": "0.1.0",
+    "schema_version_set": {
+      "fixture_manifest": 1,
+      "task_spec": 1,
+      "evidence_spec": 1,
+      "context_object": 1,
+      "context_window_section": 1,
+      "turn_trace": 1,
+      "score_report": 1
+    },
+    "provider": "mock-provider",
+    "model_slug": "mock-model",
+    "prompt_version": "v1",
+    "graph_snapshot_id": "sha256:9a32c6bb98ea14e21bca29ccb5145187426424a6e5675c11657f122441499caf",
+    "started_at": "2026-03-15T20:33:49.948542839+00:00",
+    "completed_at": "2026-03-15T20:33:50.862335439+00:00",
+    "outcome": "done"
+  },
+  "events": [
+    {
+      "event_id": "event-0",
+      "captured_at": "2026-03-15T20:33:49.948542839+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:6f0f5a95511b74080ea19dae931ef0b0004e41e5d06774cc6c41f084f4067395",
+        "mutation": "seed_overview(limit=2)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-1",
+      "captured_at": "2026-03-15T20:33:50.094833645+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:d2472e979c1fc5e0de65f5d4d2dcfb6edd5364efc666205869a2119607ecee0d",
+        "mutation": "select(crates/graphbench-core/src/artifacts.rs,L1)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-2",
+      "captured_at": "2026-03-15T20:33:50.240306766+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:34ed9ae7f1262368e200ebb7a3cc826dccbeeb98569851c08c027d2a0e0ac18c",
+        "mutation": "hydrate_exact_proof(crates/graphbench-core/src/artifacts.rs,8)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-3",
+      "captured_at": "2026-03-15T20:33:50.392440963+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": null,
+      "component": "harness",
+      "event_type": "run.started",
+      "details": {
+        "event": "run_started",
+        "run_id": "smoke-mock-1773606830"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-4",
+      "captured_at": "2026-03-15T20:33:50.392453426+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "think",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-5",
+      "captured_at": "2026-03-15T20:33:50.395051419+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:0c4845bd50b5aea71d87529b102467f85912630040fdcc039ecce49b3e23db1a",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:f99415b9fc3e06c70b0a46734cbca5404ea1908c2026ec6dca6e845dc816ece8",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-6",
+      "captured_at": "2026-03-15T20:33:50.395057691+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-7",
+      "captured_at": "2026-03-15T20:33:50.395077368+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": "mock-request-1",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-8",
+      "captured_at": "2026-03-15T20:33:50.395087036+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-9",
+      "captured_at": "2026-03-15T20:33:50.395108236+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "session.walk",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-10",
+      "captured_at": "2026-03-15T20:33:50.395110360+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "session.walk",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-11",
+      "captured_at": "2026-03-15T20:33:50.702141625+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "session.walk",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-12",
+      "captured_at": "2026-03-15T20:33:50.856868003+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:6d6f8a8649a7f2fe08352df07c67bfbc8752f7556b65028ee587e619fc9b47bc",
+        "mutation": "session.walk(target=crates/graphbench-core/src/artifacts.rs,mode=dependencies,depth=1)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-13",
+      "captured_at": "2026-03-15T20:33:50.857109757+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "evidence_acquired",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-23",
+      "captured_at": "2026-03-15T20:33:50.857109757+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": "mock-request-1",
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639.json",
+          "byte_count": 53
+        },
+        {
+          "blob_id": "sha256:3b13902c36f3ed62a052829f314f79506373018076205d3ba1c791421e41f91c",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/3b13902c36f3ed62a052829f314f79506373018076205d3ba1c791421e41f91c.json",
+          "byte_count": 37
+        },
+        {
+          "blob_id": "sha256:8e26078574456c23d5ca94eda5a78920f38062b58f7a678bc09dc39f0005ef23",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/8e26078574456c23d5ca94eda5a78920f38062b58f7a678bc09dc39f0005ef23.json",
+          "byte_count": 458
+        },
+        {
+          "blob_id": "sha256:f99415b9fc3e06c70b0a46734cbca5404ea1908c2026ec6dca6e845dc816ece8",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/f99415b9fc3e06c70b0a46734cbca5404ea1908c2026ec6dca6e845dc816ece8.txt",
+          "byte_count": 4952
+        },
+        {
+          "blob_id": "sha256:0c4845bd50b5aea71d87529b102467f85912630040fdcc039ecce49b3e23db1a",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/0c4845bd50b5aea71d87529b102467f85912630040fdcc039ecce49b3e23db1a.txt",
+          "byte_count": 4752
+        }
+      ]
+    },
+    {
+      "event_id": "event-14",
+      "captured_at": "2026-03-15T20:33:50.857113864+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 0,
+      "component": "scoring",
+      "event_type": "evidence.matched",
+      "details": {
+        "event": "evidence_matched",
+        "fact_ids": [
+          "prepare_evidence"
+        ],
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-15",
+      "captured_at": "2026-03-15T20:33:50.857937920+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 1,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "act",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-16",
+      "captured_at": "2026-03-15T20:33:50.861209717+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 1,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:68a94ec946c330aabd515cbb38b476ed7cd674cf3bf7afeb7416789b97e0c161",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:56cdf487ffb1c29672c96e95d2a576480bb85514e072590fe0a29706ed780498",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-17",
+      "captured_at": "2026-03-15T20:33:50.861218714+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-18",
+      "captured_at": "2026-03-15T20:33:50.861236207+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": "mock-request-2",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-19",
+      "captured_at": "2026-03-15T20:33:50.861242779+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "complete",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-20",
+      "captured_at": "2026-03-15T20:33:50.861261655+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 1,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "ready_to_edit",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-24",
+      "captured_at": "2026-03-15T20:33:50.861261655+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 1,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": "mock-request-2",
+        "tool_calls": 0
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639.json",
+          "byte_count": 53
+        },
+        {
+          "blob_id": "sha256:9f70adc645169a98213d1269db9307d93f9f5e1ee7e3ce637ccfb24700247c9c",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/9f70adc645169a98213d1269db9307d93f9f5e1ee7e3ce637ccfb24700247c9c.json",
+          "byte_count": 37
+        },
+        {
+          "blob_id": "sha256:872e714a4f1529a1888748735adb9d0a2e603c4f3de60a4db56117a373b6a911",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/872e714a4f1529a1888748735adb9d0a2e603c4f3de60a4db56117a373b6a911.json",
+          "byte_count": 250
+        },
+        {
+          "blob_id": "sha256:56cdf487ffb1c29672c96e95d2a576480bb85514e072590fe0a29706ed780498",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/56cdf487ffb1c29672c96e95d2a576480bb85514e072590fe0a29706ed780498.txt",
+          "byte_count": 7398
+        },
+        {
+          "blob_id": "sha256:68a94ec946c330aabd515cbb38b476ed7cd674cf3bf7afeb7416789b97e0c161",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/68a94ec946c330aabd515cbb38b476ed7cd674cf3bf7afeb7416789b97e0c161.txt",
+          "byte_count": 7198
+        }
+      ]
+    },
+    {
+      "event_id": "event-21",
+      "captured_at": "2026-03-15T20:33:50.861264149+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": 1,
+      "component": "scoring",
+      "event_type": "evidence.matched",
+      "details": {
+        "event": "evidence_matched",
+        "fact_ids": [
+          "schema_constants"
+        ],
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-22",
+      "captured_at": "2026-03-15T20:33:50.862335439+00:00",
+      "run_id": "smoke-mock-1773606830",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-mock",
+      "turn_index": null,
+      "component": "harness",
+      "event_type": "run.completed",
+      "details": {
+        "event": "run_completed",
+        "run_id": "smoke-mock-1773606830",
+        "turns": 2
+      },
+      "blob_refs": []
+    }
+  ],
+  "turns": [
+    {
+      "turn_index": 0,
+      "request_blob": {
+        "blob_id": "sha256:34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639.json",
+        "byte_count": 53
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:3b13902c36f3ed62a052829f314f79506373018076205d3ba1c791421e41f91c",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/3b13902c36f3ed62a052829f314f79506373018076205d3ba1c791421e41f91c.json",
+        "byte_count": 37
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:8e26078574456c23d5ca94eda5a78920f38062b58f7a678bc09dc39f0005ef23",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/8e26078574456c23d5ca94eda5a78920f38062b58f7a678bc09dc39f0005ef23.json",
+        "byte_count": 458
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:f99415b9fc3e06c70b0a46734cbca5404ea1908c2026ec6dca6e845dc816ece8",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/f99415b9fc3e06c70b0a46734cbca5404ea1908c2026ec6dca6e845dc816ece8.txt",
+        "byte_count": 4952
+      },
+      "context_blob": {
+        "blob_id": "sha256:0c4845bd50b5aea71d87529b102467f85912630040fdcc039ecce49b3e23db1a",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/0c4845bd50b5aea71d87529b102467f85912630040fdcc039ecce49b3e23db1a.txt",
+        "byte_count": 4752
+      },
+      "provider_request_id": "mock-request-1",
+      "telemetry": {
+        "prompt_bytes": 4952,
+        "prompt_tokens": 547,
+        "latency_ms": 462,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "session.walk",
+          "latency_ms": 306,
+          "outcome": "ok",
+          "input_payload": {
+            "depth": 1,
+            "limit": 6,
+            "mode": "dependencies",
+            "target": "crates/graphbench-core/src/artifacts.rs"
+          },
+          "output_payload": {
+            "changed": true,
+            "operation": "session.walk",
+            "session_export": {
+              "edges": [
+                {
+                  "multiplicity": 1,
+                  "relation": "exports",
+                  "source": "fa5433f9c84e42c4c89e99e8",
+                  "source_short_id": "F1",
+                  "target": "150bd9426b003139fe292bf3",
+                  "target_short_id": "S1"
+                },
+                {
+                  "multiplicity": 1,
+                  "relation": "exports",
+                  "source": "fa5433f9c84e42c4c89e99e8",
+                  "source_short_id": "F1",
+                  "target": "3de45757daade706dcfb3d68",
+                  "target_short_id": "S2"
+                },
+                {
+                  "multiplicity": 1,
+                  "relation": "exports",
+                  "source": "fa5433f9c84e42c4c89e99e8",
+                  "source_short_id": "F1",
+                  "target": "843c066f2e3b6bf38d4804d6",
+                  "target_short_id": "S3"
+                },
+                {
+                  "multiplicity": 1,
+                  "relation": "exports",
+                  "source": "fa5433f9c84e42c4c89e99e8",
+                  "source_short_id": "F1",
+                  "target": "f4f6dbc9bc08ff38ee3545d3",
+                  "target_short_id": "S4"
+                },
+                {
+                  "multiplicity": 1,
+                  "relation": "exports",
+                  "source": "fa5433f9c84e42c4c89e99e8",
+                  "source_short_id": "F1",
+                  "target": "eccd70c3dbbe6a637813ae5d",
+                  "target_short_id": "S5"
+                },
+                {
+                  "multiplicity": 1,
+                  "relation": "exports",
+                  "source": "fa5433f9c84e42c4c89e99e8",
+                  "source_short_id": "F1",
+                  "target": "ecf2cc47c1627bf1b3daa8b0",
+                  "target_short_id": "S6"
+                }
+              ],
+              "export_mode": "compact",
+              "focus": "fa5433f9c84e42c4c89e99e8",
+              "focus_label": "crates/graphbench-core/src/artifacts.rs",
+              "focus_short_id": "F1",
+              "frontier": [
+                {
+                  "action": "hydrate_source",
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "candidate_count": 0,
+                  "description": "Hydrate source for file crates/graphbench-core/src/artifacts.rs",
+                  "explanation": "Hydrating crates/graphbench-core/src/artifacts.rs will add source lines to the working set export",
+                  "priority": 120,
+                  "short_id": "F1"
+                },
+                {
+                  "action": "expand_file",
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "candidate_count": 55,
+                  "description": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                  "explanation": "55 hidden symbol candidates remain under the focused file",
+                  "priority": 112,
+                  "short_id": "F1"
+                }
+              ],
+              "heuristics": {
+                "hidden_candidate_count": 55,
+                "low_value_candidate_count": 0,
+                "recommendations": [
+                  {
+                    "action_kind": "expand_file",
+                    "candidate_count": 55,
+                    "estimated_evidence_gain": 55,
+                    "estimated_hydration_bytes": 0,
+                    "estimated_token_cost": 1320,
+                    "explanation": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                    "priority": 112,
+                    "rationale": "55 hidden symbol candidates remain under the focused file",
+                    "target_block_id": "fa5433f9c84e42c4c89e99e8",
+                    "target_label": "crates/graphbench-core/src/artifacts.rs",
+                    "target_short_id": "F1"
+                  }
+                ],
+                "recommended_actions": [
+                  {
+                    "action": "expand_file",
+                    "block_id": "fa5433f9c84e42c4c89e99e8",
+                    "candidate_count": 55,
+                    "description": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                    "explanation": "55 hidden symbol candidates remain under the focused file",
+                    "priority": 112,
+                    "short_id": "F1"
+                  }
+                ],
+                "recommended_next_action": {
+                  "action": "expand_file",
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "candidate_count": 55,
+                  "description": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                  "explanation": "55 hidden symbol candidates remain under the focused file",
+                  "priority": 112,
+                  "short_id": "F1"
+                },
+                "should_stop": false
+              },
+              "hidden_unreachable_count": 3,
+              "nodes": [
+                {
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs",
+                    "path": "crates/graphbench-core/src/artifacts.rs"
+                  },
+                  "detail_level": "source",
+                  "distance_from_focus": 0,
+                  "hydrated_source": {
+                    "display": "crates/graphbench-core/src/artifacts.rs",
+                    "end_line": 1,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "snippet": "   1 | use crate::error::{AppError, ErrorCode, ErrorContext};\n   2 | use serde::{Deserialize, Serialize};\n   3 | \n   4 | pub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;\n   5 | pub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;\n   6 | pub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;\n   7 | pub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;\n   8 | pub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;\n   9 | pub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;",
+                    "start_line": 1
+                  },
+                  "label": "crates/graphbench-core/src/artifacts.rs",
+                  "logical_key": "file:crates/graphbench-core/src/artifacts.rs",
+                  "node_class": "file",
+                  "origin": {
+                    "kind": "manual"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 212,
+                  "short_id": "F1"
+                },
+                {
+                  "block_id": "150bd9426b003139fe292bf3",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs#L223-L226",
+                    "end_line": 226,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "start_line": 223
+                  },
+                  "detail_level": "symbol_card",
+                  "distance_from_focus": 1,
+                  "label": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                  "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                  "node_class": "symbol",
+                  "origin": {
+                    "anchor": "fa5433f9c84e42c4c89e99e8",
+                    "kind": "dependencies",
+                    "relation": "exports"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 84,
+                  "short_id": "S1",
+                  "signature": "struct AcceptableProof [exported] [public]",
+                  "symbol_name": "AcceptableProof"
+                },
+                {
+                  "block_id": "3de45757daade706dcfb3d68",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs#L7",
+                    "end_line": 7,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "start_line": 7
+                  },
+                  "detail_level": "symbol_card",
+                  "distance_from_focus": 1,
+                  "label": "symbol:crates/graphbench-core/src/artifacts.rs::CONTEXT_OBJECT_SCHEMA_VERSION",
+                  "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::CONTEXT_OBJECT_SCHEMA_VERSION",
+                  "node_class": "symbol",
+                  "origin": {
+                    "anchor": "fa5433f9c84e42c4c89e99e8",
+                    "kind": "dependencies",
+                    "relation": "exports"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 84,
+                  "short_id": "S2",
+                  "signature": "const CONTEXT_OBJECT_SCHEMA_VERSION : u32 [exported] [public]",
+                  "symbol_name": "CONTEXT_OBJECT_SCHEMA_VERSION"
+                },
+                {
+                  "block_id": "843c066f2e3b6bf38d4804d6",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs#L8",
+                    "end_line": 8,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "start_line": 8
+                  },
+                  "detail_level": "symbol_card",
+                  "distance_from_focus": 1,
+                  "label": "symbol:crates/graphbench-core/src/artifacts.rs::CONTEXT_WINDOW_SECTION_SCHEMA_VERSION",
+                  "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::CONTEXT_WINDOW_SECTION_SCHEMA_VERSION",
+                  "node_class": "symbol",
+                  "origin": {
+                    "anchor": "fa5433f9c84e42c4c89e99e8",
+                    "kind": "dependencies",
+                    "relation": "exports"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 84,
+                  "short_id": "S3",
+                  "signature": "const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION : u32 [exported] [public]",
+                  "symbol_name": "CONTEXT_WINDOW_SECTION_SCHEMA_VERSION"
+                },
+                {
+                  "block_id": "f4f6dbc9bc08ff38ee3545d3",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs#L326-L330",
+                    "end_line": 330,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "start_line": 326
+                  },
+                  "detail_level": "symbol_card",
+                  "distance_from_focus": 1,
+                  "label": "symbol:crates/graphbench-core/src/artifacts.rs::ContextIdentity",
+                  "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::ContextIdentity",
+                  "node_class": "symbol",
+                  "origin": {
+                    "anchor": "fa5433f9c84e42c4c89e99e8",
+                    "kind": "dependencies",
+                    "relation": "exports"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 84,
+                  "short_id": "S4",
+                  "signature": "struct ContextIdentity [exported] [public]",
+                  "symbol_name": "ContextIdentity"
+                },
+                {
+                  "block_id": "eccd70c3dbbe6a637813ae5d",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs#L370-L382",
+                    "end_line": 382,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "start_line": 370
+                  },
+                  "detail_level": "symbol_card",
+                  "distance_from_focus": 1,
+                  "label": "symbol:crates/graphbench-core/src/artifacts.rs::ContextObject",
+                  "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::ContextObject",
+                  "node_class": "symbol",
+                  "origin": {
+                    "anchor": "fa5433f9c84e42c4c89e99e8",
+                    "kind": "dependencies",
+                    "relation": "exports"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 84,
+                  "short_id": "S5",
+                  "signature": "struct ContextObject [exported] [public]",
+                  "symbol_name": "ContextObject"
+                },
+                {
+                  "block_id": "ecf2cc47c1627bf1b3daa8b0",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs#L365-L367",
+                    "end_line": 367,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "start_line": 365
+                  },
+                  "detail_level": "symbol_card",
+                  "distance_from_focus": 1,
+                  "label": "symbol:crates/graphbench-core/src/artifacts.rs::ContextObjectHashSet",
+                  "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::ContextObjectHashSet",
+                  "node_class": "symbol",
+                  "origin": {
+                    "anchor": "fa5433f9c84e42c4c89e99e8",
+                    "kind": "dependencies",
+                    "relation": "exports"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 84,
+                  "short_id": "S6",
+                  "signature": "struct ContextObjectHashSet [exported] [public]",
+                  "symbol_name": "ContextObjectHashSet"
+                }
+              ],
+              "omissions": {
+                "details": [
+                  {
+                    "block_id": "c8ad2a8cfa28c70a667dd678",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": "frontend",
+                    "reason": "visible_level_limit",
+                    "short_id": "D2"
+                  },
+                  {
+                    "block_id": "9e133aeeddbeadc9a82a2902",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": ".",
+                    "reason": "visible_level_limit",
+                    "short_id": "R1"
+                  },
+                  {
+                    "block_id": "99b62cfb483779db26d3be75",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": "crates",
+                    "reason": "visible_level_limit",
+                    "short_id": "D1"
+                  },
+                  {
+                    "block_id": "fa5433f9c84e42c4c89e99e8",
+                    "explanation": "Hydrated source excerpt superseded the shorter summary/docs view for this node.",
+                    "label": "crates/graphbench-core/src/artifacts.rs",
+                    "reason": "hydrated_excerpt_superseded_summary",
+                    "short_id": "F1"
+                  }
+                ],
+                "dropped_by_render_budget": 0,
+                "excluded_by_class_filters": 0,
+                "hidden_by_visible_levels": 3,
+                "suppressed_by_hydrated_excerpt": 1
+              },
+              "omitted_symbol_count": 255,
+              "summary": {
+                "directories": 2,
+                "files": 1,
+                "hydrated_sources": 1,
+                "max_selected": 48,
+                "repositories": 1,
+                "selected": 10,
+                "symbols": 6
+              },
+              "total_selected_edges": 6,
+              "visible_levels": 3,
+              "visible_node_count": 7
+            },
+            "status": "ok",
+            "target": "crates/graphbench-core/src/artifacts.rs"
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 1,
+      "request_blob": {
+        "blob_id": "sha256:34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639.json",
+        "byte_count": 53
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:9f70adc645169a98213d1269db9307d93f9f5e1ee7e3ce637ccfb24700247c9c",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/9f70adc645169a98213d1269db9307d93f9f5e1ee7e3ce637ccfb24700247c9c.json",
+        "byte_count": 37
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:872e714a4f1529a1888748735adb9d0a2e603c4f3de60a4db56117a373b6a911",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/872e714a4f1529a1888748735adb9d0a2e603c4f3de60a4db56117a373b6a911.json",
+        "byte_count": 250
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:56cdf487ffb1c29672c96e95d2a576480bb85514e072590fe0a29706ed780498",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/56cdf487ffb1c29672c96e95d2a576480bb85514e072590fe0a29706ed780498.txt",
+        "byte_count": 7398
+      },
+      "context_blob": {
+        "blob_id": "sha256:68a94ec946c330aabd515cbb38b476ed7cd674cf3bf7afeb7416789b97e0c161",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/68a94ec946c330aabd515cbb38b476ed7cd674cf3bf7afeb7416789b97e0c161.txt",
+        "byte_count": 7198
+      },
+      "provider_request_id": "mock-request-2",
+      "telemetry": {
+        "prompt_bytes": 7398,
+        "prompt_tokens": 645,
+        "latency_ms": 0,
+        "tool_calls": 0
+      },
+      "tool_traces": []
+    }
+  ],
+  "aggregation": {
+    "total_turns": 2,
+    "aggregate_prompt_bytes": 12350,
+    "aggregate_prompt_tokens": 1192,
+    "aggregate_latency_ms": 462,
+    "aggregate_tool_calls": 1
+  },
+  "structured_logs": [
+    {
+      "captured_at": "2026-03-15T20:33:49.948542839+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.094833645+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.240306766+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.392440963+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "run.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.392453426+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.395051419+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.395057691+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.395077368+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.395087036+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.395108236+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.requested",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.395110360+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.702141625+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.856868003+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.857109757+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.857109757+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.857113864+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "evidence.matched",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.857937920+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.861209717+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.861218714+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.861236207+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.861242779+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.861261655+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.861261655+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.861264149+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "evidence.matched",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-15T20:33:50.862335439+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "run.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773606830",
+      "strategy_id": "smoke-mock",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "kind": "complete",
+  "prompt_version": "v1",
+  "model_slug": "nvidia/nemotron-3-nano-30b-a3b:free",
+  "provider": "openrouter",
+  "assistant_message": "Evidence gathered, ready to edit",
+  "acquired_fact_ids": [
+    "roadmap-tracks-foundation-schema-fixture-task-work",
+    "repo-map-points-to-domain-directories"
+  ],
+  "readiness_state": "ready_to_edit"
+}

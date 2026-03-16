@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "graphbench://schemas/score-report.schema.json",
+  "title": "Score Report",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "run_id",
+    "task_id",
+    "schema_version",
+    "evidence_visibility_score",
+    "evidence_acquisition_score",
+    "evidence_efficiency_score",
+    "explanation_quality_score",
+    "metrics"
+  ],
+  "properties": {
+    "run_id": { "type": "string" },
+    "task_id": { "type": "string" },
+    "schema_version": { "const": 1 },
+    "evidence_visibility_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "evidence_acquisition_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "evidence_efficiency_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "explanation_quality_score": { "type": "number", "minimum": 0, "maximum": 1 },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "required_evidence_recall",
+        "evidence_precision",
+        "irrelevant_material_ratio",
+        "turns_to_readiness",
+        "reread_count",
+        "post_readiness_drift_turns"
+      ],
+      "properties": {
+        "required_evidence_recall": { "type": "number", "minimum": 0, "maximum": 1 },
+        "evidence_precision": { "type": "number", "minimum": 0, "maximum": 1 },
+        "irrelevant_material_ratio": { "type": "number", "minimum": 0, "maximum": 1 },
+        "turns_to_readiness": { "type": "integer", "minimum": 0 },
+        "reread_count": { "type": "integer", "minimum": 0 },
+        "post_readiness_drift_turns": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

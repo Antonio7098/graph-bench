@@ -1,0 +1,13 @@
+{
+  "kind": "tool_call",
+  "prompt_version": "v1",
+  "model_slug": "nvidia/nemotron-3-nano-30b-a3b:free",
+  "provider": "openrouter",
+  "assistant_message": "Collapse RUN_MANIFEST_SCHEMA_VERSION from working set",
+  "tool_call": {
+    "tool_name": "session.focus",
+    "payload": {}
+  },
+  "acquired_fact_ids": [],
+  "readiness_state": "evidence_acquired"
+}

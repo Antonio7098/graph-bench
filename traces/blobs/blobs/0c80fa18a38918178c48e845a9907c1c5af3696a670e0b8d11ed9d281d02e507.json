@@ -1,0 +1,18 @@
+{
+  "text": "{\n  \"acquired_fact_ids\":[],\n  \"assistant_message\":\"searching for schema version constants in artifacts.rs\",\n  \"kind\":\"tool_call\",\n  \"model_slug\":\"gpt-4\",\n  \"prompt_version\":\"v1\",\n  \"provider\":\"openai\",\n  \"readiness_state\":\"not_ready\",\n  \"tool_call\":{\n    \"payload\":{\n      \"path\":\"crates/graphbench-core/src/artifacts.rs\",\n      \"pattern\":\"FIXTURE_MANIFEST_SCHEMA_VERSION\"\n    },\n    \"tool_name\":\"search\"\n  }\n}",
+  "thinking": null,
+  "tool_calls": null,
+  "usage": {
+    "completion_tokens": 904,
+    "completion_tokens_details": {
+      "audio_tokens": 0,
+      "reasoning_tokens": 857
+    },
+    "prompt_tokens": 747,
+    "prompt_tokens_details": {
+      "audio_tokens": 0,
+      "cached_tokens": 0
+    },
+    "total_tokens": 1651
+  }
+}

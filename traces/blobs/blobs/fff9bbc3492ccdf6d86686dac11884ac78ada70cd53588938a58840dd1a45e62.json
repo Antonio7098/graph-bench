@@ -1,0 +1,29 @@
+{
+  "kind": "tool_call",
+  "prompt_version": "v1",
+  "model_slug": "mock-model",
+  "provider": "mock-provider",
+  "assistant_message": "Need graph-backed expansion.",
+  "tool_call": {
+    "tool_name": "run_python_query",
+    "payload": {
+      "code": "target = graph.find(path_regex=r'crates/graphbench-core/src/artifacts\\.rs', limit=1)[0]\nsession.walk(target, mode='file', depth=1, limit=6)\nresult = {'target': target['logical_key'], 'selected': session.summary()['selected']}",
+      "export_kwargs": {
+        "compact": true,
+        "max_frontier_actions": 4,
+        "visible_levels": 3
+      },
+      "include_export": true,
+      "limits": {
+        "max_operations": 40,
+        "max_seconds": 2.0,
+        "max_stdout_chars": 2000,
+        "max_trace_events": 2000
+      }
+    }
+  },
+  "acquired_fact_ids": [
+    "prepare_evidence"
+  ],
+  "readiness_state": "evidence_acquired"
+}

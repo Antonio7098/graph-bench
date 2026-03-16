@@ -1,0 +1,43 @@
+{
+  "evidence_spec_id": "evidence.prepare-edit.constitution-compliance",
+  "schema_version": 1,
+  "required_facts": [
+    {
+      "fact_id": "constitution-requires-stable-error-taxonomy",
+      "description": "The constitution requires stable error categories and codes.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "constitution.yml" },
+        { "kind": "excerpt", "value": "Error Taxonomy Is Required" }
+      ]
+    },
+    {
+      "fact_id": "backend-error-module-defines-categories-and-codes",
+      "description": "The backend error module defines stable categories and shared codes.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "crates/graphbench-core/src/error.rs" },
+        { "kind": "excerpt", "value": "GB-SCHEMA-001" }
+      ]
+    }
+  ],
+  "supporting_facts": [
+    {
+      "fact_id": "logging-module-defines-required-fields",
+      "description": "The logging module defines stable structured logging field names.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "crates/graphbench-core/src/logging.rs" }
+      ]
+    }
+  ],
+  "distractor_facts": [
+    {
+      "fact_id": "ui-styles-control-error-contracts",
+      "description": "CSS styling does not define error or logging contracts.",
+      "acceptable_proofs": [
+        { "kind": "path", "value": "frontend/src/styles.css" }
+      ]
+    }
+  ],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test error_code_maps_to_stable_category" }
+  ]
+}

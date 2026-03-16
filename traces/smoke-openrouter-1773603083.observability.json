@@ -1,0 +1,1373 @@
+{
+  "run_manifest": {
+    "run_id": "smoke-openrouter-1773603083",
+    "schema_version": 1,
+    "fixture_id": "graphbench.internal",
+    "task_id": "prepare-edit.schema-boundaries",
+    "strategy_id": "smoke-openrouter",
+    "harness_version": "0.1.0",
+    "schema_version_set": {
+      "fixture_manifest": 1,
+      "task_spec": 1,
+      "evidence_spec": 1,
+      "context_object": 1,
+      "context_window_section": 1,
+      "turn_trace": 1,
+      "score_report": 1
+    },
+    "provider": "openrouter",
+    "model_slug": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "prompt_version": "v1",
+    "graph_snapshot_id": "sha256:e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "started_at": "1970-01-01T00:00:00Z",
+    "completed_at": "1970-01-01T00:00:00Z",
+    "outcome": "done"
+  },
+  "events": [
+    {
+      "event_id": "turn-0-payloads",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": null,
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:b83b26f50776daa672f95ba63f8c6b6077a86b37f6c455058131947622d036da",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/b83b26f50776daa672f95ba63f8c6b6077a86b37f6c455058131947622d036da.json",
+          "byte_count": 5286
+        },
+        {
+          "blob_id": "sha256:fb9f7f8cb8db245324f257b08dabdd98f0d8a7b3867da8b45fe2f07741370f63",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/fb9f7f8cb8db245324f257b08dabdd98f0d8a7b3867da8b45fe2f07741370f63.json",
+          "byte_count": 12750
+        },
+        {
+          "blob_id": "sha256:1a798ec22564f124650bb445bbac4ae738a4026def8a8891d3b135baf02f8f4f",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/1a798ec22564f124650bb445bbac4ae738a4026def8a8891d3b135baf02f8f4f.json",
+          "byte_count": 427
+        },
+        {
+          "blob_id": "sha256:b24ff0e0aa0db9d40b88b46cf6b81d7401c782603260a982a40c0885101f1551",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/b24ff0e0aa0db9d40b88b46cf6b81d7401c782603260a982a40c0885101f1551.txt",
+          "byte_count": 2707
+        },
+        {
+          "blob_id": "sha256:1e4ceb561f965e46ef932113085d7e983619ec96731dd749971072688feef9d3",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/1e4ceb561f965e46ef932113085d7e983619ec96731dd749971072688feef9d3.txt",
+          "byte_count": 2546
+        }
+      ]
+    },
+    {
+      "event_id": "turn-1-payloads",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": null,
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:c376dde061f2e877717cddd5785735f0891f0250802417c6af238bb0ba85a5e5",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/c376dde061f2e877717cddd5785735f0891f0250802417c6af238bb0ba85a5e5.json",
+          "byte_count": 39271
+        },
+        {
+          "blob_id": "sha256:6ee96cfb6b025b57afb9f3b37f58c364a302995440c01824edf70b3600f014db",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/6ee96cfb6b025b57afb9f3b37f58c364a302995440c01824edf70b3600f014db.json",
+          "byte_count": 9421
+        },
+        {
+          "blob_id": "sha256:a9cfc8c5dfabab60208b86a16face4c697e07d2c3d6f624a6e1885d2387cb1b9",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/a9cfc8c5dfabab60208b86a16face4c697e07d2c3d6f624a6e1885d2387cb1b9.json",
+          "byte_count": 458
+        },
+        {
+          "blob_id": "sha256:1b5191fccab8a9e3d89d5e0d94a29115134f325e50f7e7f42a7408d8cf18018f",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/1b5191fccab8a9e3d89d5e0d94a29115134f325e50f7e7f42a7408d8cf18018f.txt",
+          "byte_count": 34999
+        },
+        {
+          "blob_id": "sha256:d133912a848f7c65b86907c3861fd775871dee4aa8148641409cb2fecaf2989e",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/d133912a848f7c65b86907c3861fd775871dee4aa8148641409cb2fecaf2989e.txt",
+          "byte_count": 34838
+        }
+      ]
+    },
+    {
+      "event_id": "turn-2-payloads",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": null,
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:8efbab27c71076487d7e7a5ef3773c35958d9483f0089c8745e8001bcfef2600",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/8efbab27c71076487d7e7a5ef3773c35958d9483f0089c8745e8001bcfef2600.json",
+          "byte_count": 40969
+        },
+        {
+          "blob_id": "sha256:71cfc6c8b0cd38fcb8ea1652e3c23299f2c2962e81a7d01dd4c33f286a4b733f",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/71cfc6c8b0cd38fcb8ea1652e3c23299f2c2962e81a7d01dd4c33f286a4b733f.json",
+          "byte_count": 15082
+        },
+        {
+          "blob_id": "sha256:71bab6d17b7060485af1fcb49566133c37c25f2dd5981fb63b5c464a5dd90cb1",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/71bab6d17b7060485af1fcb49566133c37c25f2dd5981fb63b5c464a5dd90cb1.json",
+          "byte_count": 408
+        },
+        {
+          "blob_id": "sha256:3cbbfafbd0a3c3bb621becd7be85eac6599674447f8343c7dd9fdbffa4ef6ca6",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/3cbbfafbd0a3c3bb621becd7be85eac6599674447f8343c7dd9fdbffa4ef6ca6.txt",
+          "byte_count": 36642
+        },
+        {
+          "blob_id": "sha256:5148793c9e356dfa327de69dbf07b50d155544e9f7a7d75c5050baadf48c26a1",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/5148793c9e356dfa327de69dbf07b50d155544e9f7a7d75c5050baadf48c26a1.txt",
+          "byte_count": 36481
+        }
+      ]
+    },
+    {
+      "event_id": "turn-3-payloads",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 3,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": null,
+        "tool_calls": 0
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:e02ab1d72e59aabb904ebb1546a582a492654858d5fb34f82fe7050a095b20f1",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/e02ab1d72e59aabb904ebb1546a582a492654858d5fb34f82fe7050a095b20f1.json",
+          "byte_count": 46470
+        },
+        {
+          "blob_id": "sha256:fba82220c720ab93bcfcaf9f26736ac392ed6e19a19a65bf10e12675406efb77",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/fba82220c720ab93bcfcaf9f26736ac392ed6e19a19a65bf10e12675406efb77.json",
+          "byte_count": 8079
+        },
+        {
+          "blob_id": "sha256:8094db77b3e11c7d8cf026bc72ec65a22eb7fa827b815b137b171dd689196f56",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/8094db77b3e11c7d8cf026bc72ec65a22eb7fa827b815b137b171dd689196f56.json",
+          "byte_count": 287
+        },
+        {
+          "blob_id": "sha256:a2112d9980d963cf82f622ee60ec02d6003ea26e0cc91908df3aa4d82f8014a2",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/a2112d9980d963cf82f622ee60ec02d6003ea26e0cc91908df3aa4d82f8014a2.txt",
+          "byte_count": 42031
+        },
+        {
+          "blob_id": "sha256:7241849659372504b17a7c9bff8ea8da8ffc3546bea43a75698ff1410117ae4d",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/7241849659372504b17a7c9bff8ea8da8ffc3546bea43a75698ff1410117ae4d.txt",
+          "byte_count": 41870
+        }
+      ]
+    },
+    {
+      "event_id": "turn-4-payloads",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 4,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": null,
+        "tool_calls": 0
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:9b8a581932ea49721fb67c3cb3cb6026b5065fcc9b2ef3fa493ac64e15551be3",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/9b8a581932ea49721fb67c3cb3cb6026b5065fcc9b2ef3fa493ac64e15551be3.json",
+          "byte_count": 46538
+        },
+        {
+          "blob_id": "sha256:8abb0f479a110a93b66a2bdde3b3dfda5f3c07360f26ed541175b30693a38f5d",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/8abb0f479a110a93b66a2bdde3b3dfda5f3c07360f26ed541175b30693a38f5d.json",
+          "byte_count": 8181
+        },
+        {
+          "blob_id": "sha256:5807037166504971ab22d2d9ad6b0225fda3f70ab375c1985f72a997f451362e",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/5807037166504971ab22d2d9ad6b0225fda3f70ab375c1985f72a997f451362e.json",
+          "byte_count": 274
+        },
+        {
+          "blob_id": "sha256:0624f6fb8a344ed8a27bdfa37b8eaaa09911bf9bd379fd8294927c3b07c30618",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/0624f6fb8a344ed8a27bdfa37b8eaaa09911bf9bd379fd8294927c3b07c30618.txt",
+          "byte_count": 42099
+        },
+        {
+          "blob_id": "sha256:20878a2b0bebb497d12c8cb337ad8976b05cd231786c493e6c5f3b94b176f324",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/20878a2b0bebb497d12c8cb337ad8976b05cd231786c493e6c5f3b94b176f324.txt",
+          "byte_count": 41938
+        }
+      ]
+    },
+    {
+      "event_id": "event-0",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:b4fd167f75414669bf80215e4509ec1c18fd15ba09791fb89fec83e0de6e08ed",
+        "mutation": "seed_overview(limit=2)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-1",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:ecfe8364913c9c06571257dc3369e3de294f729df056b6d309cb32f47d20819a",
+        "mutation": "select(crates/graphbench-core/src/artifacts.rs,L1)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-2",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:b2aaa6922071236695f599d8ac9e39be6f7df5d0e16e426d0c357d5ebe06b672",
+        "mutation": "hydrate_exact_proof(crates/graphbench-core/src/artifacts.rs,8)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-3",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": null,
+      "component": "harness",
+      "event_type": "run.started",
+      "details": {
+        "event": "run_started",
+        "run_id": "smoke-openrouter-1773603083"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-4",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "think",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-5",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:1e4ceb561f965e46ef932113085d7e983619ec96731dd749971072688feef9d3",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:b24ff0e0aa0db9d40b88b46cf6b81d7401c782603260a982a40c0885101f1551",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-6",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-7",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": null,
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-8",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-9",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "read_file",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-10",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "read_file",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-11",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "read_file",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-12",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "not_ready",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-13",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 0,
+      "component": "scoring",
+      "event_type": "evidence.matched",
+      "details": {
+        "event": "evidence_matched",
+        "fact_ids": [
+          "prepare_evidence"
+        ],
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-14",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "act",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-15",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:d133912a848f7c65b86907c3861fd775871dee4aa8148641409cb2fecaf2989e",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:1b5191fccab8a9e3d89d5e0d94a29115134f325e50f7e7f42a7408d8cf18018f",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-16",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-17",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": null,
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-18",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-19",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "search",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-20",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "search",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-21",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "search",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-22",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "evidence_visible",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-23",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 1,
+      "component": "scoring",
+      "event_type": "evidence.matched",
+      "details": {
+        "event": "evidence_matched",
+        "fact_ids": [
+          "artifacts.rs"
+        ],
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-24",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "think",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-25",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:5148793c9e356dfa327de69dbf07b50d155544e9f7a7d75c5050baadf48c26a1",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:3cbbfafbd0a3c3bb621becd7be85eac6599674447f8343c7dd9fdbffa4ef6ca6",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-26",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-27",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": null,
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-28",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-29",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "search",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-30",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "search",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-31",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "search",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-32",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 2,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "not_ready",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-33",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 3,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "act",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-34",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 3,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:7241849659372504b17a7c9bff8ea8da8ffc3546bea43a75698ff1410117ae4d",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:a2112d9980d963cf82f622ee60ec02d6003ea26e0cc91908df3aa4d82f8014a2",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-35",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 3,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-36",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 3,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": null,
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-37",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 3,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "think",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-38",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 3,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "ready_to_edit",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-39",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 4,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "think",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-40",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 4,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:20878a2b0bebb497d12c8cb337ad8976b05cd231786c493e6c5f3b94b176f324",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:0624f6fb8a344ed8a27bdfa37b8eaaa09911bf9bd379fd8294927c3b07c30618",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-41",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 4,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-42",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 4,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": null,
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-43",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 4,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "complete",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-44",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": 4,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "ready_to_edit",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-45",
+      "run_id": "smoke-openrouter-1773603083",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "smoke-openrouter",
+      "turn_index": null,
+      "component": "harness",
+      "event_type": "run.completed",
+      "details": {
+        "event": "run_completed",
+        "run_id": "smoke-openrouter-1773603083",
+        "turns": 5
+      },
+      "blob_refs": []
+    }
+  ],
+  "turns": [
+    {
+      "turn_index": 0,
+      "request_blob": {
+        "blob_id": "sha256:b83b26f50776daa672f95ba63f8c6b6077a86b37f6c455058131947622d036da",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/b83b26f50776daa672f95ba63f8c6b6077a86b37f6c455058131947622d036da.json",
+        "byte_count": 5286
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:fb9f7f8cb8db245324f257b08dabdd98f0d8a7b3867da8b45fe2f07741370f63",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/fb9f7f8cb8db245324f257b08dabdd98f0d8a7b3867da8b45fe2f07741370f63.json",
+        "byte_count": 12750
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:1a798ec22564f124650bb445bbac4ae738a4026def8a8891d3b135baf02f8f4f",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/1a798ec22564f124650bb445bbac4ae738a4026def8a8891d3b135baf02f8f4f.json",
+        "byte_count": 427
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:b24ff0e0aa0db9d40b88b46cf6b81d7401c782603260a982a40c0885101f1551",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/b24ff0e0aa0db9d40b88b46cf6b81d7401c782603260a982a40c0885101f1551.txt",
+        "byte_count": 2707
+      },
+      "context_blob": {
+        "blob_id": "sha256:1e4ceb561f965e46ef932113085d7e983619ec96731dd749971072688feef9d3",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/1e4ceb561f965e46ef932113085d7e983619ec96731dd749971072688feef9d3.txt",
+        "byte_count": 2546
+      },
+      "provider_request_id": null,
+      "telemetry": {
+        "prompt_bytes": 2707,
+        "prompt_tokens": 324,
+        "latency_ms": 6785,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "read_file",
+          "latency_ms": 0,
+          "outcome": "ok",
+          "input_payload": {
+            "path": "crates/graphbench-core/src/artifacts.rs"
+          },
+          "output_payload": {
+            "contents": "use crate::error::{AppError, ErrorCode, ErrorContext};\nuse serde::{Deserialize, Serialize};\n\npub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;\npub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;\npub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;\npub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;\npub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;\npub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;\npub const SCORE_REPORT_SCHEMA_VERSION: u32 = 1;\npub const RUN_MANIFEST_SCHEMA_VERSION: u32 = 1;\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum MirrorPolicy {\n    Workspace,\n    LocalCacheOnly,\n    MirrorRequired,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct RepositoryRef {\n    pub source: String,\n    pub commit_sha: String,\n    pub mirror_policy: MirrorPolicy,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct GraphSnapshot {\n    pub snapshot_id: String,\n    pub snapshot_format: String,\n    pub snapshot_ref: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct FixtureMetadata {\n    pub title: String,\n    pub notes: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum FixtureLanguage {\n    Rust,\n    TypeScript,\n    Markdown,\n    Yaml,\n    Json,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct FixtureManifest {\n    pub fixture_id: String,\n    pub schema_version: u32,\n    pub repository: RepositoryRef,\n    pub graph: GraphSnapshot,\n    pub languages: Vec<FixtureLanguage>,\n    pub metadata: FixtureMetadata,\n}\n\nimpl FixtureManifest {\n    pub fn validate(&self) -> Result<(), AppError> {\n        if self.schema_version != FIXTURE_MANIFEST_SCHEMA_VERSION {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"fixture_manifest\",\n                \"validate\",\n                \"unsupported fixture schema version\",\n            ));\n        }\n\n        validate_identifier(&self.fixture_id, \"fixture.fixture_id\")?;\n        validate_commit_sha(&self.repository.commit_sha)?;\n        validate_non_empty(&self.repository.source, \"fixture.repository.source\")?;\n        validate_non_empty(&self.graph.snapshot_format, \"fixture.graph.snapshot_format\")?;\n        validate_non_empty(&self.graph.snapshot_ref, \"fixture.graph.snapshot_ref\")?;\n        validate_snapshot_id(&self.graph.snapshot_id)?;\n        validate_non_empty(&self.metadata.title, \"fixture.metadata.title\")?;\n\n        if self.languages.is_empty() {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"fixture_manifest\",\n                \"validate\",\n                \"fixture.languages must not be empty\",\n            ));\n        }\n\n        Ok(())\n    }\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum TaskClass {\n    Locate,\n    Explain,\n    PrepareToEdit,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum Difficulty {\n    Easy,\n    Medium,\n    Hard,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct VerificationTarget {\n    pub kind: String,\n    pub value: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TaskReview {\n    pub required_evidence_is_sufficient: bool,\n    pub distractors_are_realistic: bool,\n    pub multiple_valid_paths_considered: bool,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TaskSpec {\n    pub task_id: String,\n    pub schema_version: u32,\n    pub fixture_id: String,\n    pub title: String,\n    pub statement: String,\n    pub task_class: TaskClass,\n    pub difficulty: Difficulty,\n    pub allowed_tools: Vec<String>,\n    pub turn_budget: u32,\n    pub evidence_spec_ref: String,\n    pub seed_paths: Vec<String>,\n    pub seed_selectors: Vec<String>,\n    pub verification_targets: Vec<VerificationTarget>,\n    pub known_distractor_regions: Vec<String>,\n    pub expected_edit_loci: Vec<String>,\n    pub review: TaskReview,\n}\n\nimpl TaskSpec {\n    pub fn validate(&self) -> Result<(), AppError> {\n        if self.schema_version != TASK_SPEC_SCHEMA_VERSION {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"task_spec\",\n                \"validate\",\n                \"unsupported task schema version\",\n            ));\n        }\n\n        validate_identifier(&self.task_id, \"task.task_id\")?;\n        validate_identifier(&self.fixture_id, \"task.fixture_id\")?;\n        validate_non_empty(&self.title, \"task.title\")?;\n        validate_non_empty(&self.statement, \"task.statement\")?;\n        validate_non_empty(&self.evidence_spec_ref, \"task.evidence_spec_ref\")?;\n\n        if self.allowed_tools.is_empty() {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"task_spec\",\n                \"validate\",\n                \"task.allowed_tools must not be empty\",\n            ));\n        }\n\n        if self.turn_budget == 0 {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"task_spec\",\n                \"validate\",\n                \"task.turn_budget must be greater than zero\",\n            ));\n        }\n\n        if self.verification_targets.is_empty() {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"task_spec\",\n                \"validate\",\n                \"task.verification_targets must not be empty\",\n            ));\n        }\n\n        if self.seed_paths.is_empty() && self.seed_selectors.is_empty() {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"task_spec\",\n                \"validate\",\n                \"task must expose at least one seed path or selector\",\n            ));\n        }\n\n        if !(self.review.required_evidence_is_sufficient\n            && self.review.distractors_are_realistic\n            && self.review.multiple_valid_paths_considered)\n        {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"task_spec\",\n                \"validate\",\n                \"task review must explicitly pass all authoring checks\",\n            ));\n        }\n\n        Ok(())\n    }\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum ProofKind {\n    Path,\n    Symbol,\n    LogicalKey,\n    Excerpt,\n    GraphPath,\n    Coderef,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct AcceptableProof {\n    pub kind: ProofKind,\n    pub value: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct EvidenceFact {\n    pub fact_id: String,\n    pub description: String,\n    pub acceptable_proofs: Vec<AcceptableProof>,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct EvidenceSpec {\n    pub evidence_spec_id: String,\n    pub schema_version: u32,\n    pub required_facts: Vec<EvidenceFact>,\n    pub supporting_facts: Vec<EvidenceFact>,\n    pub distractor_facts: Vec<EvidenceFact>,\n    pub verification_targets: Vec<VerificationTarget>,\n}\n\nimpl EvidenceSpec {\n    pub fn validate(&self) -> Result<(), AppError> {\n        if self.schema_version != EVIDENCE_SPEC_SCHEMA_VERSION {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"evidence_spec\",\n                \"validate\",\n                \"unsupported evidence schema version\",\n            ));\n        }\n\n        validate_identifier(&self.evidence_spec_id, \"evidence.evidence_spec_id\")?;\n\n        if self.required_facts.is_empty() {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"evidence_spec\",\n                \"validate\",\n                \"evidence.required_facts must not be empty\",\n            ));\n        }\n\n        if self.distractor_facts.is_empty() {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"evidence_spec\",\n                \"validate\",\n                \"evidence.distractor_facts must not be empty\",\n            ));\n        }\n\n        if self.verification_targets.is_empty() {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"evidence_spec\",\n                \"validate\",\n                \"evidence.verification_targets must not be empty\",\n            ));\n        }\n\n        for fact in self\n            .required_facts\n            .iter()\n            .chain(self.supporting_facts.iter())\n            .chain(self.distractor_facts.iter())\n        {\n            validate_identifier(&fact.fact_id, \"evidence.fact_id\")?;\n            validate_non_empty(&fact.description, \"evidence.description\")?;\n\n            if fact.acceptable_proofs.is_empty() {\n                return Err(validation_error(\n                    ErrorCode::SchemaValidationFailed,\n                    \"evidence_spec\",\n                    \"validate\",\n                    \"every fact must declare acceptable proofs\",\n                ));\n            }\n\n            for proof in &fact.acceptable_proofs {\n                validate_non_empty(&proof.value, \"evidence.acceptable_proof.value\")?;\n            }\n        }\n\n        Ok(())\n    }\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum ContextObjectKind {\n    Symbol,\n    SymbolCluster,\n    FileRegion,\n    DependencyNeighborhood,\n    TestTarget,\n    ValidationArtifact,\n    ToolResultSummary,\n    DirtyEditLocus,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct ContextIdentity {\n    pub logical_key: Option<String>,\n    pub path: Option<String>,\n    pub symbol: Option<String>,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct ContextProvenance {\n    pub source_kind: String,\n    pub anchor_id: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum RepresentationLevel {\n    L0,\n    L1,\n    L2,\n    L3,\n    L4,\n    L5,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum LeaseState {\n    Granted,\n    Expiring,\n    Denied,\n}\n\npub type RelevanceScore = i32;\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct EvidenceMatch {\n    pub fact_id: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct ContextObjectHashSet {\n    pub object_hash: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct ContextObject {\n    pub context_object_id: String,\n    pub schema_version: u32,\n    pub graph_snapshot_id: String,\n    pub kind: ContextObjectKind,\n    pub identity: ContextIdentity,\n    pub representation_level: RepresentationLevel,\n    pub provenance: ContextProvenance,\n    pub relevance_score: RelevanceScore,\n    pub lease_state: LeaseState,\n    pub evidence_matches: Vec<EvidenceMatch>,\n    pub hashes: ContextObjectHashSet,\n}\n\nimpl ContextObject {\n    pub fn validate(&self) -> Result<(), AppError> {\n        if self.schema_version != CONTEXT_OBJECT_SCHEMA_VERSION {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"context_object\",\n                \"validate\",\n                \"unsupported context object schema version\",\n            ));\n        }\n\n        validate_identifier(&self.context_object_id, \"context.context_object_id\")?;\n        validate_snapshot_id(&self.graph_snapshot_id)?;\n        validate_non_empty(\n            &self.provenance.source_kind,\n            \"context.provenance.source_kind\",\n        )?;\n        validate_non_empty(&self.provenance.anchor_id, \"context.provenance.anchor_id\")?;\n        validate_hash(&self.hashes.object_hash, \"context.hashes.object_hash\")?;\n\n        if self.identity.logical_key.is_none()\n            && self.identity.path.is_none()\n            && self.identity.symbol.is_none()\n        {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"context_object\",\n                \"validate\",\n                \"context identity must include at least one of logical_key, path, or symbol\",\n            ));\n        }\n\n        Ok(())\n    }\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct RenderedContextSection {\n    pub section_id: String,\n    pub schema_version: u32,\n    pub title: String,\n    pub content: String,\n    pub byte_count: u32,\n    pub token_count: u32,\n}\n\nimpl RenderedContextSection {\n    pub fn validate(&self) -> Result<(), AppError> {\n        if self.schema_version != CONTEXT_WINDOW_SECTION_SCHEMA_VERSION {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"context_window_section\",\n                \"validate\",\n                \"unsupported context window section schema version\",\n            ));\n        }\n\n        validate_identifier(&self.section_id, \"context_window_section.section_id\")?;\n        validate_non_empty(&self.title, \"context_window_section.title\")?;\n        validate_non_empty(&self.content, \"context_window_section.content\")?;\n        Ok(())\n    }\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TurnRequest {\n    pub schema_version: u32,\n    pub prompt_version: String,\n    pub prompt_hash: String,\n    pub context_hash: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TurnResponse {\n    pub provider: String,\n    pub model_slug: String,\n    pub schema_version: u32,\n    pub validated: bool,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct OmittedCandidate {\n    pub candidate_id: String,\n    pub reason: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TurnSelection {\n    pub selected_context_objects: Vec<String>,\n    pub omitted_candidates: Vec<OmittedCandidate>,\n    pub rendered_sections: Vec<RenderedContextSection>,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TelemetryCounts {\n    pub prompt_bytes: u32,\n    pub prompt_tokens: u32,\n    pub latency_ms: u32,\n    pub tool_calls: u32,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\n#[serde(rename_all = \"snake_case\")]\npub enum ReadinessState {\n    NotReady,\n    EvidenceVisible,\n    EvidenceAcquired,\n    ReadyToEdit,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TurnHashSet {\n    pub turn_hash: String,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct TurnTrace {\n    pub run_id: String,\n    pub turn_index: u32,\n    pub task_id: String,\n    pub fixture_id: String,\n    pub strategy_id: String,\n    pub request: TurnRequest,\n    pub response: TurnResponse,\n    pub selection: TurnSelection,\n    pub telemetry: TelemetryCounts,\n    pub evidence_delta: Vec<String>,\n    pub readiness_state: ReadinessState,\n    pub readiness_reason: String,\n    pub hashes: TurnHashSet,\n}\n\nimpl TurnTrace {\n    pub fn validate_for_creation(&self) -> Result<(), AppError> {\n        self.validate_common(\"create\")\n    }\n\n    pub fn validate_for_persistence(&self) -> Result<(), AppError> {\n        self.validate_common(\"persist\")\n    }\n\n    pub fn validate_for_replay(&self) -> Result<(), AppError> {\n        self.validate_common(\"replay\")\n    }\n\n    fn validate_common(&self, operation: &'static str) -> Result<(), AppError> {\n        validate_identifier(&self.run_id, \"turn_trace.run_id\")?;\n        validate_identifier(&self.task_id, \"turn_trace.task_id\")?;\n        validate_identifier(&self.fixture_id, \"turn_trace.fixture_id\")?;\n        validate_identifier(&self.strategy_id, \"turn_trace.strategy_id\")?;\n        validate_hash(&self.request.prompt_hash, \"turn_trace.request.prompt_hash\")?;\n        validate_hash(\n            &self.request.context_hash,\n            \"turn_trace.request.context_hash\",\n        )?;\n        validate_non_empty(\n            &self.request.prompt_version,\n            \"turn_trace.request.prompt_version\",\n        )?;\n        validate_non_empty(&self.response.provider, \"turn_trace.response.provider\")?;\n        validate_non_empty(&self.response.model_slug, \"turn_trace.response.model_slug\")?;\n        validate_non_empty(&self.readiness_reason, \"turn_trace.readiness_reason\")?;\n        validate_hash(&self.hashes.turn_hash, \"turn_trace.hashes.turn_hash\")?;\n\n        if self.request.schema_version != TURN_TRACE_SCHEMA_VERSION\n            || self.response.schema_version != TURN_TRACE_SCHEMA_VERSION\n        {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"turn_trace\",\n                operation,\n                \"turn request and response schema versions must match the turn trace schema version\",\n            ));\n        }\n\n        if !self.response.validated {\n            return Err(validation_error(\n                ErrorCode::ProviderResponseInvalid,\n                \"turn_trace\",\n                operation,\n                \"turn response must be validated before use\",\n            ));\n        }\n\n        for section in &self.selection.rendered_sections {\n            section.validate()?;\n        }\n\n        Ok(())\n    }\n}\n\npub type ScoreValue = f64;\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]\npub struct ScoreMetrics {\n    pub required_evidence_recall: ScoreValue,\n    pub evidence_precision: ScoreValue,\n    pub irrelevant_material_ratio: ScoreValue,\n    pub turns_to_readiness: u32,\n    pub reread_count: u32,\n    pub post_readiness_drift_turns: u32,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq)]\npub struct ScoreReport {\n    pub run_id: String,\n    pub task_id: String,\n    pub schema_version: u32,\n    pub evidence_visibility_score: ScoreValue,\n    pub evidence_acquisition_score: ScoreValue,\n    pub evidence_efficiency_score: ScoreValue,\n    pub explanation_quality_score: ScoreValue,\n    pub metrics: ScoreMetrics,\n}\n\nimpl ScoreReport {\n    pub fn validate_for_creation(&self) -> Result<(), AppError> {\n        self.validate_common(\"create\")\n    }\n\n    pub fn validate_for_persistence(&self) -> Result<(), AppError> {\n        self.validate_common(\"persist\")\n    }\n\n    pub fn validate_for_scoring(&self) -> Result<(), AppError> {\n        self.validate_common(\"score\")\n    }\n\n    fn validate_common(&self, operation: &'static str) -> Result<(), AppError> {\n        if self.schema_version != SCORE_REPORT_SCHEMA_VERSION {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"score_report\",\n                operation,\n                \"unsupported score report schema version\",\n            ));\n        }\n\n        validate_identifier(&self.run_id, \"score_report.run_id\")?;\n        validate_identifier(&self.task_id, \"score_report.task_id\")?;\n\n        for score in [\n            self.evidence_visibility_score,\n            self.evidence_acquisition_score,\n            self.evidence_efficiency_score,\n            self.explanation_quality_score,\n            self.metrics.required_evidence_recall,\n            self.metrics.evidence_precision,\n            self.metrics.irrelevant_material_ratio,\n        ] {\n            if !(0.0..=1.0).contains(&score) {\n                return Err(validation_error(\n                    ErrorCode::SchemaValidationFailed,\n                    \"score_report\",\n                    operation,\n                    \"all normalized scores and ratios must be between 0.0 and 1.0\",\n                ));\n            }\n        }\n\n        Ok(())\n    }\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct RunSchemaVersionSet {\n    pub fixture_manifest: u32,\n    pub task_spec: u32,\n    pub evidence_spec: u32,\n    pub context_object: u32,\n    pub context_window_section: u32,\n    pub turn_trace: u32,\n    pub score_report: u32,\n}\n\n#[derive(Debug, Clone, Serialize, Deserialize, PartialEq, Eq)]\npub struct RunManifest {\n    pub run_id: String,\n    pub schema_version: u32,\n    pub fixture_id: String,\n    pub task_id: String,\n    pub strategy_id: String,\n    pub harness_version: String,\n    pub schema_version_set: RunSchemaVersionSet,\n    pub provider: String,\n    pub model_slug: String,\n    pub prompt_version: String,\n    pub graph_snapshot_id: String,\n    pub started_at: String,\n    pub completed_at: String,\n    pub outcome: String,\n}\n\nimpl RunManifest {\n    pub fn validate(&self) -> Result<(), AppError> {\n        if self.schema_version != RUN_MANIFEST_SCHEMA_VERSION {\n            return Err(validation_error(\n                ErrorCode::SchemaValidationFailed,\n                \"run_manifest\",\n                \"validate\",\n                \"unsupported run manifest schema version\",\n            ));\n        }\n\n        validate_identifier(&self.run_id, \"run_manifest.run_id\")?;\n        validate_identifier(&self.fixture_id, \"run_manifest.fixture_id\")?;\n        validate_identifier(&self.task_id, \"run_manifest.task_id\")?;\n        validate_identifier(&self.strategy_id, \"run_manifest.strategy_id\")?;\n        validate_non_empty(&self.harness_version, \"run_manifest.harness_version\")?;\n        validate_non_empty(&self.provider, \"run_manifest.provider\")?;\n        validate_non_empty(&self.model_slug, \"run_manifest.model_slug\")?;\n        validate_non_empty(&self.prompt_version, \"run_manifest.prompt_version\")?;\n        validate_snapshot_id(&self.graph_snapshot_id)?;\n        validate_non_empty(&self.started_at, \"run_manifest.started_at\")?;\n        validate_non_empty(&self.completed_at, \"run_manifest.completed_at\")?;\n        validate_non_empty(&self.outcome, \"run_manifest.outcome\")?;\n        Ok(())\n    }\n}\n\nfn validate_non_empty(value: &str, field: &'static str) -> Result<(), AppError> {\n    if value.trim().is_empty() {\n        return Err(validation_error(\n            ErrorCode::SchemaValidationFailed,\n            \"artifacts\",\n            \"validate_non_empty\",\n            field,\n        ));\n    }\n\n    Ok(())\n}\n\nfn validate_identifier(value: &str, field: &'static str) -> Result<(), AppError> {\n    validate_non_empty(value, field)?;\n\n    if !value\n        .chars()\n        .all(|character| character.is_ascii_alphanumeric() || matches!(character, '-' | '_' | '.'))\n    {\n        return Err(validation_error(\n            ErrorCode::SchemaValidationFailed,\n            \"artifacts\",\n            \"validate_identifier\",\n            field,\n        ));\n    }\n\n    Ok(())\n}\n\nfn validate_commit_sha(value: &str) -> Result<(), AppError> {\n    if value.len() != 40 || !value.chars().all(|character| character.is_ascii_hexdigit()) {\n        return Err(validation_error(\n            ErrorCode::FixtureManifestInvalid,\n            \"fixture_manifest\",\n            \"validate_commit_sha\",\n            \"fixture.repository.commit_sha must be a 40-character hex SHA\",\n        ));\n    }\n\n    Ok(())\n}\n\nfn validate_snapshot_id(value: &str) -> Result<(), AppError> {\n    let Some(hash) = value.strip_prefix(\"sha256:\") else {\n        return Err(validation_error(\n            ErrorCode::SchemaValidationFailed,\n            \"artifacts\",\n            \"validate_snapshot_id\",\n            \"snapshot ids must use sha256:<hex> format\",\n        ));\n    };\n\n    if hash.len() != 64 || !hash.chars().all(|character| character.is_ascii_hexdigit()) {\n        return Err(validation_error(\n            ErrorCode::SchemaValidationFailed,\n            \"artifacts\",\n            \"validate_snapshot_id\",\n            \"snapshot ids must use sha256:<64 hex> format\",\n        ));\n    }\n\n    Ok(())\n}\n\nfn validate_hash(value: &str, field: &'static str) -> Result<(), AppError> {\n    validate_snapshot_id(value).map_err(|_| {\n        validation_error(\n            ErrorCode::SchemaValidationFailed,\n            \"artifacts\",\n            \"validate_hash\",\n            field,\n        )\n    })\n}\n\nfn validation_error(\n    code: ErrorCode,\n    component: &'static str,\n    operation: &'static str,\n    message: &'static str,\n) -> AppError {\n    AppError::new(\n        code,\n        message,\n        ErrorContext {\n            component,\n            operation,\n        },\n    )\n}\n\n#[cfg(test)]\nmod tests {\n    use super::{\n        CONTEXT_WINDOW_SECTION_SCHEMA_VERSION, Difficulty, EVIDENCE_SPEC_SCHEMA_VERSION,\n        FIXTURE_MANIFEST_SCHEMA_VERSION, FixtureLanguage, FixtureManifest, FixtureMetadata,\n        GraphSnapshot, MirrorPolicy, RenderedContextSection, RepositoryRef,\n        SCORE_REPORT_SCHEMA_VERSION, ScoreMetrics, ScoreReport, TASK_SPEC_SCHEMA_VERSION,\n        TURN_TRACE_SCHEMA_VERSION, TaskClass, TaskReview, TaskSpec, TurnHashSet, TurnRequest,\n        TurnResponse, TurnSelection, TurnTrace, VerificationTarget,\n    };\n\n    #[test]\n    fn fixture_validation_requires_pinned_sha() {\n        let fixture = FixtureManifest {\n            fixture_id: \"graphbench.internal\".to_owned(),\n            schema_version: FIXTURE_MANIFEST_SCHEMA_VERSION,\n            repository: RepositoryRef {\n                source: \".\".to_owned(),\n                commit_sha: \"abc\".to_owned(),\n                mirror_policy: MirrorPolicy::Workspace,\n            },\n            graph: GraphSnapshot {\n                snapshot_id: format!(\"sha256:{}\", \"a\".repeat(64)),\n                snapshot_format: \"json\".to_owned(),\n                snapshot_ref: \"snapshot.json\".to_owned(),\n            },\n            languages: vec![FixtureLanguage::Rust],\n            metadata: FixtureMetadata {\n                title: \"Fixture\".to_owned(),\n                notes: String::new(),\n            },\n        };\n\n        assert!(fixture.validate().is_err());\n    }\n\n    #[test]\n    fn task_validation_requires_review_and_verification_targets() {\n        let task = TaskSpec {\n            task_id: \"task-1\".to_owned(),\n            schema_version: TASK_SPEC_SCHEMA_VERSION,\n            fixture_id: \"fixture-1\".to_owned(),\n            title: \"Task\".to_owned(),\n            statement: \"Collect evidence.\".to_owned(),\n            task_class: TaskClass::PrepareToEdit,\n            difficulty: Difficulty::Medium,\n            allowed_tools: vec![\"read_file\".to_owned()],\n            turn_budget: 5,\n            evidence_spec_ref: \"evidence.json\".to_owned(),\n            seed_paths: vec![\"README.md\".to_owned()],\n            seed_selectors: Vec::new(),\n            verification_targets: Vec::new(),\n            known_distractor_regions: Vec::new(),\n            expected_edit_loci: Vec::new(),\n            review: TaskReview {\n                required_evidence_is_sufficient: true,\n                distractors_are_realistic: true,\n                multiple_valid_paths_considered: true,\n            },\n        };\n\n        assert!(task.validate().is_err());\n    }\n\n    #[test]\n    fn turn_trace_validation_rejects_unvalidated_responses() {\n        let trace = TurnTrace {\n            run_id: \"run-1\".to_owned(),\n            turn_index: 0,\n            task_id: \"task-1\".to_owned(),\n            fixture_id: \"fixture-1\".to_owned(),\n            strategy_id: \"baseline\".to_owned(),\n            request: TurnRequest {\n                schema_version: TURN_TRACE_SCHEMA_VERSION,\n                prompt_version: \"v1\".to_owned(),\n                prompt_hash: format!(\"sha256:{}\", \"b\".repeat(64)),\n                context_hash: format!(\"sha256:{}\", \"c\".repeat(64)),\n            },\n            response: TurnResponse {\n                provider: \"test\".to_owned(),\n                model_slug: \"model\".to_owned(),\n                schema_version: TURN_TRACE_SCHEMA_VERSION,\n                validated: false,\n            },\n            selection: TurnSelection {\n                selected_context_objects: vec![\"context-1\".to_owned()],\n                omitted_candidates: Vec::new(),\n                rendered_sections: vec![RenderedContextSection {\n                    section_id: \"objective_state\".to_owned(),\n                    schema_version: CONTEXT_WINDOW_SECTION_SCHEMA_VERSION,\n                    title: \"Objective State\".to_owned(),\n                    content: \"Task body\".to_owned(),\n                    byte_count: 9,\n                    token_count: 2,\n                }],\n            },\n            telemetry: super::TelemetryCounts {\n                prompt_bytes: 9,\n                prompt_tokens: 2,\n                latency_ms: 10,\n                tool_calls: 1,\n            },\n            evidence_delta: vec![\"fact-1\".to_owned()],\n            readiness_state: super::ReadinessState::EvidenceAcquired,\n            readiness_reason: \"required facts were gathered\".to_owned(),\n            hashes: TurnHashSet {\n                turn_hash: format!(\"sha256:{}\", \"d\".repeat(64)),\n            },\n        };\n\n        assert!(trace.validate_for_creation().is_err());\n    }\n\n    #[test]\n    fn score_report_validation_bounds_scores() {\n        let report = ScoreReport {\n            run_id: \"run-1\".to_owned(),\n            task_id: \"task-1\".to_owned(),\n            schema_version: SCORE_REPORT_SCHEMA_VERSION,\n            evidence_visibility_score: 1.0,\n            evidence_acquisition_score: 0.9,\n            evidence_efficiency_score: 0.8,\n            explanation_quality_score: 1.2,\n            metrics: ScoreMetrics {\n                required_evidence_recall: 1.0,\n                evidence_precision: 0.9,\n                irrelevant_material_ratio: 0.1,\n                turns_to_readiness: 2,\n                reread_count: 0,\n                post_readiness_drift_turns: 0,\n            },\n        };\n\n        assert!(report.validate_for_scoring().is_err());\n    }\n\n    #[test]\n    fn rendered_context_section_validates() {\n        let section = RenderedContextSection {\n            section_id: \"selected_history\".to_owned(),\n            schema_version: CONTEXT_WINDOW_SECTION_SCHEMA_VERSION,\n            title: \"Selected History\".to_owned(),\n            content: \"Recent items\".to_owned(),\n            byte_count: 12,\n            token_count: 3,\n        };\n\n        assert!(section.validate().is_ok());\n    }\n\n    #[test]\n    fn evidence_spec_validation_requires_facts() {\n        let spec = super::EvidenceSpec {\n            evidence_spec_id: \"evidence-1\".to_owned(),\n            schema_version: EVIDENCE_SPEC_SCHEMA_VERSION,\n            required_facts: Vec::new(),\n            supporting_facts: Vec::new(),\n            distractor_facts: Vec::new(),\n            verification_targets: vec![VerificationTarget {\n                kind: \"command\".to_owned(),\n                value: \"cargo test\".to_owned(),\n            }],\n        };\n\n        assert!(spec.validate().is_err());\n    }\n}\n",
+            "line_count": 964,
+            "path": "crates/graphbench-core/src/artifacts.rs",
+            "status": "ok"
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 1,
+      "request_blob": {
+        "blob_id": "sha256:c376dde061f2e877717cddd5785735f0891f0250802417c6af238bb0ba85a5e5",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/c376dde061f2e877717cddd5785735f0891f0250802417c6af238bb0ba85a5e5.json",
+        "byte_count": 39271
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:6ee96cfb6b025b57afb9f3b37f58c364a302995440c01824edf70b3600f014db",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/6ee96cfb6b025b57afb9f3b37f58c364a302995440c01824edf70b3600f014db.json",
+        "byte_count": 9421
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:a9cfc8c5dfabab60208b86a16face4c697e07d2c3d6f624a6e1885d2387cb1b9",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/a9cfc8c5dfabab60208b86a16face4c697e07d2c3d6f624a6e1885d2387cb1b9.json",
+        "byte_count": 458
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:1b5191fccab8a9e3d89d5e0d94a29115134f325e50f7e7f42a7408d8cf18018f",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/1b5191fccab8a9e3d89d5e0d94a29115134f325e50f7e7f42a7408d8cf18018f.txt",
+        "byte_count": 34999
+      },
+      "context_blob": {
+        "blob_id": "sha256:d133912a848f7c65b86907c3861fd775871dee4aa8148641409cb2fecaf2989e",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/d133912a848f7c65b86907c3861fd775871dee4aa8148641409cb2fecaf2989e.txt",
+        "byte_count": 34838
+      },
+      "provider_request_id": null,
+      "telemetry": {
+        "prompt_bytes": 34999,
+        "prompt_tokens": 2307,
+        "latency_ms": 3544,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "search",
+          "latency_ms": 8,
+          "outcome": "ok",
+          "input_payload": {
+            "path": "crates/graphbench-core/src",
+            "pattern": "pub const"
+          },
+          "output_payload": {
+            "exit_code": 0,
+            "matches": [
+              "crates/graphbench-core/src/error.rs:18:    pub const fn as_str(self) -> &'static str {",
+              "crates/graphbench-core/src/error.rs:46:    pub const fn category(self) -> ErrorCategory {",
+              "crates/graphbench-core/src/error.rs:60:    pub const fn as_str(self) -> &'static str {",
+              "crates/graphbench-core/src/error.rs:115:    pub const fn code(&self) -> ErrorCode {",
+              "crates/graphbench-core/src/error.rs:120:    pub const fn category(&self) -> ErrorCategory {",
+              "crates/graphbench-core/src/logging.rs:14:    pub const fn as_str(self) -> &'static str {",
+              "crates/graphbench-core/src/logging.rs:39:    pub const fn as_str(self) -> &'static str {",
+              "crates/graphbench-core/src/artifacts.rs:4:pub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:5:pub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:6:pub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:7:pub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:8:pub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:9:pub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:10:pub const SCORE_REPORT_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:11:pub const RUN_MANIFEST_SCHEMA_VERSION: u32 = 1;"
+            ],
+            "path": "crates/graphbench-core/src",
+            "pattern": "pub const",
+            "stderr": ""
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 2,
+      "request_blob": {
+        "blob_id": "sha256:8efbab27c71076487d7e7a5ef3773c35958d9483f0089c8745e8001bcfef2600",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/8efbab27c71076487d7e7a5ef3773c35958d9483f0089c8745e8001bcfef2600.json",
+        "byte_count": 40969
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:71cfc6c8b0cd38fcb8ea1652e3c23299f2c2962e81a7d01dd4c33f286a4b733f",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/71cfc6c8b0cd38fcb8ea1652e3c23299f2c2962e81a7d01dd4c33f286a4b733f.json",
+        "byte_count": 15082
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:71bab6d17b7060485af1fcb49566133c37c25f2dd5981fb63b5c464a5dd90cb1",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/71bab6d17b7060485af1fcb49566133c37c25f2dd5981fb63b5c464a5dd90cb1.json",
+        "byte_count": 408
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:3cbbfafbd0a3c3bb621becd7be85eac6599674447f8343c7dd9fdbffa4ef6ca6",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/3cbbfafbd0a3c3bb621becd7be85eac6599674447f8343c7dd9fdbffa4ef6ca6.txt",
+        "byte_count": 36642
+      },
+      "context_blob": {
+        "blob_id": "sha256:5148793c9e356dfa327de69dbf07b50d155544e9f7a7d75c5050baadf48c26a1",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/5148793c9e356dfa327de69dbf07b50d155544e9f7a7d75c5050baadf48c26a1.txt",
+        "byte_count": 36481
+      },
+      "provider_request_id": null,
+      "telemetry": {
+        "prompt_bytes": 36642,
+        "prompt_tokens": 2419,
+        "latency_ms": 5317,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "search",
+          "latency_ms": 8,
+          "outcome": "ok",
+          "input_payload": {
+            "path": "crates",
+            "pattern": "SCHEMA_VERSION"
+          },
+          "output_payload": {
+            "exit_code": 0,
+            "matches": [
+              "crates/graphbench-core/src/artifacts.rs:4:pub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:5:pub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:6:pub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:7:pub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:8:pub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:9:pub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:10:pub const SCORE_REPORT_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:11:pub const RUN_MANIFEST_SCHEMA_VERSION: u32 = 1;",
+              "crates/graphbench-core/src/artifacts.rs:63:        if self.schema_version != FIXTURE_MANIFEST_SCHEMA_VERSION {",
+              "crates/graphbench-core/src/artifacts.rs:144:        if self.schema_version != TASK_SPEC_SCHEMA_VERSION {",
+              "crates/graphbench-core/src/artifacts.rs:247:        if self.schema_version != EVIDENCE_SPEC_SCHEMA_VERSION {",
+              "crates/graphbench-core/src/artifacts.rs:386:        if self.schema_version != CONTEXT_OBJECT_SCHEMA_VERSION {",
+              "crates/graphbench-core/src/artifacts.rs:432:        if self.schema_version != CONTEXT_WINDOW_SECTION_SCHEMA_VERSION {",
+              "crates/graphbench-core/src/artifacts.rs:548:        if self.request.schema_version != TURN_TRACE_SCHEMA_VERSION",
+              "crates/graphbench-core/src/artifacts.rs:549:            || self.response.schema_version != TURN_TRACE_SCHEMA_VERSION",
+              "crates/graphbench-core/src/artifacts.rs:614:        if self.schema_version != SCORE_REPORT_SCHEMA_VERSION {",
+              "crates/graphbench-core/src/artifacts.rs:680:        if self.schema_version != RUN_MANIFEST_SCHEMA_VERSION {",
+              "crates/graphbench-core/src/artifacts.rs:801:        CONTEXT_WINDOW_SECTION_SCHEMA_VERSION, Difficulty, EVIDENCE_SPEC_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/artifacts.rs:802:        FIXTURE_MANIFEST_SCHEMA_VERSION, FixtureLanguage, FixtureManifest, FixtureMetadata,",
+              "crates/graphbench-core/src/artifacts.rs:804:        SCORE_REPORT_SCHEMA_VERSION, ScoreMetrics, ScoreReport, TASK_SPEC_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/artifacts.rs:805:        TURN_TRACE_SCHEMA_VERSION, TaskClass, TaskReview, TaskSpec, TurnHashSet, TurnRequest,",
+              "crates/graphbench-core/src/artifacts.rs:813:            schema_version: FIXTURE_MANIFEST_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/artifacts.rs:838:            schema_version: TASK_SPEC_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/artifacts.rs:871:                schema_version: TURN_TRACE_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/artifacts.rs:879:                schema_version: TURN_TRACE_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/artifacts.rs:887:                    schema_version: CONTEXT_WINDOW_SECTION_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/artifacts.rs:916:            schema_version: SCORE_REPORT_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/artifacts.rs:938:            schema_version: CONTEXT_WINDOW_SECTION_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/artifacts.rs:952:            schema_version: EVIDENCE_SPEC_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/observability.rs:6:    RunManifest, RunSchemaVersionSet, TURN_TRACE_SCHEMA_VERSION, TelemetryCounts,",
+              "crates/graphbench-harness/src/observability.rs:400:        schema_version: graphbench_core::artifacts::RUN_MANIFEST_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/observability.rs:406:            fixture_manifest: graphbench_core::artifacts::FIXTURE_MANIFEST_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/observability.rs:407:            task_spec: graphbench_core::artifacts::TASK_SPEC_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/observability.rs:408:            evidence_spec: graphbench_core::artifacts::EVIDENCE_SPEC_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/observability.rs:409:            context_object: graphbench_core::artifacts::CONTEXT_OBJECT_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/observability.rs:411:                graphbench_core::artifacts::CONTEXT_WINDOW_SECTION_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/observability.rs:412:            turn_trace: TURN_TRACE_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/observability.rs:413:            score_report: graphbench_core::artifacts::SCORE_REPORT_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/observability.rs:572:                schema_version: graphbench_core::artifacts::RUN_MANIFEST_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/graph.rs:349:        schema_version: crate::artifacts::CONTEXT_WINDOW_SECTION_SCHEMA_VERSION,",
+              "crates/graphbench-core/src/graph.rs:406:        schema_version: crate::artifacts::CONTEXT_OBJECT_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/runtime.rs:426:                    schema_version: graphbench_core::artifacts::TURN_TRACE_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/runtime.rs:434:                    schema_version: graphbench_core::artifacts::TURN_TRACE_SCHEMA_VERSION,",
+              "crates/graphbench-harness/src/runtime.rs:616:        schema_version: graphbench_core::artifacts::CONTEXT_WINDOW_SECTION_SCHEMA_VERSION,"
+            ],
+            "path": "crates",
+            "pattern": "SCHEMA_VERSION",
+            "stderr": ""
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 3,
+      "request_blob": {
+        "blob_id": "sha256:e02ab1d72e59aabb904ebb1546a582a492654858d5fb34f82fe7050a095b20f1",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/e02ab1d72e59aabb904ebb1546a582a492654858d5fb34f82fe7050a095b20f1.json",
+        "byte_count": 46470
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:fba82220c720ab93bcfcaf9f26736ac392ed6e19a19a65bf10e12675406efb77",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/fba82220c720ab93bcfcaf9f26736ac392ed6e19a19a65bf10e12675406efb77.json",
+        "byte_count": 8079
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:8094db77b3e11c7d8cf026bc72ec65a22eb7fa827b815b137b171dd689196f56",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/8094db77b3e11c7d8cf026bc72ec65a22eb7fa827b815b137b171dd689196f56.json",
+        "byte_count": 287
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:a2112d9980d963cf82f622ee60ec02d6003ea26e0cc91908df3aa4d82f8014a2",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/a2112d9980d963cf82f622ee60ec02d6003ea26e0cc91908df3aa4d82f8014a2.txt",
+        "byte_count": 42031
+      },
+      "context_blob": {
+        "blob_id": "sha256:7241849659372504b17a7c9bff8ea8da8ffc3546bea43a75698ff1410117ae4d",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/7241849659372504b17a7c9bff8ea8da8ffc3546bea43a75698ff1410117ae4d.txt",
+        "byte_count": 41870
+      },
+      "provider_request_id": null,
+      "telemetry": {
+        "prompt_bytes": 42031,
+        "prompt_tokens": 2582,
+        "latency_ms": 3651,
+        "tool_calls": 0
+      },
+      "tool_traces": []
+    },
+    {
+      "turn_index": 4,
+      "request_blob": {
+        "blob_id": "sha256:9b8a581932ea49721fb67c3cb3cb6026b5065fcc9b2ef3fa493ac64e15551be3",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/9b8a581932ea49721fb67c3cb3cb6026b5065fcc9b2ef3fa493ac64e15551be3.json",
+        "byte_count": 46538
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:8abb0f479a110a93b66a2bdde3b3dfda5f3c07360f26ed541175b30693a38f5d",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/8abb0f479a110a93b66a2bdde3b3dfda5f3c07360f26ed541175b30693a38f5d.json",
+        "byte_count": 8181
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:5807037166504971ab22d2d9ad6b0225fda3f70ab375c1985f72a997f451362e",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/5807037166504971ab22d2d9ad6b0225fda3f70ab375c1985f72a997f451362e.json",
+        "byte_count": 274
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:0624f6fb8a344ed8a27bdfa37b8eaaa09911bf9bd379fd8294927c3b07c30618",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/0624f6fb8a344ed8a27bdfa37b8eaaa09911bf9bd379fd8294927c3b07c30618.txt",
+        "byte_count": 42099
+      },
+      "context_blob": {
+        "blob_id": "sha256:20878a2b0bebb497d12c8cb337ad8976b05cd231786c493e6c5f3b94b176f324",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/20878a2b0bebb497d12c8cb337ad8976b05cd231786c493e6c5f3b94b176f324.txt",
+        "byte_count": 41938
+      },
+      "provider_request_id": null,
+      "telemetry": {
+        "prompt_bytes": 42099,
+        "prompt_tokens": 2592,
+        "latency_ms": 3356,
+        "tool_calls": 0
+      },
+      "tool_traces": []
+    }
+  ],
+  "aggregation": {
+    "total_turns": 5,
+    "aggregate_prompt_bytes": 158478,
+    "aggregate_prompt_tokens": 10224,
+    "aggregate_latency_ms": 22653,
+    "aggregate_tool_calls": 3
+  },
+  "structured_logs": [
+    {
+      "component": "turn",
+      "error_code": null,
+      "event": "turn.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773603083",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "component": "turn",
+      "error_code": null,
+      "event": "turn.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773603083",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "component": "turn",
+      "error_code": null,
+      "event": "turn.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773603083",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "component": "turn",
+      "error_code": null,
+      "event": "turn.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773603083",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "component": "turn",
+      "error_code": null,
+      "event": "turn.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773603083",
+      "strategy_id": "smoke-openrouter",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    }
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "task_id": "prepare-edit.harness-loop",
+  "schema_version": 1,
+  "fixture_id": "graphbench.internal",
+  "title": "Prepare to modify harness loop transitions",
+  "statement": "Gather the evidence required before changing the harness loop so state transitions remain explicit and fail fast on invalid completion paths.",
+  "task_class": "prepare_to_edit",
+  "difficulty": "easy",
+  "allowed_tools": ["read_file", "list_dir", "search"],
+  "turn_budget": 6,
+  "evidence_spec_ref": "evidence.prepare-edit.harness-loop",
+  "seed_paths": ["crates/graphbench-harness/src/lib.rs", "docs/harness.md"],
+  "seed_selectors": ["graphbench_harness::LoopState"],
+  "verification_targets": [
+    { "kind": "command", "value": "cargo test loop_state_advances_deterministically" }
+  ],
+  "known_distractor_regions": ["crates/graphbench-core/src/logging.rs", "docs/architecture.md"],
+  "expected_edit_loci": ["crates/graphbench-harness/src/lib.rs"],
+  "review": {
+    "required_evidence_is_sufficient": true,
+    "distractors_are_realistic": true,
+    "multiple_valid_paths_considered": true
+  }
+}

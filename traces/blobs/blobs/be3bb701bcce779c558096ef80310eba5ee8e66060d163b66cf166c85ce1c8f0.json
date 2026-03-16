@@ -1,0 +1,89 @@
+{
+  "provider": "openrouter",
+  "request": {
+    "max_tokens": 2048,
+    "messages": [
+      {
+        "content": [
+          {
+            "text": "You are GraphBench's model runtime. Reply with JSON only. Do not use markdown fences.",
+            "type": "text"
+          }
+        ],
+        "role": "system"
+      },
+      {
+        "content": "## Base Runtime Instructions\nGraphBench runtime. Stay bounded, typed, and evidence-oriented.\n\n## UCL Command Reference\n\n## Rules\n1. Output ONLY the UCL command(s), no explanations or markdown\n2. Use exact block IDs as provided\n3. String values must be quoted with double quotes\n4. Block IDs are short numeric IDs (1, 2, 3, etc.)\n5. Do NOT use operators like + for string concatenation - just provide the full value\n6. Responses must be schema-valid.\n\n## Response Contract\nReturn JSON only with this exact shape: {{\"kind\":\"think|tool_call|complete\",\"assistant_message\":\"<brief status>\",\"tool_call\":{{\"tool_name\":\"<one registered tool name>\",\"payload\":{{}}}},\"acquired_fact_ids\":[\"<fact id>\"],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}}. Use null or omit tool_call unless kind is tool_call. When kind is tool_call, tool_call.tool_name must exactly match one of the registered tool names shown below. Do not invent helper tools, verifier tools, or meta tools.\n\n## Objective State\nTask: Gather the exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned.\nClass: prepare_to_edit\nAllowed Tools:\ngraph.describe@v1\ngraph.find@v1\ngraph.path@v1\ngraph.resolve@v1\nrun_python_query@v1\nsession.add@v1\nsession.collapse@v1\nsession.estimate_expand@v1\nsession.estimate_hydrate@v1\nsession.event_log@v1\nsession.expand_dependencies@v1\nsession.expand_dependents@v1\nsession.expand_file@v1\nsession.explain_export_omission@v1\nsession.export@v1\nsession.focus@v1\nsession.hydrate@v1\nsession.hydrate_source@v1\nsession.mutation_log@v1\nsession.pin@v1\nsession.prune@v1\nsession.recommendations@v1\nsession.walk@v1\nsession.why@v1\nsession.why_pruned@v1\nVerification Targets:\ncommand: cargo test --workspace\n\n## Selected History\nGather the exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned.\n\n## Active Code Windows\ncrates/graphbench-core/src/artifacts.rs\n   1 | use crate::error::{AppError, ErrorCode, ErrorContext};\n   2 | use serde::{Deserialize, Serialize};\n   3 | \n   4 | pub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;\n   5 | pub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;\n   6 | pub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;\n   7 | pub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;\n   8 | pub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;\n   9 | pub const TURN_TRACE_SCHEMA_VERSION: u32 = 1;\n\n\n## Code-Navigation Items\n- crates/graphbench-core/src/artifacts.rs | kind=file | logical_key=file:crates/graphbench-core/src/artifacts.rs | path=crates/graphbench-core/src/artifacts.rs | detail=Source\n- crates | kind=directory | logical_key=directory:crates | path=crates | detail=Skeleton\n- frontend | kind=directory | logical_key=directory:frontend | path=frontend | detail=Skeleton\n- . | kind=repository | logical_key=repository:graph-bench | path=. | detail=Skeleton\n\n## Graph Relations\nNo explicit graph relations are currently visible.\n\n## Graph Frontier\nFocus: crates/graphbench-core/src/artifacts.rs | visible_nodes=4 | hidden_unreachable=0 | omitted_symbols=261\nRecommended frontier actions:\n- hydrate_source [F1] relation=- direction=- candidates=0 priority=120 via session.hydrate(...) :: Hydrate source for file crates/graphbench-core/src/artifacts.rs\n- expand_file [F1] relation=- direction=- candidates=61 priority=112 via session.walk(mode=file) :: Expand file symbols for crates/graphbench-core/src/artifacts.rs\nHeuristic next action: expand_file [F1] priority=112 candidates=61 :: Expand file symbols for crates/graphbench-core/src/artifacts.rs\n\n## Tool Contracts\n- graph.describe@v1: Payload with selector string\n- graph.find@v1: Payload with optional node_class, name_regex, path_regex, logical_key_regex, exported, case_sensitive, and limit\n- graph.path@v1: Payload with start selector, end selector, and optional max_hops\n- graph.resolve@v1: Payload with selector string\n- run_python_query@v1: Payload with code string plus optional bindings, include_export, export_kwargs, and limits\n- session.add@v1: Payload with target selector and optional detail of skeleton|summary|neighborhood|source\n- session.collapse@v1: Payload with optional target selector and include_descendants boolean.\n- session.estimate_expand@v1: Payload with target selector, optional mode, depth, relation filters, priority threshold, and traversal budgets\n- session.estimate_hydrate@v1: Payload with target selector, optional padding, and hydration budgets\n- session.event_log@v1: Payload object with no required fields\n- session.expand_dependencies@v1: Payload with target selector and optional depth, limit, relation filters, priority threshold, and traversal budgets.\n- session.expand_dependents@v1: Payload with target selector and optional depth, limit, relation filters, priority threshold, and traversal budgets.\n- session.expand_file@v1: Payload with target selector and optional depth, limit, relation filters, priority threshold, and traversal budgets.\n- session.explain_export_omission@v1: Payload with optional target selector plus export tuning fields like max_tokens, compact, visible_levels, and class filters.\n- session.export@v1: Payload with optional max_tokens, compact, include_rendered, visible_levels, only_node_classes, exclude_node_classes, max_frontier_actions, and max_rendered_bytes\n- session.focus@v1: Payload with optional target selector; null or omission clears focus\n- session.hydrate@v1: Payload with target selector, optional padding, and hydration budgets\n- session.hydrate_source@v1: Payload with target selector, optional padding, and hydration budgets.\n- session.mutation_log@v1: Payload object with no required fields\n- session.pin@v1: Payload with optional target selector and pinned boolean.\n- session.prune@v1: Payload with optional max_selected integer.\n- session.recommendations@v1: Payload with optional top integer\n- session.walk@v1: Payload with target selector, optional mode=file|dependencies|dependents, depth, limit, relation, relations, priority_threshold, and traversal budgets\n- session.why@v1: Payload with target selector\n- session.why_pruned@v1: Payload with optional target selector.",
+        "role": "user"
+      }
+    ],
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "parallel_tool_calls": false,
+    "response_format": {
+      "json_schema": {
+        "description": "Structured GraphBench harness response",
+        "name": "graphbench_harness_response",
+        "schema": {
+          "additionalProperties": false,
+          "properties": {
+            "acquired_fact_ids": {
+              "items": {
+                "type": "string"
+              },
+              "type": "array"
+            },
+            "assistant_message": {
+              "type": "string"
+            },
+            "kind": {
+              "enum": [
+                "think",
+                "tool_call",
+                "complete"
+              ],
+              "type": "string"
+            },
+            "readiness_state": {
+              "enum": [
+                "not_ready",
+                "evidence_visible",
+                "evidence_acquired",
+                "ready_to_edit"
+              ],
+              "type": "string"
+            },
+            "tool_call": {
+              "additionalProperties": false,
+              "properties": {
+                "payload": {
+                  "type": "object"
+                },
+                "tool_name": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "tool_name",
+                "payload"
+              ],
+              "type": [
+                "object",
+                "null"
+              ]
+            }
+          },
+          "required": [
+            "kind",
+            "assistant_message",
+            "acquired_fact_ids",
+            "readiness_state"
+          ],
+          "type": "object"
+        },
+        "strict": true
+      },
+      "type": "json_schema"
+    },
+    "stream": false
+  }
+}
