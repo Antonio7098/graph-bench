@@ -1,0 +1,16 @@
+{
+  "kind": "tool_call",
+  "prompt_version": "v1",
+  "model_slug": "nvidia/nemotron-3-nano-30b-a3b:free",
+  "provider": "openrouter",
+  "assistant_message": "Collapsing TurnTrace to focus session",
+  "tool_call": {
+    "tool_name": "session.collapse@v1",
+    "payload": {
+      "include_descendants": true,
+      "target": "symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace"
+    }
+  },
+  "acquired_fact_ids": [],
+  "readiness_state": "not_ready"
+}

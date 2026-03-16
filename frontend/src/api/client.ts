@@ -286,15 +286,33 @@ export class RunStoreClient {
     return response.json();
   }
 
+  async listStrategies(): Promise<string[]> {
+    const response = await fetch(`${this.baseUrl}/strategies`);
+    if (!response.ok) throw new Error(`Failed to list strategies: ${response.statusText}`);
+    return response.json();
+  }
+
   async getStrategy(strategyId: string): Promise<Record<string, unknown>> {
     const response = await fetch(`${this.baseUrl}/strategies/${strategyId}`);
     if (!response.ok) throw new Error(`Failed to get strategy: ${response.statusText}`);
     return response.json();
   }
 
+  async listTasks(): Promise<string[]> {
+    const response = await fetch(`${this.baseUrl}/tasks`);
+    if (!response.ok) throw new Error(`Failed to list tasks: ${response.statusText}`);
+    return response.json();
+  }
+
   async getTask(taskId: string): Promise<Record<string, unknown>> {
     const response = await fetch(`${this.baseUrl}/tasks/${taskId}`);
     if (!response.ok) throw new Error(`Failed to get task: ${response.statusText}`);
+    return response.json();
+  }
+
+  async listFixtures(): Promise<string[]> {
+    const response = await fetch(`${this.baseUrl}/fixtures`);
+    if (!response.ok) throw new Error(`Failed to list fixtures: ${response.statusText}`);
     return response.json();
   }
 }

@@ -1,0 +1,11 @@
+{
+  "kind": "complete",
+  "prompt_version": "v1",
+  "model_slug": "nvidia/nemotron-3-nano-30b-a3b:free",
+  "provider": "openrouter",
+  "assistant_message": "Evidence acquired: RUN_MANIFEST_SCHEMA_VERSION = 2",
+  "acquired_fact_ids": [
+    "S18"
+  ],
+  "readiness_state": "ready_to_edit"
+}

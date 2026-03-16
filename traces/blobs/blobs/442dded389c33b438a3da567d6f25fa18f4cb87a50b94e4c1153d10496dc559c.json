@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\": [],\n  \"assistant_message\": \"Hydrating OmittedCandidate source\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"not_ready\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target\": \"S16\"\n    },\n    \"tool_name\": \"session.hydrate_source@v1\"\n  }\n}",
+          "reasoning": "We need to output JSON with fields: kind, assistant_message, tool_call (if tool_call), acquired_fact_ids, readiness_state. The current state seems to be preparing to edit. We have heuristic next action: hydrate_source [S16] priority=121 candidates=1 :: Hydrate source for symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate\n\nThus we should issue a tool_call of kind \"tool_call\", tool_name \"session.hydrate_source@v1\" with payload targeting that symbol. Need to include payload fields: target selector? According to session.hydrate_source@v1 contract: Payload with target selector, optional padding, and hydration budgets. We need to specify target selector that selects the symbol S16? The symbol id is S16? Actually from list: symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate corresponds to S16? In graph frontier they refer to [S16] as symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate. So we can target that node. The selector could be \"symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate\" or maybe its short id? The short ids are like S16? Actually they said short ids are stable and look like F1, S3, D2, R1. So S16 is a short id? The frontier says [S16] relation=- direction=- candidates=1 priority=121 via session.hydrate(...). So likely we can use short id \"S16\". Use payload: {\"target\":\"S16\"} maybe also padding? Not required. So tool_call payload: {\"target\":\"S16\"}.\n\nWe need to set acquired_fact_ids: list of fact ids we acquired? Probably we haven't yet acquired any facts; but we might include the target we are hydrating? The instruction: \"acquired_fact_ids\":[\"<fact id>\"]; we can include the fact id of the hydrated source? Maybe we can include the fact id of the symbol? Not sure. Could be empty array if none acquired yet. But we might include the fact id of the target we are about to hydrate? Since we haven't hydrated yet, maybe none. But we can include placeholder? Probably we should include the fact id after the tool call? The format expects acquired_fact_ids as array of strings. Could be empty now. Let's set [].\n\nReadiness_state: \"not_ready\" maybe because we haven't completed evidence acquisition. Or could be \"evidence_acquired\"? But we are about to hydrate. So readiness_state likely \"not_ready\". Use that.\n\nassistant_message: brief status, e.g., \"Hydrating OmittedCandidate source\". Must be brief.\n\nkind: \"tool_call\".\n\ntool_call: {\"tool_name\":\"session.hydrate_source@v1\",\"payload\":{\"target\":\"S16\"}}\n\nNo other fields.\n\nThus output JSON exactly.\n\nCheck no extra prose. Must be JSON only.\n\nLet's craft:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating OmittedCandidate source\",\n  \"tool_call\":{\n    \"tool_name\":\"session.hydrate_source@v1\",\n    \"payload\":{\"target\":\"S16\"}\n  },\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure JSON is valid, no trailing commas. No markdown.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to output JSON with fields: kind, assistant_message, tool_call (if tool_call), acquired_fact_ids, readiness_state. The current state seems to be preparing to edit. We have heuristic next action: hydrate_source [S16] priority=121 candidates=1 :: Hydrate source for symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate\n\nThus we should issue a tool_call of kind \"tool_call\", tool_name \"session.hydrate_source@v1\" with payload targeting that symbol. Need to include payload fields: target selector? According to session.hydrate_source@v1 contract: Payload with target selector, optional padding, and hydration budgets. We need to specify target selector that selects the symbol S16? The symbol id is S16? Actually from list: symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate corresponds to S16? In graph frontier they refer to [S16] as symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate. So we can target that node. The selector could be \"symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate\" or maybe its short id? The short ids are like S16? Actually they said short ids are stable and look like F1, S3, D2, R1. So S16 is a short id? The frontier says [S16] relation=- direction=- candidates=1 priority=121 via session.hydrate(...). So likely we can use short id \"S16\". Use payload: {\"target\":\"S16\"} maybe also padding? Not required. So tool_call payload: {\"target\":\"S16\"}.\n\nWe need to set acquired_fact_ids: list of fact ids we acquired? Probably we haven't yet acquired any facts; but we might include the target we are hydrating? The instruction: \"acquired_fact_ids\":[\"<fact id>\"]; we can include the fact id of the hydrated source? Maybe we can include the fact id of the symbol? Not sure. Could be empty array if none acquired yet. But we might include the fact id of the target we are about to hydrate? Since we haven't hydrated yet, maybe none. But we can include placeholder? Probably we should include the fact id after the tool call? The format expects acquired_fact_ids as array of strings. Could be empty now. Let's set [].\n\nReadiness_state: \"not_ready\" maybe because we haven't completed evidence acquisition. Or could be \"evidence_acquired\"? But we are about to hydrate. So readiness_state likely \"not_ready\". Use that.\n\nassistant_message: brief status, e.g., \"Hydrating OmittedCandidate source\". Must be brief.\n\nkind: \"tool_call\".\n\ntool_call: {\"tool_name\":\"session.hydrate_source@v1\",\"payload\":{\"target\":\"S16\"}}\n\nNo other fields.\n\nThus output JSON exactly.\n\nCheck no extra prose. Must be JSON only.\n\nLet's craft:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating OmittedCandidate source\",\n  \"tool_call\":{\n    \"tool_name\":\"session.hydrate_source@v1\",\n    \"payload\":{\"target\":\"S16\"}\n  },\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure JSON is valid, no trailing commas. No markdown.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773671500,
+    "id": "gen-1773671500-SwtSv6l15sq1YCUi0RA0",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 815,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 748
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4665,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5480
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd4767bdc83bda0-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 14:31:40 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

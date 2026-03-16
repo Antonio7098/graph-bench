@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\": [],\n  \"assistant_message\": \"Collapsing RUN_MANIFEST_SCHEMA_VERSION symbol to focus editing\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"evidence_acquired\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target_selector\": \"S18\",\n      \"include_descendants\": false\n    },\n    \"tool_name\": \"session.collapse@v1\"\n  }\n}",
+          "reasoning": "We need to respond JSON only with shape: {\"kind\":\"...\", \"assistant_message\":\"...\", \"tool_call\":{...}, \"acquired_fact_ids\":[], \"readiness_state\":\"...\"}.\n\nWe need to decide next action. Goal: gather exact evidence before editing schema definitions, focusing on RUN_MANIFEST_SCHEMA_VERSION. We have already hydrated source for that symbol (S18). The graph says \"focus symbol is hydrated and no unselected dependency frontier remains\". Recommended frontier actions: collapse S18. So next step likely to collapse it from working set.\n\nThus kind: tool_call, tool_name: session.collapse@v1, payload: target selector maybe \"symbol:crates/graphbench-core/src/artifacts.rs::RUN_MANIFEST_SCHEMA_VERSION\" or just \"S18\". Use short id? Short ids are like S1, S3 etc. S18 is a short id? It appears S18 is a symbol id. So use selector \"S18\". Provide include_descendants maybe false.\n\nWe also need to fill acquired_fact_ids: maybe empty list.\n\nReadiness_state: probably \"evidence_acquired\" or \"not_ready\"? Since we are about to collapse, maybe still not ready? But we have evidence visible? The symbol is hydrated, we have its definition. So readiness_state could be \"evidence_acquired\". The instruction: Use readiness_state values: not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we have evidence (definition) we can set \"evidence_acquired\". Provide assistant_message brief status.\n\nThus JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Collapsing RUN_MANIFEST_SCHEMA_VERSION symbol to focus editing\",\n  \"tool_call\":{\n    \"tool_name\":\"session.collapse@v1\",\n    \"payload\":{\n      \"target_selector\":\"S18\",\n      \"include_descendants\":false\n    }\n  },\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"evidence_acquired\"\n}\n\nMake sure no extra fields. Ensure JSON is valid, no trailing commas. Use short ids exactly as provided: S18. Ensure tool_call payload fields match allowed? session.collapse payload includes optional target selector and include_descendants boolean. So okay.\n\nReturn only JSON.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to respond JSON only with shape: {\"kind\":\"...\", \"assistant_message\":\"...\", \"tool_call\":{...}, \"acquired_fact_ids\":[], \"readiness_state\":\"...\"}.\n\nWe need to decide next action. Goal: gather exact evidence before editing schema definitions, focusing on RUN_MANIFEST_SCHEMA_VERSION. We have already hydrated source for that symbol (S18). The graph says \"focus symbol is hydrated and no unselected dependency frontier remains\". Recommended frontier actions: collapse S18. So next step likely to collapse it from working set.\n\nThus kind: tool_call, tool_name: session.collapse@v1, payload: target selector maybe \"symbol:crates/graphbench-core/src/artifacts.rs::RUN_MANIFEST_SCHEMA_VERSION\" or just \"S18\". Use short id? Short ids are like S1, S3 etc. S18 is a short id? It appears S18 is a symbol id. So use selector \"S18\". Provide include_descendants maybe false.\n\nWe also need to fill acquired_fact_ids: maybe empty list.\n\nReadiness_state: probably \"evidence_acquired\" or \"not_ready\"? Since we are about to collapse, maybe still not ready? But we have evidence visible? The symbol is hydrated, we have its definition. So readiness_state could be \"evidence_acquired\". The instruction: Use readiness_state values: not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we have evidence (definition) we can set \"evidence_acquired\". Provide assistant_message brief status.\n\nThus JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Collapsing RUN_MANIFEST_SCHEMA_VERSION symbol to focus editing\",\n  \"tool_call\":{\n    \"tool_name\":\"session.collapse@v1\",\n    \"payload\":{\n      \"target_selector\":\"S18\",\n      \"include_descendants\":false\n    }\n  },\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"evidence_acquired\"\n}\n\nMake sure no extra fields. Ensure JSON is valid, no trailing commas. Use short ids exactly as provided: S18. Ensure tool_call payload fields match allowed? session.collapse payload includes optional target selector and include_descendants boolean. So okay.\n\nReturn only JSON.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773671765,
+    "id": "gen-1773671765-oPsswHRaySClCR6BfMVv",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 593,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 522
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4611,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5204
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd47cf67f62002e-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 14:36:06 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

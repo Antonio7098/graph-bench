@@ -2,6 +2,7 @@
 
 mod db;
 mod api;
+mod event_stream;
 mod harness;
 mod websocket;
 
@@ -9,18 +10,18 @@ use std::net::SocketAddr;
 use std::path::PathBuf;
 use std::sync::Arc;
 use axum::Router;
-use tokio::sync::broadcast;
 use tower_http::cors::{Any, CorsLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
 use crate::db::Database;
 use crate::api::run_routes;
+use crate::event_stream::EventStream;
 use crate::websocket::ws_handler;
 
 #[derive(Clone)]
 pub struct AppState {
     pub db: Arc<Database>,
-    pub event_tx: broadcast::Sender<String>,
+    pub event_stream: Arc<EventStream>,
     pub traces_dir: PathBuf,
 }
 
@@ -54,11 +55,11 @@ async fn main() -> anyhow::Result<()> {
     let db_path = data_dir.join("graphbench.db");
     let db = Arc::new(Database::new(&db_path)?);
 
-    let (event_tx, _) = broadcast::channel::<String>(1000);
+    let event_stream = EventStream::with_db(db.clone());
 
     let state = AppState {
         db,
-        event_tx,
+        event_stream,
         traces_dir,
     };
 
@@ -72,8 +73,11 @@ async fn main() -> anyhow::Result<()> {
     let app = Router::new()
         .merge(run_routes())
         .route("/ws", axum::routing::get(ws_handler))
+        .route("/api/strategies", axum::routing::get(api::list_strategies))
         .route("/api/strategies/:id", axum::routing::get(api::get_strategy))
+        .route("/api/tasks", axum::routing::get(api::list_tasks))
         .route("/api/tasks/:id", axum::routing::get(api::get_task))
+        .route("/api/fixtures", axum::routing::get(api::list_fixtures))
         .layer(cors)
         .with_state(state);
 

@@ -3,6 +3,7 @@ members = [
     "crates/graphbench-core",
     "crates/graphbench-harness",
     "crates/graphbench-store",
+    "crates/graphbench-api",
 ]
 resolver = "2"
 

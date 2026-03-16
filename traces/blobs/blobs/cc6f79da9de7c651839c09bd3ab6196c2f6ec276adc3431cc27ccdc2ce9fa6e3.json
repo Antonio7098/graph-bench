@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\": [],\n  \"assistant_message\": \"Hydrating source for TaskReview (S29)\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"not_ready\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target\": \"S29\"\n    },\n    \"tool_name\": \"session.hydrate_source@v1\"\n  }\n}",
+          "reasoning": "We need to follow instructions: produce JSON only with fields: kind, assistant_message, tool_call (if tool_call), acquired_fact_ids (array), readiness_state.\n\nWe are in a state where we need to gather exact evidence needed before editing schema definitions, focusing on locating schema version constants. History shows we have performed several operations: expand_file, hydrate_source, etc. The frontier recommends hydrate_source [S29] priority=121 candidates=1. S29 is symbol:crates/graphbench-core/src/artifacts.rs::TaskReview.\n\nWe need to hydrate source for that symbol. So we should issue a tool_call with tool_name session.hydrate_source@v1 and payload targeting that symbol.\n\nWe need to include payload with target selector. The selector likely is something like \"symbol:crates/graphbench-core/src/artifacts.rs::TaskReview\" or maybe just the symbol id? The prompt says use exact short ids as provided in the prompt when referring to graph nodes. Short ids are like F1, S3, D2, R1. But we have symbols with longer names. However the frontier mentions \"hydrate_source [S29]\". S29 likely corresponds to that symbol. In the graph frontier, they refer to [S29] as node. So we can use that short id? The short id is S29 (maybe). Indeed earlier they mention \"symbol:crates/graphbench-core/src/artifacts.rs::TaskReview\" and frontier says \"[S29]\". So we can target S29.\n\nThus tool_call payload: {\"target\":\"S29\"} maybe with padding? The contract for session.hydrate_source@v1: Payload with target selector, optional padding, and hydration budgets. So we can provide target selector as \"S29\". Possibly also include padding? Not required.\n\nWe also need to set readiness_state: probably \"not_ready\" because we haven't acquired evidence yet. Or maybe \"evidence_visible\"? The readiness states: not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we haven't yet hydrated, we are not ready. So readiness_state: \"not_ready\".\n\nWe need to include acquired_fact_ids: maybe none yet. Could be empty array [].\n\nassistant_message: brief status, like \"Hydrating source for TaskReview\". Must be brief.\n\nKind: \"tool_call\" because we are making a tool call.\n\nThus JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating source for TaskReview (S29)\",\n  \"tool_call\":{\"tool_name\":\"session.hydrate_source@v1\",\"payload\":{\"target\":\"S29\"}},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure no extra fields. No markdown. Provide exactly JSON.\n\nCheck that tool_name matches registered tool names exactly: \"session.hydrate_source@v1\". Yes.\n\nPayload must be object; we include target selector. That's fine.\n\nReturn only JSON.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to follow instructions: produce JSON only with fields: kind, assistant_message, tool_call (if tool_call), acquired_fact_ids (array), readiness_state.\n\nWe are in a state where we need to gather exact evidence needed before editing schema definitions, focusing on locating schema version constants. History shows we have performed several operations: expand_file, hydrate_source, etc. The frontier recommends hydrate_source [S29] priority=121 candidates=1. S29 is symbol:crates/graphbench-core/src/artifacts.rs::TaskReview.\n\nWe need to hydrate source for that symbol. So we should issue a tool_call with tool_name session.hydrate_source@v1 and payload targeting that symbol.\n\nWe need to include payload with target selector. The selector likely is something like \"symbol:crates/graphbench-core/src/artifacts.rs::TaskReview\" or maybe just the symbol id? The prompt says use exact short ids as provided in the prompt when referring to graph nodes. Short ids are like F1, S3, D2, R1. But we have symbols with longer names. However the frontier mentions \"hydrate_source [S29]\". S29 likely corresponds to that symbol. In the graph frontier, they refer to [S29] as node. So we can use that short id? The short id is S29 (maybe). Indeed earlier they mention \"symbol:crates/graphbench-core/src/artifacts.rs::TaskReview\" and frontier says \"[S29]\". So we can target S29.\n\nThus tool_call payload: {\"target\":\"S29\"} maybe with padding? The contract for session.hydrate_source@v1: Payload with target selector, optional padding, and hydration budgets. So we can provide target selector as \"S29\". Possibly also include padding? Not required.\n\nWe also need to set readiness_state: probably \"not_ready\" because we haven't acquired evidence yet. Or maybe \"evidence_visible\"? The readiness states: not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we haven't yet hydrated, we are not ready. So readiness_state: \"not_ready\".\n\nWe need to include acquired_fact_ids: maybe none yet. Could be empty array [].\n\nassistant_message: brief status, like \"Hydrating source for TaskReview\". Must be brief.\n\nKind: \"tool_call\" because we are making a tool call.\n\nThus JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating source for TaskReview (S29)\",\n  \"tool_call\":{\"tool_name\":\"session.hydrate_source@v1\",\"payload\":{\"target\":\"S29\"}},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure no extra fields. No markdown. Provide exactly JSON.\n\nCheck that tool_name matches registered tool names exactly: \"session.hydrate_source@v1\". Yes.\n\nPayload must be object; we include target selector. That's fine.\n\nReturn only JSON.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773671407,
+    "id": "gen-1773671407-68DysHZOIxjCUTWLeSBO",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 726,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 686
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4572,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5298
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd47439dca7bda0-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 14:30:08 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

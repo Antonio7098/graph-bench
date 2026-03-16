@@ -1,0 +1,1245 @@
+{
+  "run_manifest": {
+    "run_id": "smoke-mock-1773668040",
+    "schema_version": 2,
+    "fixture_id": "graphbench.internal",
+    "task_id": "prepare-edit.schema-boundaries",
+    "strategy_id": "graph.broad-discovery",
+    "strategy_config": {
+      "schema_version": 1,
+      "strategy_id": "graph.broad-discovery",
+      "strategy_version": "v1",
+      "graph_discovery": "broad_graph_discovery",
+      "projection": "balanced",
+      "reread_policy": "allow",
+      "context_window": {
+        "compaction": {
+          "history_recent_items": 5,
+          "summary_max_chars": 2600,
+          "emergency_summary_max_chars": 1000,
+          "deduplicate_tool_results": false
+        },
+        "section_budgets": [
+          {
+            "section_id": "base_runtime_instructions",
+            "max_tokens": 160,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "response_contract",
+            "max_tokens": 140,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "objective_state",
+            "max_tokens": 180,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "selected_history",
+            "max_tokens": 220,
+            "trim_direction": "head"
+          },
+          {
+            "section_id": "active_code_windows",
+            "max_tokens": 320,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "code_navigation_items",
+            "max_tokens": 420,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "graph_relations",
+            "max_tokens": 260,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "graph_frontier",
+            "max_tokens": 300,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "tool_contracts",
+            "max_tokens": 180,
+            "trim_direction": "tail"
+          }
+        ]
+      }
+    },
+    "harness_version": "0.1.0",
+    "schema_version_set": {
+      "fixture_manifest": 1,
+      "task_spec": 1,
+      "evidence_spec": 1,
+      "strategy_config": 1,
+      "context_object": 1,
+      "context_window_section": 1,
+      "turn_trace": 1,
+      "score_report": 1
+    },
+    "provider": "mock-provider",
+    "model_slug": "mock-model",
+    "prompt_version": "v1",
+    "graph_snapshot_id": "sha256:03cfd491d47973619431d96429ab9325466e8b9a04553c06349864d861ae6c89",
+    "started_at": "2026-03-16T13:34:00.011558687+00:00",
+    "completed_at": "2026-03-16T13:34:01.274759643+00:00",
+    "outcome": "done"
+  },
+  "events": [
+    {
+      "event_id": "event-0",
+      "captured_at": "2026-03-16T13:34:00.011558687+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:a4561257d84a65ed9a7107a23129b60e6780d457c9aa9a954c1e1c490429eb78",
+        "mutation": "seed_overview(limit=2)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-1",
+      "captured_at": "2026-03-16T13:34:00.160736839+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:78f87fc6d227a46d2bcd699caba8928d321b0d71892a2bd0459e1179c56baf33",
+        "mutation": "select(crates/graphbench-core/src/artifacts.rs,L1)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-2",
+      "captured_at": "2026-03-16T13:34:00.327148310+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:3217a28e4027e451535e160ec800488a7539cfc80fd2097a6363009e283c621d",
+        "mutation": "hydrate_exact_proof(crates/graphbench-core/src/artifacts.rs,8)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-3",
+      "captured_at": "2026-03-16T13:34:00.610674944+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": null,
+      "component": "harness",
+      "event_type": "run.started",
+      "details": {
+        "event": "run_started",
+        "run_id": "smoke-mock-1773668040"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-4",
+      "captured_at": "2026-03-16T13:34:00.610690464+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "think",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-5",
+      "captured_at": "2026-03-16T13:34:00.623220041+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:cab5825ac602ba28351ef0c55d350817dfb13edd0ae02d68d54b798b64ed1dde",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:5c6013c5c8a987ffedeed861d9833f445e75fbeb8940e7b1c7e16009153b3672",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-6",
+      "captured_at": "2026-03-16T13:34:00.623233847+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-7",
+      "captured_at": "2026-03-16T13:34:00.623265106+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": "mock-request-1",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-8",
+      "captured_at": "2026-03-16T13:34:00.623278+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-9",
+      "captured_at": "2026-03-16T13:34:00.623307586+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "run_python_query@v1",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-10",
+      "captured_at": "2026-03-16T13:34:00.623309820+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "run_python_query@v1",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-11",
+      "captured_at": "2026-03-16T13:34:01.103644302+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "run_python_query@v1",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-12",
+      "captured_at": "2026-03-16T13:34:01.268130183+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:aeaf258ac53b5e8f8efbd3c88ee0688d17be0878ce3864a41ebe9e301affc36d",
+        "mutation": "run_python_query"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-13",
+      "captured_at": "2026-03-16T13:34:01.268259476+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "evidence_acquired",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-23",
+      "captured_at": "2026-03-16T13:34:01.268259476+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": "mock-request-1",
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639.json",
+          "byte_count": 53
+        },
+        {
+          "blob_id": "sha256:3b13902c36f3ed62a052829f314f79506373018076205d3ba1c791421e41f91c",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/3b13902c36f3ed62a052829f314f79506373018076205d3ba1c791421e41f91c.json",
+          "byte_count": 37
+        },
+        {
+          "blob_id": "sha256:fff9bbc3492ccdf6d86686dac11884ac78ada70cd53588938a58840dd1a45e62",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/fff9bbc3492ccdf6d86686dac11884ac78ada70cd53588938a58840dd1a45e62.json",
+          "byte_count": 893
+        },
+        {
+          "blob_id": "sha256:5c6013c5c8a987ffedeed861d9833f445e75fbeb8940e7b1c7e16009153b3672",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/5c6013c5c8a987ffedeed861d9833f445e75fbeb8940e7b1c7e16009153b3672.txt",
+          "byte_count": 5678
+        },
+        {
+          "blob_id": "sha256:cab5825ac602ba28351ef0c55d350817dfb13edd0ae02d68d54b798b64ed1dde",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/cab5825ac602ba28351ef0c55d350817dfb13edd0ae02d68d54b798b64ed1dde.txt",
+          "byte_count": 5478
+        }
+      ]
+    },
+    {
+      "event_id": "event-14",
+      "captured_at": "2026-03-16T13:34:01.268263564+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 0,
+      "component": "scoring",
+      "event_type": "evidence.matched",
+      "details": {
+        "event": "evidence_matched",
+        "fact_ids": [
+          "prepare_evidence"
+        ],
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-15",
+      "captured_at": "2026-03-16T13:34:01.269166782+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 1,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "act",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-16",
+      "captured_at": "2026-03-16T13:34:01.273687798+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 1,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:762eb6435b3feb62180b5fd855c0c5c60b739eabec6a95aa9fde2fbad87a02fa",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:5b0607a9a24c70cb260250888234121c5ca9b2e4948e24c438e6a6073774f07b",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-17",
+      "captured_at": "2026-03-16T13:34:01.273706353+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-18",
+      "captured_at": "2026-03-16T13:34:01.273727793+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": "mock-request-2",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-19",
+      "captured_at": "2026-03-16T13:34:01.273737131+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "complete",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-20",
+      "captured_at": "2026-03-16T13:34:01.273757259+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 1,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "ready_to_edit",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-24",
+      "captured_at": "2026-03-16T13:34:01.273757259+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 1,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": "mock-request-2",
+        "tool_calls": 0
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639.json",
+          "byte_count": 53
+        },
+        {
+          "blob_id": "sha256:9f70adc645169a98213d1269db9307d93f9f5e1ee7e3ce637ccfb24700247c9c",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/9f70adc645169a98213d1269db9307d93f9f5e1ee7e3ce637ccfb24700247c9c.json",
+          "byte_count": 37
+        },
+        {
+          "blob_id": "sha256:872e714a4f1529a1888748735adb9d0a2e603c4f3de60a4db56117a373b6a911",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/872e714a4f1529a1888748735adb9d0a2e603c4f3de60a4db56117a373b6a911.json",
+          "byte_count": 250
+        },
+        {
+          "blob_id": "sha256:5b0607a9a24c70cb260250888234121c5ca9b2e4948e24c438e6a6073774f07b",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/5b0607a9a24c70cb260250888234121c5ca9b2e4948e24c438e6a6073774f07b.txt",
+          "byte_count": 6373
+        },
+        {
+          "blob_id": "sha256:762eb6435b3feb62180b5fd855c0c5c60b739eabec6a95aa9fde2fbad87a02fa",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/762eb6435b3feb62180b5fd855c0c5c60b739eabec6a95aa9fde2fbad87a02fa.txt",
+          "byte_count": 6173
+        }
+      ]
+    },
+    {
+      "event_id": "event-21",
+      "captured_at": "2026-03-16T13:34:01.273760044+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": 1,
+      "component": "scoring",
+      "event_type": "evidence.matched",
+      "details": {
+        "event": "evidence_matched",
+        "fact_ids": [
+          "schema_constants"
+        ],
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-22",
+      "captured_at": "2026-03-16T13:34:01.274759643+00:00",
+      "run_id": "smoke-mock-1773668040",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.broad-discovery",
+      "turn_index": null,
+      "component": "harness",
+      "event_type": "run.completed",
+      "details": {
+        "event": "run_completed",
+        "run_id": "smoke-mock-1773668040",
+        "turns": 2
+      },
+      "blob_refs": []
+    }
+  ],
+  "turns": [
+    {
+      "turn_index": 0,
+      "request_blob": {
+        "blob_id": "sha256:34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639.json",
+        "byte_count": 53
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:3b13902c36f3ed62a052829f314f79506373018076205d3ba1c791421e41f91c",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/3b13902c36f3ed62a052829f314f79506373018076205d3ba1c791421e41f91c.json",
+        "byte_count": 37
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:fff9bbc3492ccdf6d86686dac11884ac78ada70cd53588938a58840dd1a45e62",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/fff9bbc3492ccdf6d86686dac11884ac78ada70cd53588938a58840dd1a45e62.json",
+        "byte_count": 893
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:5c6013c5c8a987ffedeed861d9833f445e75fbeb8940e7b1c7e16009153b3672",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/5c6013c5c8a987ffedeed861d9833f445e75fbeb8940e7b1c7e16009153b3672.txt",
+        "byte_count": 5678
+      },
+      "context_blob": {
+        "blob_id": "sha256:cab5825ac602ba28351ef0c55d350817dfb13edd0ae02d68d54b798b64ed1dde",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/cab5825ac602ba28351ef0c55d350817dfb13edd0ae02d68d54b798b64ed1dde.txt",
+        "byte_count": 5478
+      },
+      "provider_request_id": "mock-request-1",
+      "telemetry": {
+        "prompt_bytes": 5678,
+        "prompt_tokens": 621,
+        "latency_ms": 645,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "run_python_query@v1",
+          "latency_ms": 480,
+          "outcome": "ok",
+          "input_payload": {
+            "code": "target = graph.find(path_regex=r'crates/graphbench-core/src/artifacts\\.rs', limit=1)[0]\nsession.walk(target, mode='file', depth=1, limit=6)\nresult = {'target': target['logical_key'], 'selected': session.summary()['selected']}",
+            "export_kwargs": {
+              "compact": true,
+              "max_frontier_actions": 4,
+              "visible_levels": 3
+            },
+            "include_export": true,
+            "limits": {
+              "max_operations": 40,
+              "max_seconds": 2.0,
+              "max_stdout_chars": 2000,
+              "max_trace_events": 2000
+            }
+          },
+          "output_payload": {
+            "error": null,
+            "export": {
+              "edges": [
+                {
+                  "multiplicity": 1,
+                  "relation": "exports",
+                  "source": "blk_fa5433f9c84e42c4c89e99e8",
+                  "source_short_id": "F1",
+                  "target": "blk_150bd9426b003139fe292bf3",
+                  "target_short_id": "S1"
+                }
+              ],
+              "export_mode": "compact",
+              "focus": "blk_150bd9426b003139fe292bf3",
+              "focus_label": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+              "focus_short_id": "S1",
+              "frontier": [
+                {
+                  "action": "hydrate_source",
+                  "block_id": "blk_150bd9426b003139fe292bf3",
+                  "candidate_count": 1,
+                  "description": "Hydrate source for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                  "explanation": "Hydrating symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof will surface an anchored source excerpt for the focused symbol",
+                  "priority": 121,
+                  "short_id": "S1"
+                },
+                {
+                  "action": "expand_dependents",
+                  "block_id": "blk_150bd9426b003139fe292bf3",
+                  "candidate_count": 2,
+                  "description": "expand_dependents incoming neighbors via imports_symbol for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                  "direction": "incoming",
+                  "explanation": "2 hidden incoming candidates remain for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof via imports_symbol",
+                  "priority": 68,
+                  "relation": "imports_symbol",
+                  "short_id": "S1"
+                },
+                {
+                  "action": "expand_dependents",
+                  "block_id": "blk_150bd9426b003139fe292bf3",
+                  "candidate_count": 1,
+                  "description": "expand_dependents incoming neighbors via exports for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                  "direction": "incoming",
+                  "explanation": "1 hidden incoming candidate remain for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof via exports",
+                  "priority": 61,
+                  "relation": "exports",
+                  "short_id": "S1"
+                },
+                {
+                  "action": "collapse",
+                  "block_id": "blk_150bd9426b003139fe292bf3",
+                  "candidate_count": 1,
+                  "description": "Collapse symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof from working set",
+                  "explanation": "Collapse removes symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof from the active working set when the current branch is no longer useful",
+                  "priority": 6,
+                  "short_id": "S1"
+                }
+              ],
+              "heuristics": {
+                "hidden_candidate_count": 3,
+                "low_value_candidate_count": 0,
+                "recommendations": [
+                  {
+                    "action_kind": "hydrate_source",
+                    "candidate_count": 1,
+                    "estimated_evidence_gain": 4,
+                    "estimated_hydration_bytes": 275,
+                    "estimated_token_cost": 69,
+                    "explanation": "Hydrate source for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                    "priority": 121,
+                    "rationale": "Hydrating symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof will surface an anchored source excerpt for the focused symbol",
+                    "target_block_id": "150bd9426b003139fe292bf3",
+                    "target_label": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                    "target_short_id": "S1"
+                  },
+                  {
+                    "action_kind": "expand_dependents",
+                    "candidate_count": 2,
+                    "estimated_evidence_gain": 2,
+                    "estimated_hydration_bytes": 0,
+                    "estimated_token_cost": 48,
+                    "explanation": "expand_dependents incoming neighbors via imports_symbol for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                    "priority": 68,
+                    "rationale": "2 hidden incoming candidates remain for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof via imports_symbol",
+                    "relation_set": [
+                      "imports_symbol"
+                    ],
+                    "target_block_id": "150bd9426b003139fe292bf3",
+                    "target_label": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                    "target_short_id": "S1"
+                  },
+                  {
+                    "action_kind": "expand_dependents",
+                    "candidate_count": 1,
+                    "estimated_evidence_gain": 1,
+                    "estimated_hydration_bytes": 0,
+                    "estimated_token_cost": 24,
+                    "explanation": "expand_dependents incoming neighbors via exports for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                    "priority": 61,
+                    "rationale": "1 hidden incoming candidate remain for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof via exports",
+                    "relation_set": [
+                      "exports"
+                    ],
+                    "target_block_id": "150bd9426b003139fe292bf3",
+                    "target_label": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                    "target_short_id": "S1"
+                  }
+                ],
+                "recommended_actions": [
+                  {
+                    "action": "hydrate_source",
+                    "block_id": "blk_150bd9426b003139fe292bf3",
+                    "candidate_count": 1,
+                    "description": "Hydrate source for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                    "explanation": "Hydrating symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof will surface an anchored source excerpt for the focused symbol",
+                    "priority": 121,
+                    "short_id": "S1"
+                  },
+                  {
+                    "action": "expand_dependents",
+                    "block_id": "blk_150bd9426b003139fe292bf3",
+                    "candidate_count": 2,
+                    "description": "expand_dependents incoming neighbors via imports_symbol for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                    "direction": "incoming",
+                    "explanation": "2 hidden incoming candidates remain for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof via imports_symbol",
+                    "priority": 68,
+                    "relation": "imports_symbol",
+                    "short_id": "S1"
+                  },
+                  {
+                    "action": "expand_dependents",
+                    "block_id": "blk_150bd9426b003139fe292bf3",
+                    "candidate_count": 1,
+                    "description": "expand_dependents incoming neighbors via exports for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                    "direction": "incoming",
+                    "explanation": "1 hidden incoming candidate remain for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof via exports",
+                    "priority": 61,
+                    "relation": "exports",
+                    "short_id": "S1"
+                  }
+                ],
+                "recommended_next_action": {
+                  "action": "hydrate_source",
+                  "block_id": "blk_150bd9426b003139fe292bf3",
+                  "candidate_count": 1,
+                  "description": "Hydrate source for symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                  "explanation": "Hydrating symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof will surface an anchored source excerpt for the focused symbol",
+                  "priority": 121,
+                  "short_id": "S1"
+                },
+                "should_stop": false
+              },
+              "hidden_unreachable_count": 3,
+              "nodes": [
+                {
+                  "block_id": "blk_150bd9426b003139fe292bf3",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs#L223-L226",
+                    "end_line": 226,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "start_line": 223
+                  },
+                  "detail_level": "neighborhood",
+                  "distance_from_focus": 0,
+                  "label": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                  "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                  "node_class": "symbol",
+                  "origin": {
+                    "kind": "manual"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 214,
+                  "short_id": "S1",
+                  "signature": "struct AcceptableProof [exported] [public]",
+                  "symbol_name": "AcceptableProof"
+                },
+                {
+                  "block_id": "blk_fa5433f9c84e42c4c89e99e8",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs",
+                    "path": "crates/graphbench-core/src/artifacts.rs"
+                  },
+                  "detail_level": "source",
+                  "distance_from_focus": 1,
+                  "label": "crates/graphbench-core/src/artifacts.rs",
+                  "logical_key": "file:crates/graphbench-core/src/artifacts.rs",
+                  "node_class": "file",
+                  "origin": {
+                    "kind": "manual"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 102,
+                  "short_id": "F1"
+                }
+              ],
+              "omissions": {
+                "details": [
+                  {
+                    "block_id": "blk_9e133aeeddbeadc9a82a2902",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": ".",
+                    "reason": "visible_level_limit",
+                    "short_id": "R1"
+                  },
+                  {
+                    "block_id": "blk_99b62cfb483779db26d3be75",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": "crates",
+                    "reason": "visible_level_limit",
+                    "short_id": "D1"
+                  },
+                  {
+                    "block_id": "blk_c8ad2a8cfa28c70a667dd678",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": "frontend",
+                    "reason": "visible_level_limit",
+                    "short_id": "D2"
+                  }
+                ],
+                "dropped_by_render_budget": 0,
+                "excluded_by_class_filters": 0,
+                "hidden_by_visible_levels": 3,
+                "suppressed_by_hydrated_excerpt": 0
+              },
+              "omitted_symbol_count": 260,
+              "summary": {
+                "directories": 2,
+                "files": 1,
+                "hydrated_sources": 1,
+                "max_selected": 48,
+                "repositories": 1,
+                "selected": 5,
+                "symbols": 1
+              },
+              "total_selected_edges": 1,
+              "visible_levels": 3,
+              "visible_node_count": 2
+            },
+            "limits": {
+              "max_operations": 40,
+              "max_seconds": 2.0,
+              "max_stdout_chars": 2000,
+              "max_trace_events": 2000
+            },
+            "ok": true,
+            "result": {
+              "selected": 5,
+              "target": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof"
+            },
+            "selected_block_ids": [
+              "blk_150bd9426b003139fe292bf3",
+              "blk_99b62cfb483779db26d3be75",
+              "blk_9e133aeeddbeadc9a82a2902",
+              "blk_c8ad2a8cfa28c70a667dd678",
+              "blk_fa5433f9c84e42c4c89e99e8"
+            ],
+            "stdout": "",
+            "summary": {
+              "directories": 2,
+              "files": 1,
+              "hydrated_sources": 1,
+              "max_selected": 48,
+              "repositories": 1,
+              "selected": 5,
+              "symbols": 1
+            },
+            "usage": {
+              "elapsed_seconds": 0.017746,
+              "operation_count": 3,
+              "stdout_chars": 0,
+              "trace_events": 139
+            }
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 1,
+      "request_blob": {
+        "blob_id": "sha256:34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/34b19aa98b5e696c5b26d356caf797562b85842b9da0d08c3cf8892c65b8e639.json",
+        "byte_count": 53
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:9f70adc645169a98213d1269db9307d93f9f5e1ee7e3ce637ccfb24700247c9c",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/9f70adc645169a98213d1269db9307d93f9f5e1ee7e3ce637ccfb24700247c9c.json",
+        "byte_count": 37
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:872e714a4f1529a1888748735adb9d0a2e603c4f3de60a4db56117a373b6a911",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/872e714a4f1529a1888748735adb9d0a2e603c4f3de60a4db56117a373b6a911.json",
+        "byte_count": 250
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:5b0607a9a24c70cb260250888234121c5ca9b2e4948e24c438e6a6073774f07b",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/5b0607a9a24c70cb260250888234121c5ca9b2e4948e24c438e6a6073774f07b.txt",
+        "byte_count": 6373
+      },
+      "context_blob": {
+        "blob_id": "sha256:762eb6435b3feb62180b5fd855c0c5c60b739eabec6a95aa9fde2fbad87a02fa",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/762eb6435b3feb62180b5fd855c0c5c60b739eabec6a95aa9fde2fbad87a02fa.txt",
+        "byte_count": 6173
+      },
+      "provider_request_id": "mock-request-2",
+      "telemetry": {
+        "prompt_bytes": 6373,
+        "prompt_tokens": 616,
+        "latency_ms": 0,
+        "tool_calls": 0
+      },
+      "tool_traces": []
+    }
+  ],
+  "aggregation": {
+    "total_turns": 2,
+    "aggregate_prompt_bytes": 12051,
+    "aggregate_prompt_tokens": 1237,
+    "aggregate_latency_ms": 645,
+    "aggregate_tool_calls": 1
+  },
+  "structured_logs": [
+    {
+      "captured_at": "2026-03-16T13:34:00.011558687+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T13:34:00.160736839+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T13:34:00.327148310+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T13:34:00.610674944+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "run.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T13:34:00.610690464+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:00.623220041+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:00.623233847+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:00.623265106+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:00.623278+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:00.623307586+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.requested",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:00.623309820+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.103644302+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.268130183+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.268259476+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.268259476+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.268263564+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "evidence.matched",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.269166782+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.273687798+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.273706353+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.273727793+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.273737131+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.273757259+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.273757259+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.273760044+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "evidence.matched",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T13:34:01.274759643+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "run.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-mock-1773668040",
+      "strategy_id": "graph.broad-discovery",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    }
+  ]
+}

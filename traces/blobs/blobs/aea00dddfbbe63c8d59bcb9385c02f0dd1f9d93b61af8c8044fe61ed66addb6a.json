@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n\"acquired_fact_ids\": [],\n  \"assistant_message\": \"Collapsing RUN_MANIFEST_SCHEMA_VERSION from working set\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"evidence_acquired\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target_selector\": \"S18\"\n    },\n    \"tool_name\": \"session.collapse@v1\"\n  }\n}",
+          "reasoning": "We need to produce JSON response with shape: {\"kind\":\"think|tool_call|complete\",\"assistant_message\":\"<brief status>\", \"tool_call\": {\"tool_name\":\"<one registered tool name>\", \"payload\": {}} , \"acquired_fact_ids\": [\"<fact id>\"], \"readiness_state\":\"...\"}\n\nWe need to decide what action to take now. Based on active code windows and frontier, the recommended next action is collapse [S18] priority=6 candidates=1 :: Collapse symbol:crates/graphbench-core/src/artifacts.rs::RUN_MANIFEST_SCHEMA_VERSION from working set.\n\nS18 is the symbol for RUN_MANIFEST_SCHEMA_VERSION. The frontier says collapse [S18] with include_descendants? The recommended action is collapse [S18] priority=6 candidates=1 :: Collapse symbol:crates/graphbench-core/src/artifacts.rs::RUN_MANIFEST_SCHEMA_VERSION from working set.\n\nThus we should perform a tool_call with session.collapse@v1. Payload: probably target selector for that symbol. The symbol ID is S18. The tool requires target selector. We can use something like \"symbol:crates/graphbench-core/src/artifacts.rs::RUN_MANIFEST_SCHEMA_VERSION\". Or maybe just the short id? The rules: Use exact short ids as provided in the prompt when referring to graph nodes. Short ids look like F1, S3, D2, or R1. In the graph relations they used [S18] as identifier. So short id is S18. So payload should include \"target_selector\": \"S18\" maybe? The tool contract: session.collapse@v1 payload includes optional target selector and include_descendants boolean. So we can pass {\"target_selector\":\"S18\"}.\n\nWe also need to fill acquired_fact_ids: maybe we can include the fact id we are focusing on? The rules: acquired_fact_ids: list of fact ids. We might have none yet. Could be empty array. Or maybe we can include the symbol id? The example shows [\"<fact id>\"]. Probably we can leave empty array [].\n\nReadiness_state: after collapse, maybe \"evidence_acquired\"? Actually we are about to collapse, which may change working set but not yet evidence. Possibly \"not_ready\". But we can set readiness_state to \"not_ready\" if we haven't gathered evidence. Or maybe \"evidence_visible\". The frontier says hydrate_source is ready? Actually they have hydrated RUN_MANIFEST_SCHEMA_VERSION already? They previously hydrated definition of RUN_MANIFEST_SCHEMA_VERSION to capture exact schema version constant. So evidence is acquired? The readiness might be \"evidence_acquired\". Let's set readiness_state to \"evidence_acquired\". Or maybe \"ready_to_edit\"? But we haven't edited yet. The instructions: readiness_state can be not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we have evidence (the constant definition is visible), we could set \"evidence_acquired\". Let's do that.\n\nThus JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Collapsing RUN_MANIFEST_SCHEMA_VERSION from working set\",\n  \"tool_call\": {\n    \"tool_name\":\"session.collapse@v1\",\n    \"payload\": {\n      \"target_selector\":\"S18\"\n    }\n  },\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"evidence_acquired\"\n}\n\nMake sure no extra prose. Must be JSON only. No markdown. Ensure proper quoting. Provide exactly that shape.\n\nCheck that tool_name must exactly match registered tool names. session.collapse@v1 is registered. Good.\n\nPayload must be object; we include target_selector. Could also include include_descendants? Not required. So payload: {\"target_selector\":\"S18\"}.\n\nacquired_fact_ids: maybe we can list the fact id we just collapsed? Not needed. Provide empty array [].\n\nReadiness_state: \"evidence_acquired\". Good.\n\nReturn JSON only.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to produce JSON response with shape: {\"kind\":\"think|tool_call|complete\",\"assistant_message\":\"<brief status>\", \"tool_call\": {\"tool_name\":\"<one registered tool name>\", \"payload\": {}} , \"acquired_fact_ids\": [\"<fact id>\"], \"readiness_state\":\"...\"}\n\nWe need to decide what action to take now. Based on active code windows and frontier, the recommended next action is collapse [S18] priority=6 candidates=1 :: Collapse symbol:crates/graphbench-core/src/artifacts.rs::RUN_MANIFEST_SCHEMA_VERSION from working set.\n\nS18 is the symbol for RUN_MANIFEST_SCHEMA_VERSION. The frontier says collapse [S18] with include_descendants? The recommended action is collapse [S18] priority=6 candidates=1 :: Collapse symbol:crates/graphbench-core/src/artifacts.rs::RUN_MANIFEST_SCHEMA_VERSION from working set.\n\nThus we should perform a tool_call with session.collapse@v1. Payload: probably target selector for that symbol. The symbol ID is S18. The tool requires target selector. We can use something like \"symbol:crates/graphbench-core/src/artifacts.rs::RUN_MANIFEST_SCHEMA_VERSION\". Or maybe just the short id? The rules: Use exact short ids as provided in the prompt when referring to graph nodes. Short ids look like F1, S3, D2, or R1. In the graph relations they used [S18] as identifier. So short id is S18. So payload should include \"target_selector\": \"S18\" maybe? The tool contract: session.collapse@v1 payload includes optional target selector and include_descendants boolean. So we can pass {\"target_selector\":\"S18\"}.\n\nWe also need to fill acquired_fact_ids: maybe we can include the fact id we are focusing on? The rules: acquired_fact_ids: list of fact ids. We might have none yet. Could be empty array. Or maybe we can include the symbol id? The example shows [\"<fact id>\"]. Probably we can leave empty array [].\n\nReadiness_state: after collapse, maybe \"evidence_acquired\"? Actually we are about to collapse, which may change working set but not yet evidence. Possibly \"not_ready\". But we can set readiness_state to \"not_ready\" if we haven't gathered evidence. Or maybe \"evidence_visible\". The frontier says hydrate_source is ready? Actually they have hydrated RUN_MANIFEST_SCHEMA_VERSION already? They previously hydrated definition of RUN_MANIFEST_SCHEMA_VERSION to capture exact schema version constant. So evidence is acquired? The readiness might be \"evidence_acquired\". Let's set readiness_state to \"evidence_acquired\". Or maybe \"ready_to_edit\"? But we haven't edited yet. The instructions: readiness_state can be not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we have evidence (the constant definition is visible), we could set \"evidence_acquired\". Let's do that.\n\nThus JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Collapsing RUN_MANIFEST_SCHEMA_VERSION from working set\",\n  \"tool_call\": {\n    \"tool_name\":\"session.collapse@v1\",\n    \"payload\": {\n      \"target_selector\":\"S18\"\n    }\n  },\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"evidence_acquired\"\n}\n\nMake sure no extra prose. Must be JSON only. No markdown. Ensure proper quoting. Provide exactly that shape.\n\nCheck that tool_name must exactly match registered tool names. session.collapse@v1 is registered. Good.\n\nPayload must be object; we include target_selector. Could also include include_descendants? Not required. So payload: {\"target_selector\":\"S18\"}.\n\nacquired_fact_ids: maybe we can list the fact id we just collapsed? Not needed. Provide empty array [].\n\nReadiness_state: \"evidence_acquired\". Good.\n\nReturn JSON only.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773669055,
+    "id": "gen-1773669055-vKJksBJs0aQlsLtGk8DE",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 950,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 909
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4608,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5558
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd43acc4cd09451-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 13:50:55 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

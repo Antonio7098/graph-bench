@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n \"acquired_fact_ids\": [],\n  \"assistant_message\": \"Expanding file symbols for artifacts.rs\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"not_ready\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target_selector\": \"crates/graphbench-core/src/artifacts.rs\"\n    },\n    \"tool_name\": \"session.expand_file@v1\"\n  }\n}",
+          "reasoning": "We need to follow the response contract. The user wants JSON only, no markdown fences. Must include kind, assistant_message, optionally tool_call and acquired_fact_ids, and readiness_state. We need to decide what to do next.\n\nWe have made previous tool calls: session.expand_file@v1 and session.hydrate@v1 presumably returned ok. Now we are at frontier. Recommended next action: expand_file [F1] priority=112 candidates=17. So we should issue a tool call: session.expand_file@v1 with target selector maybe the file artifacts.rs? The selector likely is something like \"file:crates/graphbench-core/src/artifacts.rs\". Use short id? There's a short id for file? Not given. The graph frontier says focus: crates/graphbench-core/src/artifacts.rs. Probably we can use selector string \"file:crates/graphbench-core/src/artifacts.rs\" or maybe \"crates/graphbench-core/src/artifacts.rs\". In earlier history they used \"target_selector\" placeholder. Probably we need to supply payload with target_selector.\n\nThus make a tool_call: session.expand_file@v1 with payload containing target_selector maybe \"crates/graphbench-core/src/artifacts.rs\". Also maybe set depth or limit? Not required.\n\nWe must return JSON with kind: \"tool_call\", assistant_message brief status, tool_call with tool_name and payload, acquired_fact_ids empty maybe, readiness_state \"not_ready\" or something? The readiness_state likely indicates we are not ready yet because we haven't gotten evidence. Could be \"evidence_visible\" or \"ready_to_edit\". Since we haven't read yet, maybe \"not_ready\". But after tool call we will wait for response. Probably readiness_state should be \"not_ready\" until evidence acquired.\n\nThus output JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Expanding file symbols for artifacts.rs\",\n  \"tool_call\":{\n    \"tool_name\":\"session.expand_file@v1\",\n    \"payload\":{\n      \"target_selector\":\"crates/graphbench-core/src/artifacts.rs\"\n    }\n  },\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure no extra text. Ensure JSON is valid. No markdown. Provide exactly that.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to follow the response contract. The user wants JSON only, no markdown fences. Must include kind, assistant_message, optionally tool_call and acquired_fact_ids, and readiness_state. We need to decide what to do next.\n\nWe have made previous tool calls: session.expand_file@v1 and session.hydrate@v1 presumably returned ok. Now we are at frontier. Recommended next action: expand_file [F1] priority=112 candidates=17. So we should issue a tool call: session.expand_file@v1 with target selector maybe the file artifacts.rs? The selector likely is something like \"file:crates/graphbench-core/src/artifacts.rs\". Use short id? There's a short id for file? Not given. The graph frontier says focus: crates/graphbench-core/src/artifacts.rs. Probably we can use selector string \"file:crates/graphbench-core/src/artifacts.rs\" or maybe \"crates/graphbench-core/src/artifacts.rs\". In earlier history they used \"target_selector\" placeholder. Probably we need to supply payload with target_selector.\n\nThus make a tool_call: session.expand_file@v1 with payload containing target_selector maybe \"crates/graphbench-core/src/artifacts.rs\". Also maybe set depth or limit? Not required.\n\nWe must return JSON with kind: \"tool_call\", assistant_message brief status, tool_call with tool_name and payload, acquired_fact_ids empty maybe, readiness_state \"not_ready\" or something? The readiness_state likely indicates we are not ready yet because we haven't gotten evidence. Could be \"evidence_visible\" or \"ready_to_edit\". Since we haven't read yet, maybe \"not_ready\". But after tool call we will wait for response. Probably readiness_state should be \"not_ready\" until evidence acquired.\n\nThus output JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Expanding file symbols for artifacts.rs\",\n  \"tool_call\":{\n    \"tool_name\":\"session.expand_file@v1\",\n    \"payload\":{\n      \"target_selector\":\"crates/graphbench-core/src/artifacts.rs\"\n    }\n  },\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure no extra text. Ensure JSON is valid. No markdown. Provide exactly that.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773669037,
+    "id": "gen-1773669037-8xg9iUpDmseWEVZbSVTF",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 569,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 536
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4190,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 4759
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd43a5aab2a9451-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 13:50:37 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\":[\"S3\"],\n  \"assistant_message\":\"Hydrating source for CONTEXT_WINDOW_SECTION_SCHEMA_VERSION (short id S3)\",\n  \"kind\":\"tool_call\",\n  \"readiness_state\":\"evidence_visible\",\n  \"tool_call\":{\n    \"payload\":{\n      \"target_selector\":\"[S3]\"\n    },\n    \"tool_name\":\"session.hydrate\"\n  }\n}",
+          "reasoning": "We need to produce JSON only, no markdown. The user wants a response following the contract. The context indicates that we have hydrated schema version constant, collapsed it, and there are instructions to hydrate_source [S3] for CONTEXT_WINDOW_SECTION_SCHEMA_VERSION. We need to decide next action.\n\nThe active code windows are empty. The user wants to gather exact evidence needed before editing schema definitions. We are at prepare_to_edit stage. We have performed some operations, collapsed RUN_MANIFEST_SCHEMA_VERSION. Now we need to hydrate the CONTEXT_WINDOW_SECTION_SCHEMA_VERSION source. That corresponds to short id [S3] maybe? In the graph frontier they mention hydrate_source [S3] relation=- direction=- candidates=1 priority=121 via session.hydrate(...). So we should issue a tool call session.hydrate with target_selector likely \"[S3]\" or something. The target_selector likely refers to a selector string; previous usage used \"target\" or \"target_selector\". The tool contract: session.hydrate@v1 payload includes target selector and optional padding. The example earlier used session.hydrate@v1 {status:unknown,path:,line_count:0,match_count:0,fields:[target_selector]}. They used placeholder path and match_count. The payload likely includes \"target_selector\": \"<selector>\" maybe \"target\". Actually earlier they called session.hydrate@v1 with fields [target_selector] in the tool_result summary. The payload likely includes \"target_selector\". So we need to call session.hydrate with payload like {\"target_selector\":\"[S3]\"} or maybe just \"S3\"? In the graph frontier they say hydrate_source [S3] relation=- direction=- candidates=1 priority=121 via session.hydrate(...). So we should use selector \"[S3]\" maybe.\n\nThus we should produce a JSON with kind: tool_call, tool_call: {tool_name: \"session.hydrate\", payload: {\"target_selector\":\"[S3]\"} } and other fields: acquired_fact_ids: [\"[S3]\"]? Actually acquired_fact_ids is list of fact ids; maybe we can include the hydrated fact id. The fact id might be something like \"D2\"? Not given. But they want to return acquired_fact_ids list. We can include the short id of the node we are hydrating: maybe \"S3\"? Actually short ids are like F1, S3, D2, R1. So S3 is a short id (maybe a node). So we can set acquired_fact_ids: [\"S3\"].\n\nReadiness state: after hydrating source, maybe \"evidence_visible\" or \"evidence_acquired\"? The state likely \"evidence_visible\"? Actually after hydrating, we have evidence visible but not yet ready to edit. Might be \"evidence_acquired\"? The contract says readiness_state can be \"not_ready|evidence_visible|evidence_acquired|ready_to_edit\". Since we are about to hydrate, after the call we will have evidence visible? Let's set readiness_state: \"evidence_visible\". Or maybe \"evidence_acquired\". The instruction says \"Rereads are allowed, but prefer already visible evidence when possible.\" We are about to hydrate, which will make evidence visible. So after the tool call, readiness maybe \"evidence_visible\". The JSON shape: {\"kind\":\"think|tool_call|complete\",\"assistant_message\":\"<brief status>\", \"tool_call\": {\"tool_name\":\"<one registered tool name>\",\"payload\":{}},\"acquired_fact_ids\":[\"<fact id>\"],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}.\n\nWe need to fill assistant_message with brief status. Could be \"Hydrating source for CONTEXT_WINDOW_SECTION_SCHEMA_VERSION\". Provide short message.\n\nThus produce JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating source for CONTEXT_WINDOW_SECTION_SCHEMA_VERSION (short id S3)\",\n  \"tool_call\":{\n    \"tool_name\":\"session.hydrate\",\n    \"payload\":{\n      \"target_selector\":\"[S3]\"\n    }\n  },\n  \"acquired_fact_ids\":[\"S3\"],\n  \"readiness_state\":\"evidence_visible\"\n}\n\nMake sure no extra fields, no markdown. Ensure JSON is valid. Use double quotes. The payload must be an object; we can include just target_selector. Might also need other fields? The contract says payload: {}. So we can include any fields; it's okay.\n\nThus final answer.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to produce JSON only, no markdown. The user wants a response following the contract. The context indicates that we have hydrated schema version constant, collapsed it, and there are instructions to hydrate_source [S3] for CONTEXT_WINDOW_SECTION_SCHEMA_VERSION. We need to decide next action.\n\nThe active code windows are empty. The user wants to gather exact evidence needed before editing schema definitions. We are at prepare_to_edit stage. We have performed some operations, collapsed RUN_MANIFEST_SCHEMA_VERSION. Now we need to hydrate the CONTEXT_WINDOW_SECTION_SCHEMA_VERSION source. That corresponds to short id [S3] maybe? In the graph frontier they mention hydrate_source [S3] relation=- direction=- candidates=1 priority=121 via session.hydrate(...). So we should issue a tool call session.hydrate with target_selector likely \"[S3]\" or something. The target_selector likely refers to a selector string; previous usage used \"target\" or \"target_selector\". The tool contract: session.hydrate@v1 payload includes target selector and optional padding. The example earlier used session.hydrate@v1 {status:unknown,path:,line_count:0,match_count:0,fields:[target_selector]}. They used placeholder path and match_count. The payload likely includes \"target_selector\": \"<selector>\" maybe \"target\". Actually earlier they called session.hydrate@v1 with fields [target_selector] in the tool_result summary. The payload likely includes \"target_selector\". So we need to call session.hydrate with payload like {\"target_selector\":\"[S3]\"} or maybe just \"S3\"? In the graph frontier they say hydrate_source [S3] relation=- direction=- candidates=1 priority=121 via session.hydrate(...). So we should use selector \"[S3]\" maybe.\n\nThus we should produce a JSON with kind: tool_call, tool_call: {tool_name: \"session.hydrate\", payload: {\"target_selector\":\"[S3]\"} } and other fields: acquired_fact_ids: [\"[S3]\"]? Actually acquired_fact_ids is list of fact ids; maybe we can include the hydrated fact id. The fact id might be something like \"D2\"? Not given. But they want to return acquired_fact_ids list. We can include the short id of the node we are hydrating: maybe \"S3\"? Actually short ids are like F1, S3, D2, R1. So S3 is a short id (maybe a node). So we can set acquired_fact_ids: [\"S3\"].\n\nReadiness state: after hydrating source, maybe \"evidence_visible\" or \"evidence_acquired\"? The state likely \"evidence_visible\"? Actually after hydrating, we have evidence visible but not yet ready to edit. Might be \"evidence_acquired\"? The contract says readiness_state can be \"not_ready|evidence_visible|evidence_acquired|ready_to_edit\". Since we are about to hydrate, after the call we will have evidence visible? Let's set readiness_state: \"evidence_visible\". Or maybe \"evidence_acquired\". The instruction says \"Rereads are allowed, but prefer already visible evidence when possible.\" We are about to hydrate, which will make evidence visible. So after the tool call, readiness maybe \"evidence_visible\". The JSON shape: {\"kind\":\"think|tool_call|complete\",\"assistant_message\":\"<brief status>\", \"tool_call\": {\"tool_name\":\"<one registered tool name>\",\"payload\":{}},\"acquired_fact_ids\":[\"<fact id>\"],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}.\n\nWe need to fill assistant_message with brief status. Could be \"Hydrating source for CONTEXT_WINDOW_SECTION_SCHEMA_VERSION\". Provide short message.\n\nThus produce JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating source for CONTEXT_WINDOW_SECTION_SCHEMA_VERSION (short id S3)\",\n  \"tool_call\":{\n    \"tool_name\":\"session.hydrate\",\n    \"payload\":{\n      \"target_selector\":\"[S3]\"\n    }\n  },\n  \"acquired_fact_ids\":[\"S3\"],\n  \"readiness_state\":\"evidence_visible\"\n}\n\nMake sure no extra fields, no markdown. Ensure JSON is valid. Use double quotes. The payload must be an object; we can include just target_selector. Might also need other fields? The contract says payload: {}. So we can include any fields; it's okay.\n\nThus final answer.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773669059,
+    "id": "gen-1773669059-hEAcKchyuN5mQytDv5w5",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 1054,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 1024
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4553,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5607
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd43ae6c8b89451-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 13:51:00 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

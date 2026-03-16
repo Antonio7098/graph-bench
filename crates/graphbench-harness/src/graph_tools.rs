@@ -2,7 +2,7 @@ use crate::runtime::RefreshedGraphState;
 use crate::tools::{ToolContract, ToolExecutionResult, ToolRegistry};
 use graphbench_core::error::{AppError, ErrorCode, ErrorContext};
 use graphbench_core::{GraphSession, GraphWorkspace, RepresentationLevel};
-use serde_json::{Value, json};
+use serde_json::{json, Value};
 use std::fs;
 use std::path::{Path, PathBuf};
 use std::process::Command;
@@ -22,19 +22,32 @@ import ucp
 
 payload = json.load(open(sys.argv[1], 'r', encoding='utf-8'))
 raw = ucp.CodeGraph.load(payload['graph_snapshot_path'])
-graph = ucp.query(raw)
 session = raw.load_session_json(payload['session_json'])
-tool = ucp.PythonQueryTool(
-    graph,
+args = payload['arguments']
+
+code = args.get('code')
+if not code:
+    raise ValueError("Missing required 'code' field in arguments")
+
+bindings = args.get('bindings')
+include_export = args.get('include_export', False)
+export_kwargs = args.get('export_kwargs') or {}
+limits = args.get('limits')
+
+result = ucp.run_python_query(
+    raw,
+    code,
     session=session,
-    default_include_export=payload.get('default_include_export', False),
-    default_export_kwargs=payload.get('default_export_kwargs') or {},
-    default_limits=payload.get('default_limits'),
+    bindings=bindings,
+    include_export=include_export,
+    export_kwargs=export_kwargs,
+    limits=limits,
 )
-result = tool.execute(payload['arguments'])
+
+session = result.session.raw
 json.dump(
     {
-        'payload': result.payload,
+        'payload': result.as_dict(),
         'session_json': session.to_json(),
     },
     sys.stdout,

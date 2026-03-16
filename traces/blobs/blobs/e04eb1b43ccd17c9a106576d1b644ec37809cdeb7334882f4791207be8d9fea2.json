@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\": [],\n  \"assistant_message\": \"hydrating source for artifacts.rs\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"not_ready\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target_selector\": \"F1\"\n    },\n    \"tool_name\": \"session.hydrate_source@v1\"\n  }\n}",
+          "reasoning": "We need to output JSON with either think, tool_call, or complete. We are in preparation to edit. We need to gather evidence. We have expanded file but no content shown. We need to obtain exact evidence (maybe schema version constants). Likely need to read the file to see definitions. Use session.read? Not listed. We can use graph.resolve or session.expand_file? Already expanded. Maybe need to hydrate source to get content. Use session.hydrate@v1? Actually tool name is session.hydrate@v1? The list includes session.hydrate@v1? Yes \"session.hydrate@v1\" is listed. Also session.hydrate_source@v1. The frontier suggests hydrate_source. So we should call session.hydrate_source to get source content. Then we can read constants. So we need to make a tool_call with session.hydrate_source@v1 payload with target selector. The target selector likely is the file symbol? The file is \"crates/graphbench-core/src/artifacts.rs\". The short id maybe F1? Actually F1 is the file node. So we can use selector \"F1\". Use session.hydrate_source@v1 with target selector \"F1\". Provide payload. Then we will get source content. Then we can extract schema version constants. Then we can decide readiness.\n\nThus we need to output JSON with kind: tool_call, tool_call tool_name \"session.hydrate_source@v1\", payload with target_selector \"F1\". Also acquired_fact_ids maybe empty initially. readiness_state \"not_ready\". Provide assistant_message maybe \"hydrating source\". Must follow exact shape.\n\nThe JSON must be only, no extra text. Shape: {\"kind\":\"tool_call\",\"assistant_message\":\"<brief status>\",\"tool_call\":{\"tool_name\":\"<one registered tool name>\",\"payload\":{}},\"acquired_fact_ids\":[],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}.\n\nWe need to fill assistant_message brief status. Provide maybe \"hydrate source\". So output:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"hydrating source for artifacts.rs\",\n  \"tool_call\":{\"tool_name\":\"session.hydrate_source@v1\",\"payload\":{\"target_selector\":\"F1\"}},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure no extra fields. Ensure payload is valid JSON. Use double quotes. No trailing commas. Provide exactly as required.\n\nThus final.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to output JSON with either think, tool_call, or complete. We are in preparation to edit. We need to gather evidence. We have expanded file but no content shown. We need to obtain exact evidence (maybe schema version constants). Likely need to read the file to see definitions. Use session.read? Not listed. We can use graph.resolve or session.expand_file? Already expanded. Maybe need to hydrate source to get content. Use session.hydrate@v1? Actually tool name is session.hydrate@v1? The list includes session.hydrate@v1? Yes \"session.hydrate@v1\" is listed. Also session.hydrate_source@v1. The frontier suggests hydrate_source. So we should call session.hydrate_source to get source content. Then we can read constants. So we need to make a tool_call with session.hydrate_source@v1 payload with target selector. The target selector likely is the file symbol? The file is \"crates/graphbench-core/src/artifacts.rs\". The short id maybe F1? Actually F1 is the file node. So we can use selector \"F1\". Use session.hydrate_source@v1 with target selector \"F1\". Provide payload. Then we will get source content. Then we can extract schema version constants. Then we can decide readiness.\n\nThus we need to output JSON with kind: tool_call, tool_call tool_name \"session.hydrate_source@v1\", payload with target_selector \"F1\". Also acquired_fact_ids maybe empty initially. readiness_state \"not_ready\". Provide assistant_message maybe \"hydrating source\". Must follow exact shape.\n\nThe JSON must be only, no extra text. Shape: {\"kind\":\"tool_call\",\"assistant_message\":\"<brief status>\",\"tool_call\":{\"tool_name\":\"<one registered tool name>\",\"payload\":{}},\"acquired_fact_ids\":[],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}.\n\nWe need to fill assistant_message brief status. Provide maybe \"hydrate source\". So output:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"hydrating source for artifacts.rs\",\n  \"tool_call\":{\"tool_name\":\"session.hydrate_source@v1\",\"payload\":{\"target_selector\":\"F1\"}},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure no extra fields. Ensure payload is valid JSON. Use double quotes. No trailing commas. Provide exactly as required.\n\nThus final.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773671741,
+    "id": "gen-1773671741-luN4j3020tEmhbPsIIAh",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 611,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 569
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4226,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 4837
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd47c5d79f7002e-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 14:35:41 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

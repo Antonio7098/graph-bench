@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n \"acquired_fact_ids\": [],\n  \"assistant_message\": \"Hydrating source for CONTEXT_WINDOW_SECTION_SCHEMA_VERSION\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"not_ready\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target\": \"[S3]\"\n    },\n    \"tool_name\": \"session.hydrate_source@v1\"\n  }\n}",
+          "reasoning": "We need to respond with JSON only, no markdown. The task: Gather exact evidence needed before editing schema definitions so artifacts stay versioned and aligned. We need to follow strategy: graph-targeted-lexical-read@v1. So we need to do a tool call: likely session.hydrate_source or something? The Active Code Windows empty. We have a recommended frontier action: hydrate_source [S3] priority=121 candidates=1 :: Hydrate source for symbol:crates/graphbench-core/src/artifacts.rs::CONTEXT_WINDOW_SECTION_SCHEMA_VERSION. We need to perform that tool call.\n\nThe tool name is session.hydrate_source@v1. Payload likely includes target selector. The format of payload? Not fully defined but we can guess: probably {\"target\":\"[S3]\"} or something. The instructions: Tool contracts: session.hydrate_source@v1: Payload with target selector, optional padding, and hydration budgets.\n\nWe need to construct payload JSON. Probably just {\"target\":\"[S3]\"}.\n\nWe need to output JSON with shape: {\"kind\":\"tool_call\",\"assistant_message\":\"<brief status>\",\"tool_call\":{\"tool_name\":\"session.hydrate_source@v1\",\"payload\":{...}},\"acquired_fact_ids\":[],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}.\n\nWe should include assistant_message brief status. acquired_fact_ids empty because no facts yet. readiness_state likely \"not_ready\" or \"evidence_visible\"? Since we haven't got evidence yet, maybe \"not_ready\". Use that.\n\nThus output:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating source for CONTEXT_WINDOW_SECTION_SCHEMA_VERSION\",\n  \"tool_call\":{\"tool_name\":\"session.hydrate_source@v1\",\"payload\":{\"target\":\"[S3]}\"},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nCheck that no extra fields. tool_call.payload must be object. Provide target. Ensure JSON valid.\n\nThus final answer.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to respond with JSON only, no markdown. The task: Gather exact evidence needed before editing schema definitions so artifacts stay versioned and aligned. We need to follow strategy: graph-targeted-lexical-read@v1. So we need to do a tool call: likely session.hydrate_source or something? The Active Code Windows empty. We have a recommended frontier action: hydrate_source [S3] priority=121 candidates=1 :: Hydrate source for symbol:crates/graphbench-core/src/artifacts.rs::CONTEXT_WINDOW_SECTION_SCHEMA_VERSION. We need to perform that tool call.\n\nThe tool name is session.hydrate_source@v1. Payload likely includes target selector. The format of payload? Not fully defined but we can guess: probably {\"target\":\"[S3]\"} or something. The instructions: Tool contracts: session.hydrate_source@v1: Payload with target selector, optional padding, and hydration budgets.\n\nWe need to construct payload JSON. Probably just {\"target\":\"[S3]\"}.\n\nWe need to output JSON with shape: {\"kind\":\"tool_call\",\"assistant_message\":\"<brief status>\",\"tool_call\":{\"tool_name\":\"session.hydrate_source@v1\",\"payload\":{...}},\"acquired_fact_ids\":[],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}.\n\nWe should include assistant_message brief status. acquired_fact_ids empty because no facts yet. readiness_state likely \"not_ready\" or \"evidence_visible\"? Since we haven't got evidence yet, maybe \"not_ready\". Use that.\n\nThus output:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating source for CONTEXT_WINDOW_SECTION_SCHEMA_VERSION\",\n  \"tool_call\":{\"tool_name\":\"session.hydrate_source@v1\",\"payload\":{\"target\":\"[S3]}\"},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nCheck that no extra fields. tool_call.payload must be object. Provide target. Ensure JSON valid.\n\nThus final answer.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773671432,
+    "id": "gen-1773671432-inilTgIxFSZo6jCrrIVw",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 528,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 471
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4677,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5205
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd474d53f6cbda0-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 14:30:33 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

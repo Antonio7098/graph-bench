@@ -10,6 +10,12 @@ pub struct Database {
 unsafe impl Send for Database {}
 unsafe impl Sync for Database {}
 
+impl std::fmt::Debug for Database {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("Database").finish()
+    }
+}
+
 #[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
 pub struct RunSummary {
     pub run_id: String,
@@ -22,6 +28,7 @@ pub struct RunSummary {
     pub started_at: String,
     pub completed_at: String,
     pub outcome: String,
+    pub status: String,
     pub turn_count: i32,
     pub visibility_score: Option<f64>,
     pub acquisition_score: Option<f64>,
@@ -57,6 +64,24 @@ pub struct RunManifest {
     pub outcome: String,
 }
 
+#[derive(Debug, Clone, serde::Serialize, serde::Deserialize)]
+pub struct RunEvent {
+    pub run_id: String,
+    pub seq: i64,
+    pub captured_at: String,
+    pub stream: String,
+    pub component: String,
+    pub event_type: String,
+    pub level: String,
+    pub message: String,
+    pub turn_index: Option<i32>,
+    pub tool_name: Option<String>,
+    pub provider_request_id: Option<String>,
+    pub metrics: Option<serde_json::Value>,
+    pub tags: Vec<String>,
+    pub details: serde_json::Value,
+}
+
 impl Database {
     pub fn new(path: &Path) -> Result<Self> {
         let conn = Connection::open(path)?;
@@ -79,8 +104,31 @@ impl Database {
                 acquisition_score REAL,
                 efficiency_score REAL,
                 explanation_score REAL,
-                raw_data TEXT
+                raw_data TEXT,
+                status TEXT DEFAULT 'completed'
             );
+            
+            CREATE TABLE IF NOT EXISTS run_events (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                run_id TEXT NOT NULL,
+                seq INTEGER NOT NULL,
+                captured_at TEXT NOT NULL,
+                stream TEXT NOT NULL,
+                component TEXT NOT NULL,
+                event_type TEXT NOT NULL,
+                level TEXT NOT NULL,
+                message TEXT NOT NULL,
+                turn_index INTEGER,
+                tool_name TEXT,
+                provider_request_id TEXT,
+                metrics TEXT,
+                tags TEXT,
+                details TEXT,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP
+            );
+            
+            CREATE INDEX IF NOT EXISTS idx_runs_started ON runs(started_at DESC);
+            CREATE INDEX IF NOT EXISTS idx_runs_status ON runs(status);
             
             CREATE TABLE IF NOT EXISTS turns (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -92,8 +140,9 @@ impl Database {
                 FOREIGN KEY (run_id) REFERENCES runs(run_id)
             );
             
-            CREATE INDEX IF NOT EXISTS idx_runs_started ON runs(started_at DESC);
             CREATE INDEX IF NOT EXISTS idx_turns_run ON turns(run_id);
+            CREATE INDEX IF NOT EXISTS idx_events_run ON run_events(run_id);
+            CREATE INDEX IF NOT EXISTS idx_events_seq ON run_events(run_id, seq);
             ",
         )?;
 
@@ -105,7 +154,7 @@ impl Database {
     pub fn list_runs(&self, filter: Option<RunFilter>) -> Result<Vec<RunSummary>> {
         let conn = self.conn.lock().unwrap();
 
-        let mut sql = "SELECT run_id, fixture_id, task_id, strategy_id, provider, model_slug, harness_version, started_at, completed_at, outcome, turn_count, visibility_score, acquisition_score, efficiency_score, explanation_score FROM runs WHERE 1=1".to_string();
+        let mut sql = "SELECT run_id, fixture_id, task_id, strategy_id, provider, model_slug, COALESCE(harness_version, '0.1.0'), started_at, completed_at, outcome, COALESCE(status, 'completed') as status, turn_count, visibility_score, acquisition_score, efficiency_score, explanation_score FROM runs WHERE 1=1".to_string();
         let mut params_vec: Vec<Box<dyn rusqlite::ToSql>> = Vec::new();
 
         if let Some(f) = &filter {
@@ -145,11 +194,12 @@ impl Database {
                 started_at: row.get(7)?,
                 completed_at: row.get(8)?,
                 outcome: row.get(9)?,
-                turn_count: row.get(10)?,
-                visibility_score: row.get(11)?,
-                acquisition_score: row.get(12)?,
-                efficiency_score: row.get(13)?,
-                explanation_score: row.get(14)?,
+                status: row.get(10)?,
+                turn_count: row.get(11)?,
+                visibility_score: row.get(12)?,
+                acquisition_score: row.get(13)?,
+                efficiency_score: row.get(14)?,
+                explanation_score: row.get(15)?,
             })
         })?;
 
@@ -402,6 +452,7 @@ impl Database {
                 started_at,
                 completed_at,
                 outcome: "success".to_string(),
+                status: "completed".to_string(),
                 turn_count: entries,
                 visibility_score: Some(0.6 + rand::random::<f64>() * 0.4),
                 acquisition_score: Some(0.5 + rand::random::<f64>() * 0.4),
@@ -415,6 +466,150 @@ impl Database {
         }
 
         Ok(imported)
+    }
+
+    pub fn upsert_run_status(
+        &self,
+        run_id: &str,
+        status: &str,
+        details: Option<&str>,
+    ) -> Result<()> {
+        let conn = self.conn.lock().unwrap();
+
+        let now = chrono::Utc::now().to_rfc3339();
+
+        conn.execute(
+            "INSERT INTO runs (run_id, status, started_at, completed_at, outcome, task_id, strategy_id, provider, model_slug, fixture_id, turn_count, raw_data)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+             ON CONFLICT(run_id) DO UPDATE SET status = excluded.status, raw_data = COALESCE(excluded.raw_data, runs.raw_data)",
+            params![
+                run_id,
+                status,
+                now,
+                if status == "completed" || status == "failed" { now.clone() } else { String::new() },
+                if status == "failed" { "failed" } else { "running" },
+                details.unwrap_or("benchmark"),
+                "benchmark",
+                "openrouter",
+                "benchmark-model",
+                "benchmark-internal",
+                0,
+                details.unwrap_or("{}"),
+            ],
+        )?;
+
+        Ok(())
+    }
+
+    pub fn insert_event(&self, event: &RunEvent) -> Result<()> {
+        let conn = self.conn.lock().unwrap();
+
+        let metrics_str = event
+            .metrics
+            .as_ref()
+            .map(|m| serde_json::to_string(m).unwrap_or_default());
+        let tags_str = event.tags.join(",");
+        let details_str = serde_json::to_string(&event.details).unwrap_or_default();
+
+        conn.execute(
+            "INSERT INTO run_events (run_id, seq, captured_at, stream, component, event_type, level, message, turn_index, tool_name, provider_request_id, metrics, tags, details)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            params![
+                event.run_id,
+                event.seq,
+                event.captured_at,
+                event.stream,
+                event.component,
+                event.event_type,
+                event.level,
+                event.message,
+                event.turn_index,
+                event.tool_name,
+                event.provider_request_id,
+                metrics_str,
+                tags_str,
+                details_str,
+            ],
+        )?;
+
+        Ok(())
+    }
+
+    pub fn get_events_for_run(&self, run_id: &str, from_seq: Option<u64>) -> Result<Vec<RunEvent>> {
+        let conn = self.conn.lock().unwrap();
+
+        let mut events = Vec::new();
+
+        if let Some(seq) = from_seq {
+            let seq_i64 = seq as i64;
+            let mut stmt = conn.prepare(
+                "SELECT run_id, seq, captured_at, stream, component, event_type, level, message, turn_index, tool_name, provider_request_id, metrics, tags, details FROM run_events WHERE run_id = ? AND seq > ? ORDER BY seq ASC"
+            )?;
+            let rows = stmt.query_map(params![run_id, seq_i64], |row| {
+                Ok(RunEvent {
+                    run_id: row.get(0)?,
+                    seq: row.get(1)?,
+                    captured_at: row.get(2)?,
+                    stream: row.get(3)?,
+                    component: row.get(4)?,
+                    event_type: row.get(5)?,
+                    level: row.get(6)?,
+                    message: row.get(7)?,
+                    turn_index: row.get(8)?,
+                    tool_name: row.get(9)?,
+                    provider_request_id: row.get(10)?,
+                    metrics: row
+                        .get::<_, Option<String>>(11)?
+                        .and_then(|s| serde_json::from_str(&s).ok()),
+                    tags: row
+                        .get::<_, Option<String>>(12)?
+                        .map(|s| s.split(',').map(|s| s.to_string()).collect())
+                        .unwrap_or_default(),
+                    details: row
+                        .get::<_, Option<String>>(13)?
+                        .and_then(|s| serde_json::from_str(&s).ok())
+                        .unwrap_or(serde_json::Value::Null),
+                })
+            })?;
+            for row in rows {
+                events.push(row?);
+            }
+        } else {
+            let mut stmt = conn.prepare(
+                "SELECT run_id, seq, captured_at, stream, component, event_type, level, message, turn_index, tool_name, provider_request_id, metrics, tags, details FROM run_events WHERE run_id = ? ORDER BY seq ASC"
+            )?;
+            let rows = stmt.query_map(params![run_id], |row| {
+                Ok(RunEvent {
+                    run_id: row.get(0)?,
+                    seq: row.get(1)?,
+                    captured_at: row.get(2)?,
+                    stream: row.get(3)?,
+                    component: row.get(4)?,
+                    event_type: row.get(5)?,
+                    level: row.get(6)?,
+                    message: row.get(7)?,
+                    turn_index: row.get(8)?,
+                    tool_name: row.get(9)?,
+                    provider_request_id: row.get(10)?,
+                    metrics: row
+                        .get::<_, Option<String>>(11)?
+                        .and_then(|s| serde_json::from_str(&s).ok()),
+                    tags: row
+                        .get::<_, Option<String>>(12)?
+                        .map(|s| s.split(',').map(|s| s.to_string()).collect())
+                        .unwrap_or_default(),
+                    details: row
+                        .get::<_, Option<String>>(13)?
+                        .and_then(|s| serde_json::from_str(&s).ok())
+                        .unwrap_or(serde_json::Value::Null),
+                })
+            })?;
+            for row in rows {
+                events.push(row?);
+            }
+        }
+
+        Ok(events)
     }
 }
 

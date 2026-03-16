@@ -1,0 +1,2887 @@
+{
+  "run_manifest": {
+    "run_id": "smoke-openrouter-1773671815",
+    "schema_version": 2,
+    "fixture_id": "graphbench.internal",
+    "task_id": "prepare-edit.schema-boundaries",
+    "strategy_id": "graph.targeted-lexical-read",
+    "strategy_config": {
+      "schema_version": 1,
+      "strategy_id": "graph.targeted-lexical-read",
+      "strategy_version": "v1",
+      "graph_discovery": "graph_then_targeted_lexical_read",
+      "projection": "balanced",
+      "reread_policy": "allow",
+      "context_window": {
+        "compaction": {
+          "history_recent_items": 4,
+          "summary_max_chars": 2200,
+          "emergency_summary_max_chars": 900,
+          "deduplicate_tool_results": false
+        },
+        "section_budgets": [
+          {
+            "section_id": "base_runtime_instructions",
+            "max_tokens": 160,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "response_contract",
+            "max_tokens": 140,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "objective_state",
+            "max_tokens": 180,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "selected_history",
+            "max_tokens": 220,
+            "trim_direction": "head"
+          },
+          {
+            "section_id": "active_code_windows",
+            "max_tokens": 440,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "code_navigation_items",
+            "max_tokens": 260,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "graph_relations",
+            "max_tokens": 180,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "graph_frontier",
+            "max_tokens": 200,
+            "trim_direction": "tail"
+          },
+          {
+            "section_id": "tool_contracts",
+            "max_tokens": 180,
+            "trim_direction": "tail"
+          }
+        ]
+      }
+    },
+    "harness_version": "0.1.0",
+    "schema_version_set": {
+      "fixture_manifest": 1,
+      "task_spec": 1,
+      "evidence_spec": 1,
+      "strategy_config": 1,
+      "context_object": 1,
+      "context_window_section": 1,
+      "turn_trace": 1,
+      "score_report": 1
+    },
+    "provider": "openrouter",
+    "model_slug": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "prompt_version": "v1",
+    "graph_snapshot_id": "sha256:03cfd491d47973619431d96429ab9325466e8b9a04553c06349864d861ae6c89",
+    "started_at": "2026-03-16T14:36:54.823034950+00:00",
+    "completed_at": "2026-03-16T14:37:23.035911326+00:00",
+    "outcome": "done"
+  },
+  "events": [
+    {
+      "event_id": "event-0",
+      "captured_at": "2026-03-16T14:36:54.823034950+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:d4281b4779c57622755ec173281242731bfb8e56a34fcc9ef273fcf855afd03f",
+        "mutation": "seed_overview(limit=2)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-1",
+      "captured_at": "2026-03-16T14:36:54.901833969+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:2e776d350672620c929cda73e675c9263a765265897fbb8c51f47acbce951f78",
+        "mutation": "select(crates/graphbench-core/src/artifacts.rs,L1)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-2",
+      "captured_at": "2026-03-16T14:36:54.981246740+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:f61bec404530f76ae282ea27a50f5de35c06efc2c6acde5a04e19031d72264b5",
+        "mutation": "hydrate_exact_proof(crates/graphbench-core/src/artifacts.rs,8)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-3",
+      "captured_at": "2026-03-16T14:36:55.108667819+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": null,
+      "component": "harness",
+      "event_type": "run.started",
+      "details": {
+        "event": "run_started",
+        "run_id": "smoke-openrouter-1773671815"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-4",
+      "captured_at": "2026-03-16T14:36:55.108678860+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 0,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "think",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-5",
+      "captured_at": "2026-03-16T14:36:55.110780108+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 0,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:e438853bc50039454c328862ddff775b3aa179963526433aa2652d93e73f73d3",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:e56adef1bad9cceb77b65e3d9a445b1b25710f43cf955d5ca60de4f17704d910",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-6",
+      "captured_at": "2026-03-16T14:36:55.110784586+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-7",
+      "captured_at": "2026-03-16T14:36:59.634605416+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": "gen-1773671815-6y97HRoogDq4YzAkXVxE",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-8",
+      "captured_at": "2026-03-16T14:36:59.634620735+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 0,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-9",
+      "captured_at": "2026-03-16T14:36:59.634659097+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "session.expand_file@v1",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-10",
+      "captured_at": "2026-03-16T14:36:59.634660269+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "session.expand_file@v1",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-11",
+      "captured_at": "2026-03-16T14:36:59.811829513+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 0,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "session.expand_file@v1",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-12",
+      "captured_at": "2026-03-16T14:36:59.895637162+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:87969a9b29c9b9efe620fd76bfc61b8b2f6d1d49f5dc807a46118889db087ff8",
+        "mutation": "session.expand_file(target=file:crates/graphbench-core/src/artifacts.rs,depth=1)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-13",
+      "captured_at": "2026-03-16T14:36:59.895689160+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 0,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "evidence_visible",
+        "turn_index": 0
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-58",
+      "captured_at": "2026-03-16T14:36:59.895689160+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 0,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": "gen-1773671815-6y97HRoogDq4YzAkXVxE",
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:fdf4c333245cc988b66f08625393326cff0f761148c00f098e52b95bc597927f",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/fdf4c333245cc988b66f08625393326cff0f761148c00f098e52b95bc597927f.json",
+          "byte_count": 8020
+        },
+        {
+          "blob_id": "sha256:db2ed8ce9e42aeb458841d79dbbd462dc95c0b0238413b22a07b082b3203d1ba",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/db2ed8ce9e42aeb458841d79dbbd462dc95c0b0238413b22a07b082b3203d1ba.json",
+          "byte_count": 9441
+        },
+        {
+          "blob_id": "sha256:e182290c3dca8e834045fc9e877ffde4b3d68ef7ceb25f9a4482da44aa225e82",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/e182290c3dca8e834045fc9e877ffde4b3d68ef7ceb25f9a4482da44aa225e82.json",
+          "byte_count": 483
+        },
+        {
+          "blob_id": "sha256:e56adef1bad9cceb77b65e3d9a445b1b25710f43cf955d5ca60de4f17704d910",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/e56adef1bad9cceb77b65e3d9a445b1b25710f43cf955d5ca60de4f17704d910.txt",
+          "byte_count": 5710
+        },
+        {
+          "blob_id": "sha256:e438853bc50039454c328862ddff775b3aa179963526433aa2652d93e73f73d3",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/e438853bc50039454c328862ddff775b3aa179963526433aa2652d93e73f73d3.txt",
+          "byte_count": 5510
+        }
+      ]
+    },
+    {
+      "event_id": "event-14",
+      "captured_at": "2026-03-16T14:36:59.896185259+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 1,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "act",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-15",
+      "captured_at": "2026-03-16T14:36:59.898314520+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 1,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:de56ef2deba77756e91bbb6c6ddc1e2ed997d4572135d702092f00444ec443b4",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:be5aada633a59455daf5f6e1b3e937cd2edc11ea014a1f4a43429a0596a8a273",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-16",
+      "captured_at": "2026-03-16T14:36:59.898317866+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-17",
+      "captured_at": "2026-03-16T14:37:03.297670699+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": "gen-1773671819-3xrtWg98ZwOHHQyt6KdI",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-18",
+      "captured_at": "2026-03-16T14:37:03.297695386+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 1,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-19",
+      "captured_at": "2026-03-16T14:37:03.297751813+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 1,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "graph.find@v1",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-20",
+      "captured_at": "2026-03-16T14:37:03.297752945+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 1,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "graph.find@v1",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-21",
+      "captured_at": "2026-03-16T14:37:03.302476496+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 1,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "graph.find@v1",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-22",
+      "captured_at": "2026-03-16T14:37:03.302513656+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 1,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "evidence_visible",
+        "turn_index": 1
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-59",
+      "captured_at": "2026-03-16T14:37:03.302513656+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 1,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": "gen-1773671819-3xrtWg98ZwOHHQyt6KdI",
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:5a1947965b4625d80bd867ecddbf8e62fa9e80422656879c0fbdcfab7bf29973",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/5a1947965b4625d80bd867ecddbf8e62fa9e80422656879c0fbdcfab7bf29973.json",
+          "byte_count": 8365
+        },
+        {
+          "blob_id": "sha256:ab64b714c7735ce75ea59af6533f94a78764ed0b446fb6421acc073875173745",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/ab64b714c7735ce75ea59af6533f94a78764ed0b446fb6421acc073875173745.json",
+          "byte_count": 7518
+        },
+        {
+          "blob_id": "sha256:30dd35409234401745449bb07ff8b54ce3c6d4a9e56acd3cc6d6d07f23c6d133",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/30dd35409234401745449bb07ff8b54ce3c6d4a9e56acd3cc6d6d07f23c6d133.json",
+          "byte_count": 412
+        },
+        {
+          "blob_id": "sha256:be5aada633a59455daf5f6e1b3e937cd2edc11ea014a1f4a43429a0596a8a273",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/be5aada633a59455daf5f6e1b3e937cd2edc11ea014a1f4a43429a0596a8a273.txt",
+          "byte_count": 6052
+        },
+        {
+          "blob_id": "sha256:de56ef2deba77756e91bbb6c6ddc1e2ed997d4572135d702092f00444ec443b4",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/de56ef2deba77756e91bbb6c6ddc1e2ed997d4572135d702092f00444ec443b4.txt",
+          "byte_count": 5852
+        }
+      ]
+    },
+    {
+      "event_id": "event-23",
+      "captured_at": "2026-03-16T14:37:03.303137356+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 2,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "think",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-24",
+      "captured_at": "2026-03-16T14:37:03.305657467+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 2,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:c655277b59f5528028d9c9c70f335cf9f942d7cff627e248072767b43b7e30f2",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:3b6ebfa7a5d49c2662250d6d9b42e054e36b5c71e43996fe32425ff036871b26",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-25",
+      "captured_at": "2026-03-16T14:37:03.305662767+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 2,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-26",
+      "captured_at": "2026-03-16T14:37:08.798619993+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 2,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": "gen-1773671823-N4GHNrWm7oxpvocDB452",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-27",
+      "captured_at": "2026-03-16T14:37:08.798640602+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 2,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-28",
+      "captured_at": "2026-03-16T14:37:08.798686779+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 2,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "session.expand_file@v1",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-29",
+      "captured_at": "2026-03-16T14:37:08.798688472+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 2,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "session.expand_file@v1",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-30",
+      "captured_at": "2026-03-16T14:37:08.975100921+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 2,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "session.expand_file@v1",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-31",
+      "captured_at": "2026-03-16T14:37:09.058705395+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": null,
+      "component": "graph",
+      "event_type": "graph_session.mutated",
+      "details": {
+        "event": "graph_session_mutated",
+        "graph_session_hash": "sha256:5ec4e5cdfabc6c9fdaf006540c4495cbd1f8f6f6bc80d52da627f430a8dd0d11",
+        "mutation": "session.expand_file(target=crates/graphbench-core/src/artifacts.rs,depth=1)"
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-32",
+      "captured_at": "2026-03-16T14:37:09.058811035+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 2,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "not_ready",
+        "turn_index": 2
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-60",
+      "captured_at": "2026-03-16T14:37:09.058811035+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 2,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": "gen-1773671823-N4GHNrWm7oxpvocDB452",
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:c42d38e97b0fe3c32492a12529e6befe2cc63b9b16cdc6f79a14c40357100e62",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/c42d38e97b0fe3c32492a12529e6befe2cc63b9b16cdc6f79a14c40357100e62.json",
+          "byte_count": 8618
+        },
+        {
+          "blob_id": "sha256:7cd5e9c66b81acd20b253bb7fea575100ae82cf7f631aec2bc53f6a281e9142a",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/7cd5e9c66b81acd20b253bb7fea575100ae82cf7f631aec2bc53f6a281e9142a.json",
+          "byte_count": 9851
+        },
+        {
+          "blob_id": "sha256:329396b21dd0736720e8ff9e3a37a1bf30647c4f673d847348b9abd423d9d706",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/329396b21dd0736720e8ff9e3a37a1bf30647c4f673d847348b9abd423d9d706.json",
+          "byte_count": 456
+        },
+        {
+          "blob_id": "sha256:3b6ebfa7a5d49c2662250d6d9b42e054e36b5c71e43996fe32425ff036871b26",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/3b6ebfa7a5d49c2662250d6d9b42e054e36b5c71e43996fe32425ff036871b26.txt",
+          "byte_count": 6304
+        },
+        {
+          "blob_id": "sha256:c655277b59f5528028d9c9c70f335cf9f942d7cff627e248072767b43b7e30f2",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/c655277b59f5528028d9c9c70f335cf9f942d7cff627e248072767b43b7e30f2.txt",
+          "byte_count": 6104
+        }
+      ]
+    },
+    {
+      "event_id": "event-33",
+      "captured_at": "2026-03-16T14:37:09.059331169+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 3,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "act",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-34",
+      "captured_at": "2026-03-16T14:37:09.061748995+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 3,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:7516c80680b70e0eb10a7aa96814296bbe3e952a395d7adf16d904764599cc11",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:db2795d3d7e38091e7dbe422a7713eef0c9985b81fb572f6954fca087761613c",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-35",
+      "captured_at": "2026-03-16T14:37:09.061752902+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 3,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-36",
+      "captured_at": "2026-03-16T14:37:12.765651081+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 3,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": "gen-1773671829-rdMVQBQcYivFA4BWAeNg",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-37",
+      "captured_at": "2026-03-16T14:37:12.765677661+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 3,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-38",
+      "captured_at": "2026-03-16T14:37:12.765740671+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 3,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "graph.find@v1",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-39",
+      "captured_at": "2026-03-16T14:37:12.765743466+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 3,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "graph.find@v1",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-40",
+      "captured_at": "2026-03-16T14:37:12.773230546+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 3,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "graph.find@v1",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-41",
+      "captured_at": "2026-03-16T14:37:12.773265422+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 3,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "not_ready",
+        "turn_index": 3
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-61",
+      "captured_at": "2026-03-16T14:37:12.773265422+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 3,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": "gen-1773671829-rdMVQBQcYivFA4BWAeNg",
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:b3095b7ee680635c483a331f379c91d24af3685edb7ecd82002694d79e7527b3",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/b3095b7ee680635c483a331f379c91d24af3685edb7ecd82002694d79e7527b3.json",
+          "byte_count": 9247
+        },
+        {
+          "blob_id": "sha256:a1f3118ebf60239e2adf9220817053b2ee42baa55e48a09aa4ddd2abd4864da0",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/a1f3118ebf60239e2adf9220817053b2ee42baa55e48a09aa4ddd2abd4864da0.json",
+          "byte_count": 8174
+        },
+        {
+          "blob_id": "sha256:0f71b5b1f034a93f61e9a6ae22d54db93f9e7f5e3599cdbb221203a2de539aad",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/0f71b5b1f034a93f61e9a6ae22d54db93f9e7f5e3599cdbb221203a2de539aad.json",
+          "byte_count": 524
+        },
+        {
+          "blob_id": "sha256:db2795d3d7e38091e7dbe422a7713eef0c9985b81fb572f6954fca087761613c",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/db2795d3d7e38091e7dbe422a7713eef0c9985b81fb572f6954fca087761613c.txt",
+          "byte_count": 6932
+        },
+        {
+          "blob_id": "sha256:7516c80680b70e0eb10a7aa96814296bbe3e952a395d7adf16d904764599cc11",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/7516c80680b70e0eb10a7aa96814296bbe3e952a395d7adf16d904764599cc11.txt",
+          "byte_count": 6732
+        }
+      ]
+    },
+    {
+      "event_id": "event-42",
+      "captured_at": "2026-03-16T14:37:12.773821905+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 4,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "think",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-43",
+      "captured_at": "2026-03-16T14:37:12.776196830+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 4,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:a5e5840fa9acfce4e2107374e4076b7e6a0df82f6d862ff1f2d89208bdd442f2",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:78c8a3c9e3716ef9aa7d1de4c4087e6329eb16822889501c079104d2a649181b",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-44",
+      "captured_at": "2026-03-16T14:37:12.776200757+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 4,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-45",
+      "captured_at": "2026-03-16T14:37:15.430951794+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 4,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": "gen-1773671832-Snx3qdc2ZlMfsCXTbPQM",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-46",
+      "captured_at": "2026-03-16T14:37:15.430977864+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 4,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "tool_call",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-47",
+      "captured_at": "2026-03-16T14:37:15.431044610+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 4,
+      "component": "tool",
+      "event_type": "tool.requested",
+      "details": {
+        "event": "tool_requested",
+        "tool_name": "graph.find@v1",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-48",
+      "captured_at": "2026-03-16T14:37:15.431046784+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 4,
+      "component": "tool",
+      "event_type": "tool.started",
+      "details": {
+        "event": "tool_started",
+        "tool_name": "graph.find@v1",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-49",
+      "captured_at": "2026-03-16T14:37:15.435971284+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 4,
+      "component": "tool",
+      "event_type": "tool.completed",
+      "details": {
+        "event": "tool_completed",
+        "tool_name": "graph.find@v1",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-50",
+      "captured_at": "2026-03-16T14:37:15.436009276+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 4,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "not_ready",
+        "turn_index": 4
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-62",
+      "captured_at": "2026-03-16T14:37:15.436009276+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 4,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": "gen-1773671832-Snx3qdc2ZlMfsCXTbPQM",
+        "tool_calls": 1
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:9185e6ec98959dc726852275378d4349242f8ec66a9eb3b03f71924e77574341",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/9185e6ec98959dc726852275378d4349242f8ec66a9eb3b03f71924e77574341.json",
+          "byte_count": 9506
+        },
+        {
+          "blob_id": "sha256:51a95d394dacfa50405d061b23e9639d6c2019303a97b663744695b492753578",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/51a95d394dacfa50405d061b23e9639d6c2019303a97b663744695b492753578.json",
+          "byte_count": 7633
+        },
+        {
+          "blob_id": "sha256:313c8d9d0db46d4a742ca87c5ae3d66275045ace6f117cdc896856e5759c1285",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/313c8d9d0db46d4a742ca87c5ae3d66275045ace6f117cdc896856e5759c1285.json",
+          "byte_count": 574
+        },
+        {
+          "blob_id": "sha256:78c8a3c9e3716ef9aa7d1de4c4087e6329eb16822889501c079104d2a649181b",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/78c8a3c9e3716ef9aa7d1de4c4087e6329eb16822889501c079104d2a649181b.txt",
+          "byte_count": 7191
+        },
+        {
+          "blob_id": "sha256:a5e5840fa9acfce4e2107374e4076b7e6a0df82f6d862ff1f2d89208bdd442f2",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/a5e5840fa9acfce4e2107374e4076b7e6a0df82f6d862ff1f2d89208bdd442f2.txt",
+          "byte_count": 6991
+        }
+      ]
+    },
+    {
+      "event_id": "event-51",
+      "captured_at": "2026-03-16T14:37:15.436628297+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 5,
+      "component": "harness",
+      "event_type": "turn.started",
+      "details": {
+        "event": "turn_started",
+        "state": "act",
+        "turn_index": 5
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-52",
+      "captured_at": "2026-03-16T14:37:15.439244438+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 5,
+      "component": "harness",
+      "event_type": "prompt.assembled",
+      "details": {
+        "context_hash": "sha256:29a722e6e25ab089128694e154730b818728b4e5882bcf45d14363a30a515a8b",
+        "event": "prompt_assembled",
+        "prompt_hash": "sha256:a06b10433c7fc4553333f84131672669caa8900b5e1a6cd00737ba0d4dd5e4f9",
+        "turn_index": 5
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-53",
+      "captured_at": "2026-03-16T14:37:15.439250149+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 5,
+      "component": "provider",
+      "event_type": "model.request_sent",
+      "details": {
+        "event": "model_request_sent",
+        "turn_index": 5
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-54",
+      "captured_at": "2026-03-16T14:37:23.035114167+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 5,
+      "component": "provider",
+      "event_type": "model.response_received",
+      "details": {
+        "event": "model_response_received",
+        "provider_request_id": "gen-1773671835-15WpsNBmO7nzu5I6syMO",
+        "turn_index": 5
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-55",
+      "captured_at": "2026-03-16T14:37:23.035129787+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 5,
+      "component": "provider",
+      "event_type": "model.response_validated",
+      "details": {
+        "event": "model_response_validated",
+        "kind": "complete",
+        "turn_index": 5
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-56",
+      "captured_at": "2026-03-16T14:37:23.035168600+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 5,
+      "component": "scoring",
+      "event_type": "readiness.changed",
+      "details": {
+        "event": "readiness_changed",
+        "readiness_state": "ready_to_edit",
+        "turn_index": 5
+      },
+      "blob_refs": []
+    },
+    {
+      "event_id": "event-63",
+      "captured_at": "2026-03-16T14:37:23.035168600+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": 5,
+      "component": "observability",
+      "event_type": "turn.payloads_captured",
+      "details": {
+        "provider_request_id": "gen-1773671835-15WpsNBmO7nzu5I6syMO",
+        "tool_calls": 0
+      },
+      "blob_refs": [
+        {
+          "blob_id": "sha256:ac70337faf246dcd7a90dc580f6c603f33d18d22519053e40a6c86fb3374a850",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/ac70337faf246dcd7a90dc580f6c603f33d18d22519053e40a6c86fb3374a850.json",
+          "byte_count": 9787
+        },
+        {
+          "blob_id": "sha256:ee60661cd6bd822de547606c7ecafe6db6f5daa5b94fa06a7a6b3e5ad047c563",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/ee60661cd6bd822de547606c7ecafe6db6f5daa5b94fa06a7a6b3e5ad047c563.json",
+          "byte_count": 18699
+        },
+        {
+          "blob_id": "sha256:51eda213881741dee9e16db788ac47a38471efc9072a0d433502664eed8a89ef",
+          "media_type": "application/json",
+          "path": "traces/blobs/blobs/51eda213881741dee9e16db788ac47a38471efc9072a0d433502664eed8a89ef.json",
+          "byte_count": 341
+        },
+        {
+          "blob_id": "sha256:a06b10433c7fc4553333f84131672669caa8900b5e1a6cd00737ba0d4dd5e4f9",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/a06b10433c7fc4553333f84131672669caa8900b5e1a6cd00737ba0d4dd5e4f9.txt",
+          "byte_count": 7472
+        },
+        {
+          "blob_id": "sha256:29a722e6e25ab089128694e154730b818728b4e5882bcf45d14363a30a515a8b",
+          "media_type": "text/plain",
+          "path": "traces/blobs/blobs/29a722e6e25ab089128694e154730b818728b4e5882bcf45d14363a30a515a8b.txt",
+          "byte_count": 7272
+        }
+      ]
+    },
+    {
+      "event_id": "event-57",
+      "captured_at": "2026-03-16T14:37:23.035911326+00:00",
+      "run_id": "smoke-openrouter-1773671815",
+      "task_id": "prepare-edit.schema-boundaries",
+      "fixture_id": "graphbench.internal",
+      "strategy_id": "graph.targeted-lexical-read",
+      "turn_index": null,
+      "component": "harness",
+      "event_type": "run.completed",
+      "details": {
+        "event": "run_completed",
+        "run_id": "smoke-openrouter-1773671815",
+        "turns": 6
+      },
+      "blob_refs": []
+    }
+  ],
+  "turns": [
+    {
+      "turn_index": 0,
+      "request_blob": {
+        "blob_id": "sha256:fdf4c333245cc988b66f08625393326cff0f761148c00f098e52b95bc597927f",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/fdf4c333245cc988b66f08625393326cff0f761148c00f098e52b95bc597927f.json",
+        "byte_count": 8020
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:db2ed8ce9e42aeb458841d79dbbd462dc95c0b0238413b22a07b082b3203d1ba",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/db2ed8ce9e42aeb458841d79dbbd462dc95c0b0238413b22a07b082b3203d1ba.json",
+        "byte_count": 9441
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:e182290c3dca8e834045fc9e877ffde4b3d68ef7ceb25f9a4482da44aa225e82",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/e182290c3dca8e834045fc9e877ffde4b3d68ef7ceb25f9a4482da44aa225e82.json",
+        "byte_count": 483
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:e56adef1bad9cceb77b65e3d9a445b1b25710f43cf955d5ca60de4f17704d910",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/e56adef1bad9cceb77b65e3d9a445b1b25710f43cf955d5ca60de4f17704d910.txt",
+        "byte_count": 5710
+      },
+      "context_blob": {
+        "blob_id": "sha256:e438853bc50039454c328862ddff775b3aa179963526433aa2652d93e73f73d3",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/e438853bc50039454c328862ddff775b3aa179963526433aa2652d93e73f73d3.txt",
+        "byte_count": 5510
+      },
+      "provider_request_id": "gen-1773671815-6y97HRoogDq4YzAkXVxE",
+      "telemetry": {
+        "prompt_bytes": 5710,
+        "prompt_tokens": 626,
+        "latency_ms": 4784,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "session.expand_file@v1",
+          "latency_ms": 177,
+          "outcome": "ok",
+          "input_payload": {
+            "depth": 1,
+            "limit": 61,
+            "priority_threshold": 112,
+            "target_selector": "F1"
+          },
+          "output_payload": {
+            "changed": true,
+            "operation": "session.expand_file",
+            "session_export": {
+              "edges": [],
+              "export_mode": "compact",
+              "focus": "fa5433f9c84e42c4c89e99e8",
+              "focus_label": "crates/graphbench-core/src/artifacts.rs",
+              "focus_short_id": "F1",
+              "frontier": [
+                {
+                  "action": "hydrate_source",
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "candidate_count": 0,
+                  "description": "Hydrate source for file crates/graphbench-core/src/artifacts.rs",
+                  "explanation": "Hydrating crates/graphbench-core/src/artifacts.rs will add source lines to the working set export",
+                  "priority": 120,
+                  "short_id": "F1"
+                },
+                {
+                  "action": "expand_file",
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "candidate_count": 61,
+                  "description": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                  "explanation": "61 hidden symbol candidates remain under the focused file",
+                  "priority": 112,
+                  "short_id": "F1"
+                }
+              ],
+              "heuristics": {
+                "hidden_candidate_count": 61,
+                "low_value_candidate_count": 0,
+                "recommendations": [
+                  {
+                    "action_kind": "expand_file",
+                    "candidate_count": 61,
+                    "estimated_evidence_gain": 61,
+                    "estimated_hydration_bytes": 0,
+                    "estimated_token_cost": 1464,
+                    "explanation": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                    "priority": 112,
+                    "rationale": "61 hidden symbol candidates remain under the focused file",
+                    "target_block_id": "fa5433f9c84e42c4c89e99e8",
+                    "target_label": "crates/graphbench-core/src/artifacts.rs",
+                    "target_short_id": "F1"
+                  }
+                ],
+                "recommended_actions": [
+                  {
+                    "action": "expand_file",
+                    "block_id": "fa5433f9c84e42c4c89e99e8",
+                    "candidate_count": 61,
+                    "description": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                    "explanation": "61 hidden symbol candidates remain under the focused file",
+                    "priority": 112,
+                    "short_id": "F1"
+                  }
+                ],
+                "recommended_next_action": {
+                  "action": "expand_file",
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "candidate_count": 61,
+                  "description": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                  "explanation": "61 hidden symbol candidates remain under the focused file",
+                  "priority": 112,
+                  "short_id": "F1"
+                },
+                "should_stop": false
+              },
+              "hidden_unreachable_count": 3,
+              "nodes": [
+                {
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs",
+                    "path": "crates/graphbench-core/src/artifacts.rs"
+                  },
+                  "detail_level": "source",
+                  "distance_from_focus": 0,
+                  "hydrated_source": {
+                    "display": "crates/graphbench-core/src/artifacts.rs",
+                    "end_line": 1,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "snippet": "   1 | use crate::error::{AppError, ErrorCode, ErrorContext};\n   2 | use crate::strategy::{STRATEGY_CONFIG_SCHEMA_VERSION, StrategyConfig, validate_strategy_id};\n   3 | use serde::{Deserialize, Serialize};\n   4 | \n   5 | pub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;\n   6 | pub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;\n   7 | pub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;\n   8 | pub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;\n   9 | pub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;",
+                    "start_line": 1
+                  },
+                  "label": "crates/graphbench-core/src/artifacts.rs",
+                  "logical_key": "file:crates/graphbench-core/src/artifacts.rs",
+                  "node_class": "file",
+                  "origin": {
+                    "kind": "manual"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 212,
+                  "short_id": "F1"
+                }
+              ],
+              "omissions": {
+                "details": [
+                  {
+                    "block_id": "9e133aeeddbeadc9a82a2902",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": ".",
+                    "reason": "visible_level_limit",
+                    "short_id": "R1"
+                  },
+                  {
+                    "block_id": "99b62cfb483779db26d3be75",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": "crates",
+                    "reason": "visible_level_limit",
+                    "short_id": "D1"
+                  },
+                  {
+                    "block_id": "c8ad2a8cfa28c70a667dd678",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": "frontend",
+                    "reason": "visible_level_limit",
+                    "short_id": "D2"
+                  },
+                  {
+                    "block_id": "fa5433f9c84e42c4c89e99e8",
+                    "explanation": "Hydrated source excerpt superseded the shorter summary/docs view for this node.",
+                    "label": "crates/graphbench-core/src/artifacts.rs",
+                    "reason": "hydrated_excerpt_superseded_summary",
+                    "short_id": "F1"
+                  }
+                ],
+                "dropped_by_render_budget": 0,
+                "excluded_by_class_filters": 0,
+                "hidden_by_visible_levels": 3,
+                "suppressed_by_hydrated_excerpt": 1
+              },
+              "omitted_symbol_count": 261,
+              "summary": {
+                "directories": 2,
+                "files": 1,
+                "hydrated_sources": 1,
+                "max_selected": 48,
+                "repositories": 1,
+                "selected": 4,
+                "symbols": 0
+              },
+              "total_selected_edges": 0,
+              "visible_levels": 3,
+              "visible_node_count": 1
+            },
+            "status": "ok",
+            "target": "file:crates/graphbench-core/src/artifacts.rs"
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 1,
+      "request_blob": {
+        "blob_id": "sha256:5a1947965b4625d80bd867ecddbf8e62fa9e80422656879c0fbdcfab7bf29973",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/5a1947965b4625d80bd867ecddbf8e62fa9e80422656879c0fbdcfab7bf29973.json",
+        "byte_count": 8365
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:ab64b714c7735ce75ea59af6533f94a78764ed0b446fb6421acc073875173745",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/ab64b714c7735ce75ea59af6533f94a78764ed0b446fb6421acc073875173745.json",
+        "byte_count": 7518
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:30dd35409234401745449bb07ff8b54ce3c6d4a9e56acd3cc6d6d07f23c6d133",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/30dd35409234401745449bb07ff8b54ce3c6d4a9e56acd3cc6d6d07f23c6d133.json",
+        "byte_count": 412
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:be5aada633a59455daf5f6e1b3e937cd2edc11ea014a1f4a43429a0596a8a273",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/be5aada633a59455daf5f6e1b3e937cd2edc11ea014a1f4a43429a0596a8a273.txt",
+        "byte_count": 6052
+      },
+      "context_blob": {
+        "blob_id": "sha256:de56ef2deba77756e91bbb6c6ddc1e2ed997d4572135d702092f00444ec443b4",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/de56ef2deba77756e91bbb6c6ddc1e2ed997d4572135d702092f00444ec443b4.txt",
+        "byte_count": 5852
+      },
+      "provider_request_id": "gen-1773671819-3xrtWg98ZwOHHQyt6KdI",
+      "telemetry": {
+        "prompt_bytes": 6052,
+        "prompt_tokens": 637,
+        "latency_ms": 3404,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "graph.find@v1",
+          "latency_ms": 4,
+          "outcome": "ok",
+          "input_payload": {
+            "name_regex": "FIXTURE_MANIFEST_SCHEMA_VERSION"
+          },
+          "output_payload": {
+            "matches": [
+              {
+                "block_id": "64700ee3aa432a491db10dd9",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L4",
+                  "end_line": 4,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 4
+                },
+                "exported": true,
+                "label": "FIXTURE_MANIFEST_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::FIXTURE_MANIFEST_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "FIXTURE_MANIFEST_SCHEMA_VERSION"
+              }
+            ],
+            "status": "ok"
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 2,
+      "request_blob": {
+        "blob_id": "sha256:c42d38e97b0fe3c32492a12529e6befe2cc63b9b16cdc6f79a14c40357100e62",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/c42d38e97b0fe3c32492a12529e6befe2cc63b9b16cdc6f79a14c40357100e62.json",
+        "byte_count": 8618
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:7cd5e9c66b81acd20b253bb7fea575100ae82cf7f631aec2bc53f6a281e9142a",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/7cd5e9c66b81acd20b253bb7fea575100ae82cf7f631aec2bc53f6a281e9142a.json",
+        "byte_count": 9851
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:329396b21dd0736720e8ff9e3a37a1bf30647c4f673d847348b9abd423d9d706",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/329396b21dd0736720e8ff9e3a37a1bf30647c4f673d847348b9abd423d9d706.json",
+        "byte_count": 456
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:3b6ebfa7a5d49c2662250d6d9b42e054e36b5c71e43996fe32425ff036871b26",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/3b6ebfa7a5d49c2662250d6d9b42e054e36b5c71e43996fe32425ff036871b26.txt",
+        "byte_count": 6304
+      },
+      "context_blob": {
+        "blob_id": "sha256:c655277b59f5528028d9c9c70f335cf9f942d7cff627e248072767b43b7e30f2",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/c655277b59f5528028d9c9c70f335cf9f942d7cff627e248072767b43b7e30f2.txt",
+        "byte_count": 6104
+      },
+      "provider_request_id": "gen-1773671823-N4GHNrWm7oxpvocDB452",
+      "telemetry": {
+        "prompt_bytes": 6304,
+        "prompt_tokens": 651,
+        "latency_ms": 5753,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "session.expand_file@v1",
+          "latency_ms": 176,
+          "outcome": "ok",
+          "input_payload": {
+            "depth": 1,
+            "limit": 1,
+            "target": "crates/graphbench-core/src/artifacts.rs"
+          },
+          "output_payload": {
+            "changed": true,
+            "operation": "session.expand_file",
+            "session_export": {
+              "edges": [
+                {
+                  "multiplicity": 1,
+                  "relation": "exports",
+                  "source": "fa5433f9c84e42c4c89e99e8",
+                  "source_short_id": "F1",
+                  "target": "150bd9426b003139fe292bf3",
+                  "target_short_id": "S1"
+                }
+              ],
+              "export_mode": "compact",
+              "focus": "fa5433f9c84e42c4c89e99e8",
+              "focus_label": "crates/graphbench-core/src/artifacts.rs",
+              "focus_short_id": "F1",
+              "frontier": [
+                {
+                  "action": "hydrate_source",
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "candidate_count": 0,
+                  "description": "Hydrate source for file crates/graphbench-core/src/artifacts.rs",
+                  "explanation": "Hydrating crates/graphbench-core/src/artifacts.rs will add source lines to the working set export",
+                  "priority": 120,
+                  "short_id": "F1"
+                },
+                {
+                  "action": "expand_file",
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "candidate_count": 60,
+                  "description": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                  "explanation": "60 hidden symbol candidates remain under the focused file",
+                  "priority": 112,
+                  "short_id": "F1"
+                }
+              ],
+              "heuristics": {
+                "hidden_candidate_count": 60,
+                "low_value_candidate_count": 0,
+                "recommendations": [
+                  {
+                    "action_kind": "expand_file",
+                    "candidate_count": 60,
+                    "estimated_evidence_gain": 60,
+                    "estimated_hydration_bytes": 0,
+                    "estimated_token_cost": 1440,
+                    "explanation": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                    "priority": 112,
+                    "rationale": "60 hidden symbol candidates remain under the focused file",
+                    "target_block_id": "fa5433f9c84e42c4c89e99e8",
+                    "target_label": "crates/graphbench-core/src/artifacts.rs",
+                    "target_short_id": "F1"
+                  }
+                ],
+                "recommended_actions": [
+                  {
+                    "action": "expand_file",
+                    "block_id": "fa5433f9c84e42c4c89e99e8",
+                    "candidate_count": 60,
+                    "description": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                    "explanation": "60 hidden symbol candidates remain under the focused file",
+                    "priority": 112,
+                    "short_id": "F1"
+                  }
+                ],
+                "recommended_next_action": {
+                  "action": "expand_file",
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "candidate_count": 60,
+                  "description": "Expand file symbols for crates/graphbench-core/src/artifacts.rs",
+                  "explanation": "60 hidden symbol candidates remain under the focused file",
+                  "priority": 112,
+                  "short_id": "F1"
+                },
+                "should_stop": false
+              },
+              "hidden_unreachable_count": 3,
+              "nodes": [
+                {
+                  "block_id": "fa5433f9c84e42c4c89e99e8",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs",
+                    "path": "crates/graphbench-core/src/artifacts.rs"
+                  },
+                  "detail_level": "source",
+                  "distance_from_focus": 0,
+                  "hydrated_source": {
+                    "display": "crates/graphbench-core/src/artifacts.rs",
+                    "end_line": 1,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "snippet": "   1 | use crate::error::{AppError, ErrorCode, ErrorContext};\n   2 | use crate::strategy::{STRATEGY_CONFIG_SCHEMA_VERSION, StrategyConfig, validate_strategy_id};\n   3 | use serde::{Deserialize, Serialize};\n   4 | \n   5 | pub const FIXTURE_MANIFEST_SCHEMA_VERSION: u32 = 1;\n   6 | pub const TASK_SPEC_SCHEMA_VERSION: u32 = 1;\n   7 | pub const EVIDENCE_SPEC_SCHEMA_VERSION: u32 = 1;\n   8 | pub const CONTEXT_OBJECT_SCHEMA_VERSION: u32 = 1;\n   9 | pub const CONTEXT_WINDOW_SECTION_SCHEMA_VERSION: u32 = 1;",
+                    "start_line": 1
+                  },
+                  "label": "crates/graphbench-core/src/artifacts.rs",
+                  "logical_key": "file:crates/graphbench-core/src/artifacts.rs",
+                  "node_class": "file",
+                  "origin": {
+                    "kind": "manual"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 212,
+                  "short_id": "F1"
+                },
+                {
+                  "block_id": "150bd9426b003139fe292bf3",
+                  "coderef": {
+                    "display": "crates/graphbench-core/src/artifacts.rs#L223-L226",
+                    "end_line": 226,
+                    "path": "crates/graphbench-core/src/artifacts.rs",
+                    "start_line": 223
+                  },
+                  "detail_level": "symbol_card",
+                  "distance_from_focus": 1,
+                  "label": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                  "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::AcceptableProof",
+                  "node_class": "symbol",
+                  "origin": {
+                    "anchor": "fa5433f9c84e42c4c89e99e8",
+                    "kind": "file_symbols"
+                  },
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "pinned": false,
+                  "relevance_score": 88,
+                  "short_id": "S1",
+                  "signature": "struct AcceptableProof [exported] [public]",
+                  "symbol_name": "AcceptableProof"
+                }
+              ],
+              "omissions": {
+                "details": [
+                  {
+                    "block_id": "9e133aeeddbeadc9a82a2902",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": ".",
+                    "reason": "visible_level_limit",
+                    "short_id": "R1"
+                  },
+                  {
+                    "block_id": "c8ad2a8cfa28c70a667dd678",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": "frontend",
+                    "reason": "visible_level_limit",
+                    "short_id": "D2"
+                  },
+                  {
+                    "block_id": "99b62cfb483779db26d3be75",
+                    "explanation": "Node is outside the visible level budget from the current focus (visible_levels=3).",
+                    "label": "crates",
+                    "reason": "visible_level_limit",
+                    "short_id": "D1"
+                  },
+                  {
+                    "block_id": "fa5433f9c84e42c4c89e99e8",
+                    "explanation": "Hydrated source excerpt superseded the shorter summary/docs view for this node.",
+                    "label": "crates/graphbench-core/src/artifacts.rs",
+                    "reason": "hydrated_excerpt_superseded_summary",
+                    "short_id": "F1"
+                  }
+                ],
+                "dropped_by_render_budget": 0,
+                "excluded_by_class_filters": 0,
+                "hidden_by_visible_levels": 3,
+                "suppressed_by_hydrated_excerpt": 1
+              },
+              "omitted_symbol_count": 260,
+              "summary": {
+                "directories": 2,
+                "files": 1,
+                "hydrated_sources": 1,
+                "max_selected": 48,
+                "repositories": 1,
+                "selected": 5,
+                "symbols": 1
+              },
+              "total_selected_edges": 1,
+              "visible_levels": 3,
+              "visible_node_count": 2
+            },
+            "status": "ok",
+            "target": "crates/graphbench-core/src/artifacts.rs"
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 3,
+      "request_blob": {
+        "blob_id": "sha256:b3095b7ee680635c483a331f379c91d24af3685edb7ecd82002694d79e7527b3",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/b3095b7ee680635c483a331f379c91d24af3685edb7ecd82002694d79e7527b3.json",
+        "byte_count": 9247
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:a1f3118ebf60239e2adf9220817053b2ee42baa55e48a09aa4ddd2abd4864da0",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/a1f3118ebf60239e2adf9220817053b2ee42baa55e48a09aa4ddd2abd4864da0.json",
+        "byte_count": 8174
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:0f71b5b1f034a93f61e9a6ae22d54db93f9e7f5e3599cdbb221203a2de539aad",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/0f71b5b1f034a93f61e9a6ae22d54db93f9e7f5e3599cdbb221203a2de539aad.json",
+        "byte_count": 524
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:db2795d3d7e38091e7dbe422a7713eef0c9985b81fb572f6954fca087761613c",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/db2795d3d7e38091e7dbe422a7713eef0c9985b81fb572f6954fca087761613c.txt",
+        "byte_count": 6932
+      },
+      "context_blob": {
+        "blob_id": "sha256:7516c80680b70e0eb10a7aa96814296bbe3e952a395d7adf16d904764599cc11",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/7516c80680b70e0eb10a7aa96814296bbe3e952a395d7adf16d904764599cc11.txt",
+        "byte_count": 6732
+      },
+      "provider_request_id": "gen-1773671829-rdMVQBQcYivFA4BWAeNg",
+      "telemetry": {
+        "prompt_bytes": 6932,
+        "prompt_tokens": 676,
+        "latency_ms": 3711,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "graph.find@v1",
+          "latency_ms": 7,
+          "outcome": "ok",
+          "input_payload": {
+            "name_regex": "FIXTURE_MANIFEST_SCHEMA_VERSION|TASK_SPEC_SCHEMA_VERSION|EVIDENCE_SPEC_SCHEMA_VERSION|CONTEXT_OBJECT_SCHEMA_VERSION|CONTEXT_WINDOW_SECTION_SCHEMA_VERSION"
+          },
+          "output_payload": {
+            "matches": [
+              {
+                "block_id": "3de45757daade706dcfb3d68",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L7",
+                  "end_line": 7,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 7
+                },
+                "exported": true,
+                "label": "CONTEXT_OBJECT_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::CONTEXT_OBJECT_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "CONTEXT_OBJECT_SCHEMA_VERSION"
+              },
+              {
+                "block_id": "843c066f2e3b6bf38d4804d6",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L8",
+                  "end_line": 8,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 8
+                },
+                "exported": true,
+                "label": "CONTEXT_WINDOW_SECTION_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::CONTEXT_WINDOW_SECTION_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "CONTEXT_WINDOW_SECTION_SCHEMA_VERSION"
+              },
+              {
+                "block_id": "787fb0ccb6a37d652a206902",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L6",
+                  "end_line": 6,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 6
+                },
+                "exported": true,
+                "label": "EVIDENCE_SPEC_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::EVIDENCE_SPEC_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "EVIDENCE_SPEC_SCHEMA_VERSION"
+              },
+              {
+                "block_id": "64700ee3aa432a491db10dd9",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L4",
+                  "end_line": 4,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 4
+                },
+                "exported": true,
+                "label": "FIXTURE_MANIFEST_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::FIXTURE_MANIFEST_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "FIXTURE_MANIFEST_SCHEMA_VERSION"
+              },
+              {
+                "block_id": "56b0e2c1c51ac8df9b1bc41b",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L5",
+                  "end_line": 5,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 5
+                },
+                "exported": true,
+                "label": "TASK_SPEC_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::TASK_SPEC_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "TASK_SPEC_SCHEMA_VERSION"
+              }
+            ],
+            "status": "ok"
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 4,
+      "request_blob": {
+        "blob_id": "sha256:9185e6ec98959dc726852275378d4349242f8ec66a9eb3b03f71924e77574341",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/9185e6ec98959dc726852275378d4349242f8ec66a9eb3b03f71924e77574341.json",
+        "byte_count": 9506
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:51a95d394dacfa50405d061b23e9639d6c2019303a97b663744695b492753578",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/51a95d394dacfa50405d061b23e9639d6c2019303a97b663744695b492753578.json",
+        "byte_count": 7633
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:313c8d9d0db46d4a742ca87c5ae3d66275045ace6f117cdc896856e5759c1285",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/313c8d9d0db46d4a742ca87c5ae3d66275045ace6f117cdc896856e5759c1285.json",
+        "byte_count": 574
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:78c8a3c9e3716ef9aa7d1de4c4087e6329eb16822889501c079104d2a649181b",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/78c8a3c9e3716ef9aa7d1de4c4087e6329eb16822889501c079104d2a649181b.txt",
+        "byte_count": 7191
+      },
+      "context_blob": {
+        "blob_id": "sha256:a5e5840fa9acfce4e2107374e4076b7e6a0df82f6d862ff1f2d89208bdd442f2",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/a5e5840fa9acfce4e2107374e4076b7e6a0df82f6d862ff1f2d89208bdd442f2.txt",
+        "byte_count": 6991
+      },
+      "provider_request_id": "gen-1773671832-Snx3qdc2ZlMfsCXTbPQM",
+      "telemetry": {
+        "prompt_bytes": 7191,
+        "prompt_tokens": 692,
+        "latency_ms": 2659,
+        "tool_calls": 1
+      },
+      "tool_traces": [
+        {
+          "tool_name": "graph.find@v1",
+          "latency_ms": 4,
+          "outcome": "ok",
+          "input_payload": {
+            "case_sensitive": true,
+            "limit": 10,
+            "name_regex": "FIXTURE_MANIFEST_SCHEMA_VERSION|TASK_SPEC_SCHEMA_VERSION|EVIDENCE_SPEC_SCHEMA_VERSION|CONTEXT_OBJECT_SCHEMA_VERSION|CONTEXT_WINDOW_SECTION_SCHEMA_VERSION"
+          },
+          "output_payload": {
+            "matches": [
+              {
+                "block_id": "3de45757daade706dcfb3d68",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L7",
+                  "end_line": 7,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 7
+                },
+                "exported": true,
+                "label": "CONTEXT_OBJECT_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::CONTEXT_OBJECT_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "CONTEXT_OBJECT_SCHEMA_VERSION"
+              },
+              {
+                "block_id": "843c066f2e3b6bf38d4804d6",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L8",
+                  "end_line": 8,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 8
+                },
+                "exported": true,
+                "label": "CONTEXT_WINDOW_SECTION_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::CONTEXT_WINDOW_SECTION_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "CONTEXT_WINDOW_SECTION_SCHEMA_VERSION"
+              },
+              {
+                "block_id": "787fb0ccb6a37d652a206902",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L6",
+                  "end_line": 6,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 6
+                },
+                "exported": true,
+                "label": "EVIDENCE_SPEC_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::EVIDENCE_SPEC_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "EVIDENCE_SPEC_SCHEMA_VERSION"
+              },
+              {
+                "block_id": "64700ee3aa432a491db10dd9",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L4",
+                  "end_line": 4,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 4
+                },
+                "exported": true,
+                "label": "FIXTURE_MANIFEST_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::FIXTURE_MANIFEST_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "FIXTURE_MANIFEST_SCHEMA_VERSION"
+              },
+              {
+                "block_id": "56b0e2c1c51ac8df9b1bc41b",
+                "coderef": {
+                  "display": "crates/graphbench-core/src/artifacts.rs#L5",
+                  "end_line": 5,
+                  "path": "crates/graphbench-core/src/artifacts.rs",
+                  "start_line": 5
+                },
+                "exported": true,
+                "label": "TASK_SPEC_SCHEMA_VERSION",
+                "logical_key": "symbol:crates/graphbench-core/src/artifacts.rs::TASK_SPEC_SCHEMA_VERSION",
+                "node_class": "symbol",
+                "path": "crates/graphbench-core/src/artifacts.rs",
+                "symbol_name": "TASK_SPEC_SCHEMA_VERSION"
+              }
+            ],
+            "status": "ok"
+          }
+        }
+      ]
+    },
+    {
+      "turn_index": 5,
+      "request_blob": {
+        "blob_id": "sha256:ac70337faf246dcd7a90dc580f6c603f33d18d22519053e40a6c86fb3374a850",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/ac70337faf246dcd7a90dc580f6c603f33d18d22519053e40a6c86fb3374a850.json",
+        "byte_count": 9787
+      },
+      "raw_response_blob": {
+        "blob_id": "sha256:ee60661cd6bd822de547606c7ecafe6db6f5daa5b94fa06a7a6b3e5ad047c563",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/ee60661cd6bd822de547606c7ecafe6db6f5daa5b94fa06a7a6b3e5ad047c563.json",
+        "byte_count": 18699
+      },
+      "validated_response_blob": {
+        "blob_id": "sha256:51eda213881741dee9e16db788ac47a38471efc9072a0d433502664eed8a89ef",
+        "media_type": "application/json",
+        "path": "traces/blobs/blobs/51eda213881741dee9e16db788ac47a38471efc9072a0d433502664eed8a89ef.json",
+        "byte_count": 341
+      },
+      "prompt_blob": {
+        "blob_id": "sha256:a06b10433c7fc4553333f84131672669caa8900b5e1a6cd00737ba0d4dd5e4f9",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/a06b10433c7fc4553333f84131672669caa8900b5e1a6cd00737ba0d4dd5e4f9.txt",
+        "byte_count": 7472
+      },
+      "context_blob": {
+        "blob_id": "sha256:29a722e6e25ab089128694e154730b818728b4e5882bcf45d14363a30a515a8b",
+        "media_type": "text/plain",
+        "path": "traces/blobs/blobs/29a722e6e25ab089128694e154730b818728b4e5882bcf45d14363a30a515a8b.txt",
+        "byte_count": 7272
+      },
+      "provider_request_id": "gen-1773671835-15WpsNBmO7nzu5I6syMO",
+      "telemetry": {
+        "prompt_bytes": 7472,
+        "prompt_tokens": 708,
+        "latency_ms": 7595,
+        "tool_calls": 0
+      },
+      "tool_traces": []
+    }
+  ],
+  "aggregation": {
+    "total_turns": 6,
+    "aggregate_prompt_bytes": 39661,
+    "aggregate_prompt_tokens": 3990,
+    "aggregate_latency_ms": 27906,
+    "aggregate_tool_calls": 5
+  },
+  "structured_logs": [
+    {
+      "captured_at": "2026-03-16T14:36:54.823034950+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T14:36:54.901833969+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T14:36:54.981246740+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T14:36:55.108667819+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "run.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T14:36:55.108678860+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T14:36:55.110780108+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T14:36:55.110784586+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.634605416+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.634620735+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.634659097+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.requested",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.634660269+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.811829513+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.895637162+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.895689160+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.895689160+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 0
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.896185259+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.898314520+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T14:36:59.898317866+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T14:37:03.297670699+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T14:37:03.297695386+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T14:37:03.297751813+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.requested",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T14:37:03.297752945+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T14:37:03.302476496+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T14:37:03.302513656+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T14:37:03.302513656+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 1
+    },
+    {
+      "captured_at": "2026-03-16T14:37:03.303137356+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-16T14:37:03.305657467+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-16T14:37:03.305662767+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-16T14:37:08.798619993+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-16T14:37:08.798640602+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-16T14:37:08.798686779+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.requested",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-16T14:37:08.798688472+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-16T14:37:08.975100921+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-16T14:37:09.058705395+00:00",
+      "component": "graph",
+      "error_code": null,
+      "event": "graph_session.mutated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    },
+    {
+      "captured_at": "2026-03-16T14:37:09.058811035+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-16T14:37:09.058811035+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 2
+    },
+    {
+      "captured_at": "2026-03-16T14:37:09.059331169+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "captured_at": "2026-03-16T14:37:09.061748995+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "captured_at": "2026-03-16T14:37:09.061752902+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "captured_at": "2026-03-16T14:37:12.765651081+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "captured_at": "2026-03-16T14:37:12.765677661+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "captured_at": "2026-03-16T14:37:12.765740671+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.requested",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "captured_at": "2026-03-16T14:37:12.765743466+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "captured_at": "2026-03-16T14:37:12.773230546+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "captured_at": "2026-03-16T14:37:12.773265422+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "captured_at": "2026-03-16T14:37:12.773265422+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 3
+    },
+    {
+      "captured_at": "2026-03-16T14:37:12.773821905+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    },
+    {
+      "captured_at": "2026-03-16T14:37:12.776196830+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    },
+    {
+      "captured_at": "2026-03-16T14:37:12.776200757+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    },
+    {
+      "captured_at": "2026-03-16T14:37:15.430951794+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    },
+    {
+      "captured_at": "2026-03-16T14:37:15.430977864+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    },
+    {
+      "captured_at": "2026-03-16T14:37:15.431044610+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.requested",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    },
+    {
+      "captured_at": "2026-03-16T14:37:15.431046784+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    },
+    {
+      "captured_at": "2026-03-16T14:37:15.435971284+00:00",
+      "component": "tool",
+      "error_code": null,
+      "event": "tool.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    },
+    {
+      "captured_at": "2026-03-16T14:37:15.436009276+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    },
+    {
+      "captured_at": "2026-03-16T14:37:15.436009276+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 4
+    },
+    {
+      "captured_at": "2026-03-16T14:37:15.436628297+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "turn.started",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 5
+    },
+    {
+      "captured_at": "2026-03-16T14:37:15.439244438+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "prompt.assembled",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 5
+    },
+    {
+      "captured_at": "2026-03-16T14:37:15.439250149+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.request_sent",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 5
+    },
+    {
+      "captured_at": "2026-03-16T14:37:23.035114167+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_received",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 5
+    },
+    {
+      "captured_at": "2026-03-16T14:37:23.035129787+00:00",
+      "component": "provider",
+      "error_code": null,
+      "event": "model.response_validated",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 5
+    },
+    {
+      "captured_at": "2026-03-16T14:37:23.035168600+00:00",
+      "component": "scoring",
+      "error_code": null,
+      "event": "readiness.changed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 5
+    },
+    {
+      "captured_at": "2026-03-16T14:37:23.035168600+00:00",
+      "component": "observability",
+      "error_code": null,
+      "event": "turn.payloads_captured",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": 5
+    },
+    {
+      "captured_at": "2026-03-16T14:37:23.035911326+00:00",
+      "component": "harness",
+      "error_code": null,
+      "event": "run.completed",
+      "fixture_id": "graphbench.internal",
+      "run_id": "smoke-openrouter-1773671815",
+      "strategy_id": "graph.targeted-lexical-read",
+      "task_id": "prepare-edit.schema-boundaries",
+      "turn_index": null
+    }
+  ]
+}

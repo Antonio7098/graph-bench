@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n\"acquired_fact_ids\":[],\n  \"assistant_message\":\"Hydrating TurnTrace source\",\n  \"kind\":\"tool_call\",\n  \"readiness_state\":\"not_ready\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target\": \"S36\"\n    },\n    \"tool_name\": \"session.hydrate\"\n  }\n}",
+          "reasoning": "We need to respond with JSON only. Kind likely think or tool_call? The prompt: \"Return JSON only with this exact shape: {{\"kind\":\"think|tool_call|complete\",\"assistant_message\":\"<brief status>\",\"tool_call\":{{\"tool_name\":\"<one registered tool name>\",\"payload\":{{}}}},\"acquired_fact_ids\":[\"<fact id>\"],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}}. Use null or omit tool_call unless kind is tool_call. When kind is tool_call, tool_call.tool_name must exactly match one of the registered tool names.\n\nWe are in objective to gather exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned. Already some hydrate actions performed but we need to continue. The active graph frontier recommends hydrate_source [S36] priority=121 candidates=1 via session.hydrate(...). So we should perform a tool call to hydrate_source? Actually tool name is session.hydrate. The frontier says hydrate_source [S36] via session.hydrate(...). So we can call session.hydrate with selector S36? The target selector is a short id like S36. Indeed S36 is a symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace. So we should hydrate source for that symbol.\n\nThus kind: tool_call, assistant_message brief status maybe \"Hydrating TurnTrace source\". tool_call payload: target selector? The session.hydrate@v1 tool expects payload with target selector and optional padding. According to tool contracts: session.hydrate@v1: Payload with target selector, optional padding, and hydration budgets. So we can provide {\"target\":\"S36\"} maybe also \"padding\":0? But we can keep minimal.\n\nWe also need to fill acquired_fact_ids: list of fact ids we acquire? Not yet acquired any fact id. Might be empty array. readiness_state: after tool call, maybe \"evidence_acquired\"? Or \"evidence_visible\"? The state after hydrating source maybe \"evidence_acquired\"? Actually readiness states: not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we are about to hydrate, we may not have evidence yet. After calling hydrate, we might get evidence_visible? But we haven't executed yet. The JSON shape includes \"acquired_fact_ids\":[\"<fact id>\"]; we can set empty array [].\n\nReadiness state maybe \"not_ready\" before tool call? But after tool call we will get result later. The instruction: Use this shape. Probably we should output kind: tool_call, with tool_call payload, and readiness_state maybe \"not_ready\"? But we are about to call tool to get evidence. Might set readiness_state \"evidence_visible\"? Not sure. The example: they used \"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\". So we need to choose one. Since we haven't yet acquired evidence, we are not ready. So maybe \"not_ready\". But after calling tool, we will get result and then we can set readiness accordingly. However the instruction says we must return JSON only with that shape; we can set readiness_state to \"not_ready\". Let's do that.\n\nThus output:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating TurnTrace source\",\n  \"tool_call\":{\"tool_name\":\"session.hydrate\",\"payload\":{\"target\":\"S36\"}},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure no extra whitespace? It's okay. Ensure JSON only, no markdown. Provide exactly that.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to respond with JSON only. Kind likely think or tool_call? The prompt: \"Return JSON only with this exact shape: {{\"kind\":\"think|tool_call|complete\",\"assistant_message\":\"<brief status>\",\"tool_call\":{{\"tool_name\":\"<one registered tool name>\",\"payload\":{{}}}},\"acquired_fact_ids\":[\"<fact id>\"],\"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\"}}. Use null or omit tool_call unless kind is tool_call. When kind is tool_call, tool_call.tool_name must exactly match one of the registered tool names.\n\nWe are in objective to gather exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned. Already some hydrate actions performed but we need to continue. The active graph frontier recommends hydrate_source [S36] priority=121 candidates=1 via session.hydrate(...). So we should perform a tool call to hydrate_source? Actually tool name is session.hydrate. The frontier says hydrate_source [S36] via session.hydrate(...). So we can call session.hydrate with selector S36? The target selector is a short id like S36. Indeed S36 is a symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace. So we should hydrate source for that symbol.\n\nThus kind: tool_call, assistant_message brief status maybe \"Hydrating TurnTrace source\". tool_call payload: target selector? The session.hydrate@v1 tool expects payload with target selector and optional padding. According to tool contracts: session.hydrate@v1: Payload with target selector, optional padding, and hydration budgets. So we can provide {\"target\":\"S36\"} maybe also \"padding\":0? But we can keep minimal.\n\nWe also need to fill acquired_fact_ids: list of fact ids we acquire? Not yet acquired any fact id. Might be empty array. readiness_state: after tool call, maybe \"evidence_acquired\"? Or \"evidence_visible\"? The state after hydrating source maybe \"evidence_acquired\"? Actually readiness states: not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we are about to hydrate, we may not have evidence yet. After calling hydrate, we might get evidence_visible? But we haven't executed yet. The JSON shape includes \"acquired_fact_ids\":[\"<fact id>\"]; we can set empty array [].\n\nReadiness state maybe \"not_ready\" before tool call? But after tool call we will get result later. The instruction: Use this shape. Probably we should output kind: tool_call, with tool_call payload, and readiness_state maybe \"not_ready\"? But we are about to call tool to get evidence. Might set readiness_state \"evidence_visible\"? Not sure. The example: they used \"readiness_state\":\"not_ready|evidence_visible|evidence_acquired|ready_to_edit\". So we need to choose one. Since we haven't yet acquired evidence, we are not ready. So maybe \"not_ready\". But after calling tool, we will get result and then we can set readiness accordingly. However the instruction says we must return JSON only with that shape; we can set readiness_state to \"not_ready\". Let's do that.\n\nThus output:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating TurnTrace source\",\n  \"tool_call\":{\"tool_name\":\"session.hydrate\",\"payload\":{\"target\":\"S36\"}},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure no extra whitespace? It's okay. Ensure JSON only, no markdown. Provide exactly that.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773672839,
+    "id": "gen-1773672839-Kdh5Qq23vAypW5MBpiNA",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 877,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 850
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4730,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5607
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd49730df84540e-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 14:54:00 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

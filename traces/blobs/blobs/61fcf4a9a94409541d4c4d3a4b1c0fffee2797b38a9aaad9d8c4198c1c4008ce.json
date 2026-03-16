@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\":[],\n  \"assistant_message\": \"Collapsing OmittedCandidate to focus editing\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"ready_to_edit\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target\": \"[S16]\"\n    },\n    \"tool_name\": \"session.collapse\"\n  }\n}",
+          "reasoning": "We need to produce JSON with kind, assistant_message, tool_call (if tool_call), acquired_fact_ids. The current state: We are at the end of a chain of expansions and hydrations. The last mentioned tool_result is session.expand_dependents finished. The heuristic suggests collapse [S16] priority=6 candidates=1 :: Collapse symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate from working set.\n\nThus we likely need to issue a tool_call to session.collapse with target maybe the node S16? The symbol OmittedCandidate corresponds to S16? In graph frontier they refer to [S16] relation=- direction=- candidates=1 priority=120 via session.hydrate(...). Actually they said recommended frontier actions: hydrate_source [S16] ... and collapse [S16] relation=- direction=- candidates=1 priority=6 via session.export(...) or session.focus(...). Heuristic next action: collapse [S16] priority=6 candidates=1 :: Collapse symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate from working set.\n\nThus we should call session.collapse with target selector maybe the node id? They said short ids like F1, S3, D2, R1. The frontier shows [S16] which is a node id? Probably S16 is the short id for that symbol. So we should collapse that node.\n\nThus tool_call: session.collapse with payload maybe {\"target\":\"[S16]\"}? The contract: session.collapse payload includes optional target selector and include_descendants boolean. So we can send {\"target\":\"[S16]\"} maybe.\n\nWe need to return JSON with kind:\"tool_call\", assistant_message:\"<brief status>\", tool_call:{...}, acquired_fact_ids:[] (maybe none). readiness_state: after collapse maybe \"evidence_acquired\"? But they want readiness_state string: \"not_ready|evidence_visible|evidence_acquired|ready_to_edit\". Since we are about to collapse, maybe still not ready? But after collapse we might be ready to edit? The instruction: \"Return JSON only with this exact shape\". So we need to include fields: kind, assistant_message, tool_call, acquired_fact_ids, readiness_state.\n\nIf we are about to perform collapse, we haven't completed yet, so readiness_state probably \"not_ready\" or \"evidence_acquired\"? The last step we have evidence acquired? We have hydrated source etc. I think we are ready to edit after collapse? The collapse is part of focusing editing. Might be \"evidence_acquired\". But they ask to set readiness_state based on status. Probably \"evidence_acquired\" indicates we have evidence. Since we have gathered evidence, we are ready to edit. But we haven't yet collapsed; after collapse we might be ready. I'd set readiness_state:\"ready_to_edit\"? But maybe they want \"evidence_acquired\" before edit. The contract says possible values: not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we have evidence but not yet ready to edit? Actually we are about to collapse to focus editing, after that we will be ready to edit. So maybe set \"ready_to_edit\". Let's choose \"ready_to_edit\". Or \"evidence_acquired\". I'd go with \"ready_to_edit\" as next step is to edit.\n\nThus JSON:\n\n{\n \"kind\":\"tool_call\",\n \"assistant_message\":\"Collapsing OmittedCandidate to focus editing\",\n \"tool_call\":{\n   \"tool_name\":\"session.collapse\",\n   \"payload\":{\"target\":\"[S16]\"}\n },\n \"acquired_fact_ids\":[],\n \"readiness_state\":\"ready_to_edit\"\n}\n\nMake sure no extra fields. Ensure JSON is valid. No markdown.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to produce JSON with kind, assistant_message, tool_call (if tool_call), acquired_fact_ids. The current state: We are at the end of a chain of expansions and hydrations. The last mentioned tool_result is session.expand_dependents finished. The heuristic suggests collapse [S16] priority=6 candidates=1 :: Collapse symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate from working set.\n\nThus we likely need to issue a tool_call to session.collapse with target maybe the node S16? The symbol OmittedCandidate corresponds to S16? In graph frontier they refer to [S16] relation=- direction=- candidates=1 priority=120 via session.hydrate(...). Actually they said recommended frontier actions: hydrate_source [S16] ... and collapse [S16] relation=- direction=- candidates=1 priority=6 via session.export(...) or session.focus(...). Heuristic next action: collapse [S16] priority=6 candidates=1 :: Collapse symbol:crates/graphbench-core/src/artifacts.rs::OmittedCandidate from working set.\n\nThus we should call session.collapse with target selector maybe the node id? They said short ids like F1, S3, D2, R1. The frontier shows [S16] which is a node id? Probably S16 is the short id for that symbol. So we should collapse that node.\n\nThus tool_call: session.collapse with payload maybe {\"target\":\"[S16]\"}? The contract: session.collapse payload includes optional target selector and include_descendants boolean. So we can send {\"target\":\"[S16]\"} maybe.\n\nWe need to return JSON with kind:\"tool_call\", assistant_message:\"<brief status>\", tool_call:{...}, acquired_fact_ids:[] (maybe none). readiness_state: after collapse maybe \"evidence_acquired\"? But they want readiness_state string: \"not_ready|evidence_visible|evidence_acquired|ready_to_edit\". Since we are about to collapse, maybe still not ready? But after collapse we might be ready to edit? The instruction: \"Return JSON only with this exact shape\". So we need to include fields: kind, assistant_message, tool_call, acquired_fact_ids, readiness_state.\n\nIf we are about to perform collapse, we haven't completed yet, so readiness_state probably \"not_ready\" or \"evidence_acquired\"? The last step we have evidence acquired? We have hydrated source etc. I think we are ready to edit after collapse? The collapse is part of focusing editing. Might be \"evidence_acquired\". But they ask to set readiness_state based on status. Probably \"evidence_acquired\" indicates we have evidence. Since we have gathered evidence, we are ready to edit. But we haven't yet collapsed; after collapse we might be ready. I'd set readiness_state:\"ready_to_edit\"? But maybe they want \"evidence_acquired\" before edit. The contract says possible values: not_ready|evidence_visible|evidence_acquired|ready_to_edit. Since we have evidence but not yet ready to edit? Actually we are about to collapse to focus editing, after that we will be ready to edit. So maybe set \"ready_to_edit\". Let's choose \"ready_to_edit\". Or \"evidence_acquired\". I'd go with \"ready_to_edit\" as next step is to edit.\n\nThus JSON:\n\n{\n \"kind\":\"tool_call\",\n \"assistant_message\":\"Collapsing OmittedCandidate to focus editing\",\n \"tool_call\":{\n   \"tool_name\":\"session.collapse\",\n   \"payload\":{\"target\":\"[S16]\"}\n },\n \"acquired_fact_ids\":[],\n \"readiness_state\":\"ready_to_edit\"\n}\n\nMake sure no extra fields. Ensure JSON is valid. No markdown.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773671389,
+    "id": "gen-1773671389-5xxQvPlwPAHXqHqPbamr",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 883,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 857
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4765,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5648
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd473c66edbbda0-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 14:29:49 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

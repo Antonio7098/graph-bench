@@ -23,6 +23,7 @@ anyhow = "1"
 thiserror = "1"
 dotenv = "0.15"
 rand = "0.8"
+sha2 = "0.10"
 
 graphbench-core = { path = "../graphbench-core" }
 graphbench-harness = { path = "../graphbench-harness" }
