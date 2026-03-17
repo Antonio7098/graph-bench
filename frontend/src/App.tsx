@@ -2,12 +2,12 @@ import { useState } from "react";
 import type { ReactElement } from "react";
 import { RunList } from "./components/RunList";
 import { RunDetail } from "./components/RunDetail";
-import { StrategyComparison } from "./components/StrategyComparison";
 import { Leaderboard } from "./components/Leaderboard";
+import { Library } from "./components/Library";
 import { mockRuns, mockRunDetail, createMockRunDetail } from "./api/mock";
 import type { RunSummary, RunDetail as RunDetailType } from "./api/client";
 
-type View = "runs" | "detail" | "comparison" | "leaderboard";
+type View = "runs" | "detail" | "library" | "leaderboard";
 type Mode = "demo" | "live";
 
 export function App(): ReactElement {
@@ -28,14 +28,9 @@ export function App(): ReactElement {
     setRefreshKey(k => k + 1);
   };
 
-  const handleCompare = () => {
-    setCurrentView("comparison");
-  };
-
   const handleRunComplete = (runId: string) => {
     setSelectedRunId(runId);
     setCurrentView("detail");
-    setRefreshKey(k => k + 1);
   };
 
   return (
@@ -77,11 +72,11 @@ export function App(): ReactElement {
             Leaderboard
           </button>
           <button 
-            className={`nav-item ${currentView === "comparison" ? "active" : ""}`}
-            onClick={handleCompare}
+            className={`nav-item ${currentView === "library" ? "active" : ""}`}
+            onClick={() => setCurrentView("library")}
           >
-            <span className="nav-icon">⚖️</span>
-            Strategy Comparison
+            <span className="nav-icon">📚</span>
+            Library
           </button>
         </nav>
       </aside>
@@ -107,10 +102,9 @@ export function App(): ReactElement {
             detail={isDemo ? mockRunDetail : undefined}
           />
         )}
-        {currentView === "comparison" && (
-          <StrategyComparison 
+        {currentView === "library" && (
+          <Library 
             onBack={() => setCurrentView("runs")} 
-            runs={isDemo ? mockRuns : undefined}
           />
         )}
       </main>

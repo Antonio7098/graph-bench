@@ -2,6 +2,7 @@ use std::path::PathBuf;
 use std::sync::Arc;
 
 use anyhow::{Context, Result};
+use serde::{Deserialize, Serialize};
 use serde_json::{json, Value};
 
 use graphbench_core::{
@@ -11,15 +12,26 @@ use graphbench_harness::{
     ensure_python_query_runtime_ready, graph_then_targeted_lexical_read,
     graph_tools::LiveGraphState,
     observability::{
-        build_observability_bundle, BlobStore, CapturedEvent, RecordedModelInvocation,
+        build_observability_bundle, BlobStore, CapturedEvent, ObservabilityBundle,
+        RecordedModelInvocation,
     },
     openrouter::OpenRouterClient,
     HarnessEvent, HarnessInput, HarnessRunConfig, HarnessRunner, ObjectiveState, ToolRegistry,
+    TurnLedger,
 };
 use sha2::Digest;
 use tracing::{info, warn};
 
 use crate::event_stream::{now_rfc3339, EventStream, StreamEvent};
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RunOutputData {
+    pub run_id: String,
+    pub turn_ledger: TurnLedger,
+    pub observability_bundle: ObservabilityBundle,
+    pub final_state: String,
+    pub final_message: String,
+}
 
 #[derive(Debug)]
 pub struct BenchmarkConfig {
@@ -41,7 +53,7 @@ pub struct BenchmarkConfig {
 pub async fn run_benchmark(
     config: BenchmarkConfig,
     event_stream: Arc<EventStream>,
-) -> Result<(String, String)> {
+) -> Result<(String, String, RunOutputData)> {
     tokio::task::spawn_blocking(move || run_benchmark_sync(config, event_stream))
         .await
         .context("Benchmark worker task panicked")?
@@ -50,7 +62,7 @@ pub async fn run_benchmark(
 fn run_benchmark_sync(
     config: BenchmarkConfig,
     event_stream: Arc<EventStream>,
-) -> Result<(String, String)> {
+) -> Result<(String, String, RunOutputData)> {
     let run_id = config.run_id.clone();
 
     info!("[{}] Starting benchmark with config: {:?}", run_id, config);
@@ -196,13 +208,55 @@ fn run_benchmark_sync(
             publish_harness_event(&event_stream_clone, &run_id_clone, event);
         });
 
-    let output = runner.execute(&input).context("Harness execution failed")?;
+    // Execute with retry
+    let max_retries = 3;
+    let mut last_error = None;
+    let mut output = None;
+    
+    for attempt in 1..=max_retries {
+        match runner.execute(&input) {
+            Ok(result) => {
+                output = Some(result);
+                break;
+            }
+            Err(e) => {
+                let error_msg = format!("{}", e);
+                last_error = Some(error_msg.clone());
+                
+                // Check if it's a transient error worth retrying
+                let is_transient = error_msg.contains("failed to parse")
+                    || error_msg.contains("timeout")
+                    || error_msg.contains("rate limit")
+                    || error_msg.contains("429")
+                    || error_msg.contains("500")
+                    || error_msg.contains("502")
+                    || error_msg.contains("503");
+                
+                if is_transient && attempt < max_retries {
+                    let backoff_ms = (attempt * attempt) * 1000; // 1s, 4s, 9s
+                    info!("[{}] Attempt {}/{} failed: {}. Retrying in {}ms...", run_id, attempt, max_retries, error_msg, backoff_ms);
+                    publish_system_event(
+                        &event_stream,
+                        &run_id,
+                        "harness",
+                        "run.retrying",
+                        "warn",
+                        &format!("Attempt {}/{} failed, retrying in {}ms", attempt, max_retries, backoff_ms),
+                        None,
+                        None,
+                        None,
+                        json!({ "attempt": attempt, "error": error_msg, "backoff_ms": backoff_ms }),
+                    );
+                    std::thread::sleep(std::time::Duration::from_millis(backoff_ms));
+                } else {
+                    break;
+                }
+            }
+        }
+    }
+    
+    let output = output.ok_or_else(|| anyhow::anyhow!("All {} retries failed: {}", max_retries, last_error.unwrap_or_else(|| "unknown error".to_string())))?;
 
-    let trace_path = PathBuf::from(format!("traces/{}.json", input.run_id));
-    output
-        .turn_ledger
-        .save(&trace_path)
-        .context("Failed to save turn ledger")?;
     output
         .turn_ledger
         .replay_validate()
@@ -225,28 +279,22 @@ fn run_benchmark_sync(
     )
     .context("Failed to build observability bundle")?;
 
-    let observability_path = PathBuf::from(format!("traces/{}.observability.json", input.run_id));
-    bundle
-        .save(&observability_path)
-        .context("Failed to save observability bundle")?;
-    bundle.validate(".").context("Observability validation failed")?;
-
-    let structured_logs_path = PathBuf::from(format!("traces/{}.events.jsonl", input.run_id));
-    bundle
-        .save_structured_logs_jsonl(&structured_logs_path)
-        .context("Failed to save structured logs")?;
+    let run_data = RunOutputData {
+        run_id: input.run_id.clone(),
+        turn_ledger: output.turn_ledger,
+        observability_bundle: bundle,
+        final_state: format!("{:?}", output.final_state),
+        final_message: output.final_message.clone(),
+    };
 
     let final_message = format!(
-        "run_id={}\ntrace={}\nobservability={}\nstructured_logs={}\nfinal_state={:?}\nfinal_message={}",
+        "run_id={}\nfinal_state={:?}\nfinal_message={}",
         input.run_id,
-        trace_path.display(),
-        observability_path.display(),
-        structured_logs_path.display(),
         output.final_state,
         output.final_message
     );
 
-    Ok((run_id, final_message))
+    Ok((run_id, final_message, run_data))
 }
 
 fn record_event(
@@ -317,6 +365,18 @@ fn publish_harness_event(event_stream: &EventStream, run_id: &str, event: &Harne
             "turn.started",
             "info",
             &format!("Turn {} started", turn_index),
+            Some(*turn_index),
+            None,
+            None,
+            details,
+        ),
+        HarnessEvent::TurnCompleted { turn_index, .. } => publish_system_event(
+            event_stream,
+            run_id,
+            "harness",
+            "turn.completed",
+            "info",
+            &format!("Turn {} completed", turn_index),
             Some(*turn_index),
             None,
             None,

@@ -78,11 +78,6 @@ async fn main() -> anyhow::Result<()> {
     let app = Router::new()
         .merge(run_routes())
         .route("/ws", axum::routing::get(ws_handler))
-        .route("/api/strategies", axum::routing::get(api::list_strategies))
-        .route("/api/strategies/:id", axum::routing::get(api::get_strategy))
-        .route("/api/tasks", axum::routing::get(api::list_tasks))
-        .route("/api/tasks/:id", axum::routing::get(api::get_task))
-        .route("/api/fixtures", axum::routing::get(api::list_fixtures))
         .layer(cors)
         .with_state(state);
 

@@ -155,6 +155,9 @@ pub enum HarnessEvent {
         turn_index: u32,
         state: RuntimeLoopState,
     },
+    TurnCompleted {
+        turn_index: u32,
+    },
     PromptAssembled {
         turn_index: u32,
         prompt_hash: String,
@@ -427,7 +430,18 @@ impl<'a, M: ModelClient> HarnessRunner<'a, M> {
                             tool_name: canonical_tool_name.clone(),
                             error: error.to_string(),
                         });
-                        return Err(error);
+                        // Instead of failing the run, emit a tool error result and continue
+                        // This allows the model to try a different tool on the next turn
+                        stream.push(RuntimeStreamItem::tool_call(
+                            canonical_tool_name.clone(),
+                            tool_call.payload.clone(),
+                        ));
+                        stream.push(RuntimeStreamItem::tool_result(
+                            canonical_tool_name.clone(),
+                            serde_json::Value::String(format!("Tool invocation failed: {}", error)),
+                        ));
+                        // Continue to next iteration of the loop instead of returning error
+                        continue;
                     }
                 };
                 tool_traces.push(result.trace.clone());
@@ -543,6 +557,8 @@ impl<'a, M: ModelClient> HarnessRunner<'a, M> {
                 replay_hash: sha256_string(&render_prompt(&sections)),
             };
             ledger.push(entry)?;
+
+            self.emit(HarnessEvent::TurnCompleted { turn_index });
 
             if state == RuntimeLoopState::Done {
                 break;

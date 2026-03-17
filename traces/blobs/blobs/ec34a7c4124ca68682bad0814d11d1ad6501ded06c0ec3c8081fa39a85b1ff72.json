@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\": [],\n  \"assistant_message\": \"Hydrating TurnTrace#516 to obtain schema version evidence\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"not_ready\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target\": \"symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace#516\"\n    },\n    \"tool_name\": \"session.hydrate@v1\"\n  }\n}",
+          "reasoning": "We need to produce JSON with fields: kind, assistant_message, tool_call (if kind tool_call), acquired_fact_ids, readiness_state. We need to follow rules. The context: we are in GraphBench runtime, need to gather evidence before editing schema definitions. The active code windows none. The history shows many steps already performed: expanded file, hydrated, etc. The frontier suggests hydrate_source for symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace#516. So next action likely to hydrate that symbol. Use tool session.hydrate@v1 with payload targeting that symbol. We need to return JSON only. The kind should be \"tool_call\" because we need to make a tool call. The payload must be exactly the tool name and payload JSON. The tool_name must be exactly \"session.hydrate@v1\". The payload should include target selector. According to frontier: hydrate_source [S37] relation=- direction=- candidates=1 priority=121 via session.hydrate(...). So we need to call session.hydrate with target selector for that symbol. The selector likely is something like \"symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace#516\". Use that as target. The payload format? Not fully specified, but likely just {\"target\":\"symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace#516\"} maybe plus other optional fields. We can include just target. The acquired_fact_ids: we may need to list fact ids we acquire after tool call? But we haven't executed yet; we are about to call tool. The schema expects acquired_fact_ids array. Since we haven't acquired yet, maybe we can leave empty array? The readiness_state should be \"not_ready\" maybe? Or \"evidence_visible\"? The instruction says responses must be schema-valid. The readiness_state can be one of: \"not_ready|evidence_visible|evidence_acquired|ready_to_edit\". Since we haven't acquired evidence yet, maybe \"not_ready\". But we are about to call tool to hydrate, which will acquire evidence. The readiness_state likely \"not_ready\". The assistant_message should be brief status. Something like \"Calling hydrate for TurnTrace#516\". The JSON must not include markdown fences.\n\nThus output:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating TurnTrace#516 to obtain schema version evidence\",\n  \"tool_call\":{\"tool_name\":\"session.hydrate@v1\",\"payload\":{\"target\":\"symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace#516\"}},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nCheck fields: kind, assistant_message, tool_call, acquired_fact_ids, readiness_state. tool_call must have tool_name and payload. Payload can be any JSON. Ensure no extra fields. No extra keys. Ensure no extra prose. Provide exactly JSON.\n\nMake sure no trailing commas. Provide as plain JSON.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to produce JSON with fields: kind, assistant_message, tool_call (if kind tool_call), acquired_fact_ids, readiness_state. We need to follow rules. The context: we are in GraphBench runtime, need to gather evidence before editing schema definitions. The active code windows none. The history shows many steps already performed: expanded file, hydrated, etc. The frontier suggests hydrate_source for symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace#516. So next action likely to hydrate that symbol. Use tool session.hydrate@v1 with payload targeting that symbol. We need to return JSON only. The kind should be \"tool_call\" because we need to make a tool call. The payload must be exactly the tool name and payload JSON. The tool_name must be exactly \"session.hydrate@v1\". The payload should include target selector. According to frontier: hydrate_source [S37] relation=- direction=- candidates=1 priority=121 via session.hydrate(...). So we need to call session.hydrate with target selector for that symbol. The selector likely is something like \"symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace#516\". Use that as target. The payload format? Not fully specified, but likely just {\"target\":\"symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace#516\"} maybe plus other optional fields. We can include just target. The acquired_fact_ids: we may need to list fact ids we acquire after tool call? But we haven't executed yet; we are about to call tool. The schema expects acquired_fact_ids array. Since we haven't acquired yet, maybe we can leave empty array? The readiness_state should be \"not_ready\" maybe? Or \"evidence_visible\"? The instruction says responses must be schema-valid. The readiness_state can be one of: \"not_ready|evidence_visible|evidence_acquired|ready_to_edit\". Since we haven't acquired evidence yet, maybe \"not_ready\". But we are about to call tool to hydrate, which will acquire evidence. The readiness_state likely \"not_ready\". The assistant_message should be brief status. Something like \"Calling hydrate for TurnTrace#516\". The JSON must not include markdown fences.\n\nThus output:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating TurnTrace#516 to obtain schema version evidence\",\n  \"tool_call\":{\"tool_name\":\"session.hydrate@v1\",\"payload\":{\"target\":\"symbol:crates/graphbench-core/src/artifacts.rs::TurnTrace#516\"}},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nCheck fields: kind, assistant_message, tool_call, acquired_fact_ids, readiness_state. tool_call must have tool_name and payload. Payload can be any JSON. Ensure no extra fields. No extra keys. Ensure no extra prose. Provide exactly JSON.\n\nMake sure no trailing commas. Provide as plain JSON.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773679807,
+    "id": "gen-1773679807-jbQ5OYJroA9goHaDVeS4",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 752,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 693
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4753,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5505
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd5414c0edf77a1-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 16:50:07 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

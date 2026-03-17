@@ -3,11 +3,11 @@ use crate::runtime::{
 };
 use crate::tools::ToolCallTrace;
 use graphbench_core::artifacts::{
-    RunManifest, RunSchemaVersionSet, TURN_TRACE_SCHEMA_VERSION, TelemetryCounts,
+    RunManifest, RunSchemaVersionSet, TelemetryCounts, TURN_TRACE_SCHEMA_VERSION,
 };
 use graphbench_core::error::{AppError, ErrorCode, ErrorContext};
 use serde::{Deserialize, Serialize};
-use serde_json::{Value, json};
+use serde_json::{json, Value};
 use sha2::{Digest, Sha256};
 use std::fs;
 use std::io::Write;
@@ -527,6 +527,7 @@ fn event_name(event: &HarnessEvent) -> &'static str {
     match event {
         HarnessEvent::RunStarted { .. } => "run.started",
         HarnessEvent::TurnStarted { .. } => "turn.started",
+        HarnessEvent::TurnCompleted { .. } => "turn.completed",
         HarnessEvent::PromptAssembled { .. } => "prompt.assembled",
         HarnessEvent::ModelRequestSent { .. } => "model.request_sent",
         HarnessEvent::ModelResponseReceived { .. } => "model.response_received",
@@ -558,6 +559,7 @@ fn event_component(event: &HarnessEvent) -> &'static str {
         HarnessEvent::ReadinessChanged { .. } | HarnessEvent::EvidenceMatched { .. } => "scoring",
         HarnessEvent::RunStarted { .. }
         | HarnessEvent::TurnStarted { .. }
+        | HarnessEvent::TurnCompleted { .. }
         | HarnessEvent::PromptAssembled { .. }
         | HarnessEvent::RunCompleted { .. }
         | HarnessEvent::RunFailed { .. } => "harness",
@@ -567,6 +569,7 @@ fn event_component(event: &HarnessEvent) -> &'static str {
 fn event_turn_index(event: &HarnessEvent) -> Option<u32> {
     match event {
         HarnessEvent::TurnStarted { turn_index, .. }
+        | HarnessEvent::TurnCompleted { turn_index, .. }
         | HarnessEvent::PromptAssembled { turn_index, .. }
         | HarnessEvent::ModelRequestSent { turn_index }
         | HarnessEvent::ModelResponseReceived { turn_index, .. }

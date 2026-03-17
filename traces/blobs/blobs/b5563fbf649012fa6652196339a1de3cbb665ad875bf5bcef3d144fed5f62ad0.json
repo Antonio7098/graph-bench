@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\":[\"S37\"],\n  \"assistant_message\":\"Hydrating definition of TURN_TRACE_SCHEMA_VERSION\",\n  \"kind\":\"tool_call\",\n  \"readiness_state\":\"not_ready\",\n  \"tool_call\":{\n    \"payload\":{\n      \"target\":\"TURN_TRACE_SCHEMA_VERSION\"\n    },\n    \"tool_name\":\"session.hydrate@v1\"\n  }\n}",
+          "reasoning": "We need to respond with JSON only, with kind think|tool_call|complete etc. The task is \"Gather the exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned.\" They are preparing to edit. We need to follow strategy: graph.targeted-lexical-read@v1. We need to locate exact evidence: they searched for definition of TURN_TRACE_SCHEMA_VERSION. They have tool_result graph.find@v1 {status:ok,path:,line_count:0,match_count:1,fields:[matches,status]}. So they found matches? Not sure what matches contain. Probably they found some matches but not full text. We likely need to read the file where the definition is. Use session.expand_file or session.hydrate? The strategy: prefer graph discovery then lexical reads only when exact proof is blocking. They are blocked by needing exact evidence of schema version constant definition. So we need to perform a lexical read (session.hydrate?) maybe session.hydrate on the symbol where definition resides. The symbol likely is something like TURN_TRACE_SCHEMA_VERSION defined somewhere, maybe in a const file. We need to locate it. They used graph.find to locate matches, got match_count:1. We need to get the exact text. Use session.hydrate with selector of that match? The selector could be something like \"TURN_TRACE_SCHEMA_VERSION\" maybe in a file. Use session.hydrate with target selector equal to that identifier? The tool session.hydrate takes a selector string. They previously used session.hydrate with target field but didn't get result? They might need to hydrate the file containing definition. Let's assume they need to hydrate the file where TURN_TRACE_SCHEMA_VERSION is defined, maybe in artifacts.rs or a consts file. Use session.hydrate with selector \"TURN_TRACE_SCHEMA_VERSION\". That will hydrate the symbol and provide its source. Then we can read the exact definition. Then acquire fact ids of the evidence read.\n\nThus we need to output a tool_call with tool_name \"session.hydrate@v1\" and payload containing selector maybe \"TURN_TRACE_SCHEMA_VERSION\". Also we need to provide acquired_fact_ids: list of fact ids we will acquire. We don't have them yet; we can include placeholder like maybe we will acquire after reading. But we must include acquired_fact_ids array with fact ids we plan to acquire? The schema says acquired_fact_ids:[\"<fact id>\"]; we need to provide actual ids? We haven't assigned fact ids. Maybe we can use placeholder like \"S37\"? Actually earlier graph frontier mentions [S37] relation=- ... but not sure. The symbol maybe has logical key S37? The frontier says \"hyrdate_source [S37] relation=- direction=- candidates=0 priority=120 via session.hydrate(...)\". So the hydrate target is [S37]. So maybe the fact id is S37. Use acquired_fact_ids: [\"S37\"].\n\nReadiness state: evidence_acquired? They haven't yet acquired evidence, but after tool call they will. Since we are about to call tool, readiness should be \"not_ready\" or \"evidence_visible\"? Actually before tool call, we are not ready to edit. So readiness_state likely \"not_ready\". Or \"evidence_visible\"? But they haven't read yet. We'll set readiness_state \"not_ready\". The assistant_message should be brief status.\n\nThus JSON shape:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating definition of TURN_TRACE_SCHEMA_VERSION\",\n  \"tool_call\":{\n    \"tool_name\":\"session.hydrate@v1\",\n    \"payload\":{}\n  },\n  \"acquired_fact_ids\":[\"S37\"],\n  \"readiness_state\":\"not_ready\"\n}\n\nBut payload must include selector etc. According to session.hydrate@v1 contract: Payload with target selector, optional padding, and hydration budgets. So we need to include \"target\":\"TURN_TRACE_SCHEMA_VERSION\"? Or maybe the selector is the symbol path? Usually you use selector string that resolves to node. Could be \"TURN_TRACE_SCHEMA_VERSION\". We'll include {\"target\":\"TURN_TRACE_SCHEMA_VERSION\"}.\n\nThus payload: {\"target\":\"TURN_TRACE_SCHEMA_VERSION\"}.\n\nMake sure JSON is valid, no extra fields.\n\nThus final output.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to respond with JSON only, with kind think|tool_call|complete etc. The task is \"Gather the exact evidence needed before editing schema definitions so fixture, task, evidence, trace, score, and run artifacts stay versioned and aligned.\" They are preparing to edit. We need to follow strategy: graph.targeted-lexical-read@v1. We need to locate exact evidence: they searched for definition of TURN_TRACE_SCHEMA_VERSION. They have tool_result graph.find@v1 {status:ok,path:,line_count:0,match_count:1,fields:[matches,status]}. So they found matches? Not sure what matches contain. Probably they found some matches but not full text. We likely need to read the file where the definition is. Use session.expand_file or session.hydrate? The strategy: prefer graph discovery then lexical reads only when exact proof is blocking. They are blocked by needing exact evidence of schema version constant definition. So we need to perform a lexical read (session.hydrate?) maybe session.hydrate on the symbol where definition resides. The symbol likely is something like TURN_TRACE_SCHEMA_VERSION defined somewhere, maybe in a const file. We need to locate it. They used graph.find to locate matches, got match_count:1. We need to get the exact text. Use session.hydrate with selector of that match? The selector could be something like \"TURN_TRACE_SCHEMA_VERSION\" maybe in a file. Use session.hydrate with target selector equal to that identifier? The tool session.hydrate takes a selector string. They previously used session.hydrate with target field but didn't get result? They might need to hydrate the file containing definition. Let's assume they need to hydrate the file where TURN_TRACE_SCHEMA_VERSION is defined, maybe in artifacts.rs or a consts file. Use session.hydrate with selector \"TURN_TRACE_SCHEMA_VERSION\". That will hydrate the symbol and provide its source. Then we can read the exact definition. Then acquire fact ids of the evidence read.\n\nThus we need to output a tool_call with tool_name \"session.hydrate@v1\" and payload containing selector maybe \"TURN_TRACE_SCHEMA_VERSION\". Also we need to provide acquired_fact_ids: list of fact ids we will acquire. We don't have them yet; we can include placeholder like maybe we will acquire after reading. But we must include acquired_fact_ids array with fact ids we plan to acquire? The schema says acquired_fact_ids:[\"<fact id>\"]; we need to provide actual ids? We haven't assigned fact ids. Maybe we can use placeholder like \"S37\"? Actually earlier graph frontier mentions [S37] relation=- ... but not sure. The symbol maybe has logical key S37? The frontier says \"hyrdate_source [S37] relation=- direction=- candidates=0 priority=120 via session.hydrate(...)\". So the hydrate target is [S37]. So maybe the fact id is S37. Use acquired_fact_ids: [\"S37\"].\n\nReadiness state: evidence_acquired? They haven't yet acquired evidence, but after tool call they will. Since we are about to call tool, readiness should be \"not_ready\" or \"evidence_visible\"? Actually before tool call, we are not ready to edit. So readiness_state likely \"not_ready\". Or \"evidence_visible\"? But they haven't read yet. We'll set readiness_state \"not_ready\". The assistant_message should be brief status.\n\nThus JSON shape:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Hydrating definition of TURN_TRACE_SCHEMA_VERSION\",\n  \"tool_call\":{\n    \"tool_name\":\"session.hydrate@v1\",\n    \"payload\":{}\n  },\n  \"acquired_fact_ids\":[\"S37\"],\n  \"readiness_state\":\"not_ready\"\n}\n\nBut payload must include selector etc. According to session.hydrate@v1 contract: Payload with target selector, optional padding, and hydration budgets. So we need to include \"target\":\"TURN_TRACE_SCHEMA_VERSION\"? Or maybe the selector is the symbol path? Usually you use selector string that resolves to node. Could be \"TURN_TRACE_SCHEMA_VERSION\". We'll include {\"target\":\"TURN_TRACE_SCHEMA_VERSION\"}.\n\nThus payload: {\"target\":\"TURN_TRACE_SCHEMA_VERSION\"}.\n\nMake sure JSON is valid, no extra fields.\n\nThus final output.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773679820,
+    "id": "gen-1773679820-rvRgkUfXtACaDcPXtHmm",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 1012,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 1024
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 5423,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 6435
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd5419d9e6577a1-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 16:50:21 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import type { ReactElement } from "react";
-import { apiClient, type RunDetail as RunDetailType, type TurnTrace } from "../api/client";
+import { apiClient, type RunDetail as RunDetailType, type TurnTrace, type RunEvent } from "../api/client";
+import { Button } from "./Button";
 
 interface RunDetailProps {
   runId: string;
@@ -8,7 +9,7 @@ interface RunDetailProps {
   detail?: RunDetailType;
 }
 
-type Tab = "overview" | "timeline" | "evidence" | "graph" | "omissions";
+type Tab = "overview" | "timeline" | "evidence" | "graph" | "omissions" | "stream";
 
 interface ModalState {
   isOpen: boolean;
@@ -270,11 +271,79 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
   const [showGraphView, setShowGraphView] = useState(false);
   const [graphTurnIndex, setGraphTurnIndex] = useState<number | null>(null);
   const isDemo = !!propDetail;
+  
+  // Live streaming state
+  const [streamEvents, setStreamEvents] = useState<RunEvent[]>([]);
+  const [runStatus, setRunStatus] = useState<"running" | "completed" | "failed" | null>(null);
+  const streamEventsRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (!isDemo) {
       loadRunDetail();
     }
+  }, [runId, isDemo]);
+
+  // Poll for events and status during run
+  useEffect(() => {
+    if (isDemo) return;
+    
+    let intervalId: ReturnType<typeof setInterval>;
+    let lastSeq = 0;
+    const isRunning = { current: true };
+    
+    async function pollEvents() {
+      if (!isRunning.current) return;
+      
+      try {
+        const events = await apiClient.getRunEvents(runId, lastSeq || undefined);
+        if (!isRunning.current) return;
+        
+        if (events.length > 0) {
+          setStreamEvents(prev => {
+            const existingSeqs = new Set(prev.map(e => e.seq));
+            const newEvents = events.filter(e => !existingSeqs.has(e.seq));
+            return [...prev, ...newEvents];
+          });
+          const latestEvent = events[events.length - 1];
+          if (latestEvent) {
+            lastSeq = latestEvent.seq;
+            if (latestEvent.event_type === "run.completed" || latestEvent.event_type === "run.failed") {
+              isRunning.current = false;
+              setRunStatus(latestEvent.event_type === "run.completed" ? "completed" : "failed");
+              loadRunDetail();
+            } else if (!runStatus) {
+              setRunStatus("running");
+            }
+          }
+        } else if (streamEvents.length === 0) {
+          const runs = await apiClient.listRuns();
+          const thisRun = runs.find(r => r.run_id === runId);
+          if (thisRun?.status && isRunning.current) {
+            if (thisRun.status === "completed" || thisRun.status === "failed") {
+              isRunning.current = false;
+              setRunStatus(thisRun.status as "completed" | "failed");
+              loadRunDetail();
+            } else {
+              setRunStatus("running");
+            }
+          }
+        }
+        
+        if (isRunning.current) {
+          streamEventsRef.current?.scrollIntoView({ behavior: "smooth" });
+        }
+      } catch {
+        // Silently ignore polling errors
+      }
+    }
+    
+    pollEvents();
+    intervalId = setInterval(pollEvents, 2000);
+    
+    return () => {
+      isRunning.current = false;
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [runId, isDemo]);
 
   async function loadRunDetail() {
@@ -292,6 +361,53 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
 
   function openModal(title: string, content: string) {
     setModal({ isOpen: true, title, content });
+  }
+
+  function openTurnFromEvent(turnIndex: number | null | undefined) {
+    if (turnIndex === null || turnIndex === undefined) return;
+    const turn = turns.find(t => t.turn_index === turnIndex);
+    if (!turn) {
+      openModal(`Turn ${turnIndex}`, "Turn data not yet available. The turn may still be in progress.");
+      return;
+    }
+    const content = `=== Turn ${turn.turn_index} ===
+
+State: ${turn.readiness_state}
+Readiness Reason: ${turn.readiness_reason || "N/A"}
+
+--- Telemetry ---
+Prompt Bytes: ${turn.telemetry.prompt_bytes}
+Prompt Tokens: ${turn.telemetry.prompt_tokens}
+Latency: ${turn.telemetry.latency_ms}ms
+Tool Calls: ${turn.telemetry.tool_calls}
+
+--- Request ---
+Prompt Version: ${turn.request.prompt_version}
+Prompt Hash: ${turn.request.prompt_hash}
+Context Hash: ${turn.request.context_hash}
+
+--- Response ---
+Provider: ${turn.response.provider}
+Model: ${turn.response.model_slug}
+Validated: ${turn.response.validated ? "Yes" : "No"}
+
+--- Selected Context Objects (${turn.selection.selected_context_objects.length}) ---
+${turn.selection.selected_context_objects.join('\n')}
+
+--- Omitted Candidates (${turn.selection.omitted_candidates.length}) ---
+${turn.selection.omitted_candidates.map(o => `${o.candidate_id}: ${o.reason}`).join('\n') || "None"}
+
+--- Evidence Delta (${turn.evidence_delta.length}) ---
+${turn.evidence_delta.join('\n')}
+
+--- Hashes ---
+Turn Hash: ${turn.hashes.turn_hash}
+
+${turn.tool_calls && turn.tool_calls.length > 0 ? `--- Tool Calls (${turn.tool_calls.length}) ---
+${turn.tool_calls.map((tc, i) => `### Tool ${i + 1}: ${tc.tool_name}
+Payload: ${JSON.stringify(tc.payload, null, 2)}
+Result: ${tc.result || "(no result)"}`).join('\n\n')}` : "--- Tool Calls ---\nNo tool calls"}`;
+    openModal(`Turn ${turn.turn_index}`, content);
   }
 
   async function openStrategyModal() {
@@ -378,7 +494,7 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
     return (
       <>
         <header className="content-header">
-          <button className="nav-item" onClick={onBack}>← Back</button>
+          <Button variant="ghost" onClick={onBack}>← Back</Button>
         </header>
         <div className="content-body">
           <div className="loading"><div className="spinner" /></div>
@@ -391,7 +507,7 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
     return (
       <>
         <header className="content-header">
-          <button className="nav-item" onClick={onBack}>← Back</button>
+          <Button variant="ghost" onClick={onBack}>← Back</Button>
         </header>
         <div className="content-body">
           <div className="empty-state">
@@ -417,6 +533,15 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
       </header>
 
       <div className="tabs">
+        {runStatus === "running" && (
+          <button 
+            className={`tab ${activeTab === "stream" ? "active" : ""}`}
+            onClick={() => setActiveTab("stream")}
+            style={{ color: "#10b981", fontWeight: "bold" }}
+          >
+            Live Stream {streamEvents.length > 0 && `(${streamEvents.length})`}
+          </button>
+        )}
         <button 
           className={`tab ${activeTab === "overview" ? "active" : ""}`}
           onClick={() => setActiveTab("overview")}
@@ -450,6 +575,75 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
       </div>
 
       <div className="content-body">
+        {activeTab === "stream" && (
+          <div className="fade-in">
+            <div className="card" style={{ marginBottom: "1rem" }}>
+              <div className="card-header">
+                <h3 className="card-title">
+                  Live Event Stream 
+                  {runStatus === "running" && <span style={{ color: "#10b981", marginLeft: "0.5rem" }}>● Running</span>}
+                  {runStatus === "completed" && <span style={{ color: "#3b82f6", marginLeft: "0.5rem" }}>● Completed</span>}
+                  {runStatus === "failed" && <span style={{ color: "#ef4444", marginLeft: "0.5rem" }}>● Failed</span>}
+                </h3>
+              </div>
+              <div className="card-body">
+                <div style={{ display: "flex", gap: "2rem", marginBottom: "1rem", padding: "0.75rem", background: "var(--color-bg-secondary)", borderRadius: "8px" }}>
+                  <div>
+                    <div className="section-title">Started</div>
+                    <div>{new Date(manifest.started_at).toLocaleString()}</div>
+                  </div>
+                  <div>
+                    <div className="section-title">Duration</div>
+                    <div>{manifest.completed_at ? 
+                      `${Math.round((new Date(manifest.completed_at).getTime() - new Date(manifest.started_at).getTime()) / 1000)}s` :
+                      `${Math.round((Date.now() - new Date(manifest.started_at).getTime()) / 1000)}s (ongoing)`
+                    }</div>
+                  </div>
+                  <div>
+                    <div className="section-title">Turns</div>
+                    <div>{Math.max(...streamEvents.map(e => e.turn_index ?? -1), data?.turns.length ?? 0 - 1) + 1}</div>
+                  </div>
+                  <div>
+                    <div className="section-title">Tool Calls</div>
+                    <div>{streamEvents.filter(e => e.event_type === "tool.completed").length}</div>
+                  </div>
+                  <div>
+                    <div className="section-title">Events</div>
+                    <div>{streamEvents.length}</div>
+                  </div>
+                </div>
+                
+                <div style={{ maxHeight: "60vh", overflowY: "auto", background: "var(--color-bg-secondary)", borderRadius: "8px", padding: "0.75rem", fontFamily: "monospace", fontSize: "0.8rem" }}>
+                  {streamEvents.length === 0 ? (
+                    <div style={{ color: "var(--color-text-muted)", textAlign: "center", padding: "2rem" }}>Waiting for events...</div>
+                  ) : (
+                    streamEvents.slice(-100).map((event, idx) => (
+                      <div 
+                        key={idx} 
+                        style={{ 
+                          padding: "0.25rem 0", 
+                          borderBottom: "1px solid var(--color-border)", 
+                          color: event.level === "error" ? "#ef4444" : event.event_type?.includes("completed") ? "#10b981" : event.event_type?.includes("started") ? "#3b82f6" : "var(--color-text)",
+                          cursor: event.turn_index !== undefined && event.turn_index !== null ? "pointer" : "default",
+                        }}
+                        onClick={() => openTurnFromEvent(event.turn_index)}
+                      >
+                        <span style={{ color: "var(--color-text-muted)", marginRight: "0.5rem" }}>[{new Date(event.captured_at).toLocaleTimeString()}]</span>
+                        <span style={{ color: "#8b5cf6", marginRight: "0.5rem" }}>{event.component}</span>
+                        <span style={{ fontWeight: "bold", marginRight: "0.5rem" }}>{event.event_type}</span>
+                        {event.turn_index !== undefined && event.turn_index !== null && <span style={{ color: "#f59e0b", marginRight: "0.5rem" }}>[turn {event.turn_index}]</span>}
+                        {event.tool_name && <span style={{ color: "#06b6d4", marginRight: "0.5rem" }}>{event.tool_name}</span>}
+                        <span>{event.message}</span>
+                      </div>
+                    ))
+                  )}
+                  <div ref={streamEventsRef} />
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+        
         {activeTab === "overview" && (
           <div className="fade-in">
             <div className="card" style={{ marginBottom: "1.5rem" }}>
@@ -535,33 +729,40 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
                   
                   <div style={{ marginTop: "1.5rem" }}>
                     <div className="section-title">Metrics</div>
-                    <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginTop: "0.75rem" }}>
-                      <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                        <span className="metric-label">Evidence Recall</span>
-                        <span className="metric-value">{(score_report.metrics.required_evidence_recall * 100).toFixed(1)}%</span>
-                      </div>
-                      <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                        <span className="metric-label">Evidence Precision</span>
-                        <span className="metric-value">{(score_report.metrics.evidence_precision * 100).toFixed(1)}%</span>
-                      </div>
-                      <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                        <span className="metric-label">Irrelevant Material</span>
-                        <span className="metric-value">{(score_report.metrics.irrelevant_material_ratio * 100).toFixed(1)}%</span>
-                      </div>
-                      <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                        <span className="metric-label">Turns to Ready</span>
-                        <span className="metric-value">{score_report.metrics.turns_to_readiness}</span>
-                      </div>
-                      <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                        <span className="metric-label">Reread Count</span>
-                        <span className="metric-value">{score_report.metrics.reread_count}</span>
-                      </div>
-                      <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                        <span className="metric-label">Post-Ready Drift</span>
-                        <span className="metric-value">{score_report.metrics.post_readiness_drift_turns}</span>
+                      {score_report && score_report.metrics && (
+                        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginTop: "0.75rem" }}>
+                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                            <span className="metric-label">Evidence Recall</span>
+                            <span className="metric-value">{((score_report.metrics.required_evidence_recall ?? 0) * 100).toFixed(1)}%</span>
+                          </div>
+                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                            <span className="metric-label">Evidence Precision</span>
+                            <span className="metric-value">{((score_report.metrics.evidence_precision ?? 0) * 100).toFixed(1)}%</span>
+                          </div>
+                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                            <span className="metric-label">Irrelevant Material</span>
+                            <span className="metric-value">{((score_report.metrics.irrelevant_material_ratio ?? 0) * 100).toFixed(1)}%</span>
+                          </div>
+                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                            <span className="metric-label">Turns to Ready</span>
+                            <span className="metric-value">{score_report.metrics.turns_to_readiness ?? "N/A"}</span>
+                          </div>
+                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                            <span className="metric-label">Reread Count</span>
+                            <span className="metric-value">{score_report.metrics.reread_count}</span>
+                          </div>
+                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                            <span className="metric-label">Post-Ready Drift</span>
+                            <span className="metric-value">{score_report.metrics.post_readiness_drift_turns}</span>
+                          </div>
+                        </div>
+                      )}
+
+                      <div className="section-title" style={{ marginTop: "1rem" }}>Run Results</div>
+                      <div style={{ display: "flex", gap: "1rem", marginTop: "0.5rem" }}>
+                        <div>Status: <span className={runStatus === "completed" ? "score-excellent" : runStatus === "failed" ? "score-poor" : ""}>{runStatus || "unknown"}</span></div>
                       </div>
                     </div>
-                  </div>
                 </div>
               </div>
             )}

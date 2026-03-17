@@ -2,6 +2,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import type { ReactElement } from "react";
 import { apiClient, type RunSummary, type RunFilter } from "../api/client";
 import { mockRuns } from "../api/mock";
+import { Button } from "./Button";
 
 interface RunListProps {
   onSelectRun: (runId: string) => void;
@@ -58,9 +59,9 @@ export function RunList({ onSelectRun, onRunComplete, runs: propRuns }: RunListP
     <>
       <header className="content-header">
         <h2 className="content-title">Runs</h2>
-        <button className="btn-primary" onClick={() => setShowRunModal(true)}>
+        <Button variant="primary" onClick={() => setShowRunModal(true)}>
           Run Benchmark
-        </button>
+        </Button>
       </header>
       
       <div className="filter-bar">
@@ -138,7 +139,13 @@ export function RunList({ onSelectRun, onRunComplete, runs: propRuns }: RunListP
                   </div>
                 </div>
                 <div style={{ display: "flex", alignItems: "center", gap: "1rem" }}>
-                  <span className={`run-outcome ${run.outcome}`}>{run.outcome}</span>
+                  {run.status === "running" ? (
+                    <span style={{ color: "#10b981", fontWeight: "bold" }}>● Running</span>
+                  ) : run.status === "failed" ? (
+                    <span className="run-outcome failure">Failed</span>
+                  ) : (
+                    <span className={`run-outcome ${run.outcome}`}>{run.outcome}</span>
+                  )}
                   <span style={{ fontSize: "0.75rem", color: "var(--color-text-muted)" }}>
                     {formatDate(run.started_at)}
                   </span>
@@ -355,8 +362,9 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
         setCurrentRunId(result.run_id);
         addLog(`Run initialized: ${result.run_id}`, "info");
         
-        addLog('Connecting to live events...', "info");
-        connectToWebSocket(result.run_id);
+        // Navigate immediately to run detail page
+        addLog('Navigating to run page...', "info");
+        onRunComplete(result.run_id);
       } else {
         addLog(`✗ Run failed`, "error");
         addLog(result.output || 'Unknown error', "error");
@@ -561,21 +569,21 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
 
         <div className="modal-footer">
           {status !== "idle" && status !== "running" && (
-            <button className="modal-btn" onClick={() => { setLogs([]); setStatus("idle"); }}>
+            <Button variant="secondary" onClick={() => { setLogs([]); setStatus("idle"); }}>
               New Run
-            </button>
+            </Button>
           )}
-          <button 
-            className="modal-btn" 
+          <Button 
+            variant="secondary" 
             onClick={handleCancel}
             disabled={loading && status === "complete"}
           >
             {status === "complete" ? "Done" : status === "running" ? "Cancel" : "Cancel"}
-          </button>
+          </Button>
           {status === "idle" && (
-            <button className="modal-btn primary" onClick={handleRun} disabled={loading || loadingOptions || !!optionsError || availableTasks.length === 0}>
+            <Button variant="primary" onClick={handleRun} disabled={loading || loadingOptions || !!optionsError || availableTasks.length === 0}>
               Run
-            </button>
+            </Button>
           )}
         </div>
       </div>

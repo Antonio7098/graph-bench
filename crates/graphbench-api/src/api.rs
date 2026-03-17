@@ -4,7 +4,6 @@ use axum::{
     response::{IntoResponse, Json, Response},
     Router,
 };
-use std::path::PathBuf;
 use std::sync::Arc;
 use serde_json::json;
 
@@ -17,6 +16,34 @@ pub fn run_routes() -> Router<Arc<AppState>> {
         .route("/api/runs/:id", get(get_run))
         .route("/api/runs/:id/events", get(get_run_events))
         .route("/api/runs/run", post(start_run))
+        // Strategies
+        .route("/api/strategies", get(list_strategies))
+        .route("/api/strategies", post(create_strategy))
+        .route("/api/strategies/all", get(list_strategies_with_versions))
+        .route("/api/strategies/:id", get(get_strategy))
+        .route("/api/strategies/:id/versions", get(list_strategy_versions))
+        // Tasks
+        .route("/api/tasks", get(list_tasks))
+        .route("/api/tasks", post(create_task))
+        .route("/api/tasks/all", get(list_tasks_with_versions))
+        .route("/api/tasks/:id", get(get_task))
+        .route("/api/tasks/:id/versions", get(list_task_versions))
+        // Evidence
+        .route("/api/evidence", get(list_evidence))
+        .route("/api/evidence", post(create_evidence))
+        .route("/api/evidence/:id", get(get_evidence))
+        // Fixtures
+        .route("/api/fixtures", get(list_fixtures))
+        .route("/api/fixtures", post(create_fixture))
+        .route("/api/fixtures/all", get(list_fixtures_with_versions))
+        .route("/api/fixtures/:id", get(get_fixture))
+        .route("/api/fixtures/:id/versions", get(list_fixture_versions))
+        // Prompts
+        .route("/api/prompts", get(list_prompts))
+        .route("/api/prompts", post(create_prompt))
+        .route("/api/prompts/all", get(list_prompts_with_versions))
+        .route("/api/prompts/:id", get(get_prompt))
+        .route("/api/prompts/:id/versions", get(list_prompt_versions))
 }
 
 async fn list_runs(
@@ -40,10 +67,42 @@ async fn get_run(
     State(state): State<Arc<AppState>>,
     Path(id): Path<String>,
 ) -> Response {
-    match state.db.get_run(&id) {
-        Ok(Some(run)) => Json(run).into_response(),
-        Ok(None) => (axum::http::StatusCode::NOT_FOUND, "Run not found").into_response(),
-        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    // First try to get from DB runs table
+    let runs = match state.db.list_runs(None) {
+        Ok(runs) => runs,
+        Err(e) => return (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    };
+    
+    if let Some(run_summary) = runs.into_iter().find(|r| r.run_id == id) {
+        // Build minimal response from runs table
+        Json(serde_json::json!({
+            "manifest": {
+                "run_id": run_summary.run_id,
+                "fixture_id": run_summary.fixture_id,
+                "task_id": run_summary.task_id,
+                "strategy_id": run_summary.strategy_id,
+                "provider": run_summary.provider,
+                "model_slug": run_summary.model_slug,
+                "started_at": run_summary.started_at,
+                "completed_at": run_summary.completed_at,
+                "outcome": run_summary.status,
+            },
+            "turns": [],
+            "evidence_matches": [],
+            "score_report": run_summary.visibility_score.map(|v| serde_json::json!({
+                "evidence_visibility_score": v,
+                "evidence_acquisition_score": run_summary.acquisition_score.unwrap_or(0.0),
+                "evidence_efficiency_score": run_summary.efficiency_score.unwrap_or(0.0),
+                "explanation_quality_score": run_summary.explanation_score.unwrap_or(0.0),
+            })),
+        })).into_response()
+    } else {
+        // Fall back to trying to load from trace files
+        match state.db.get_run(&id) {
+            Ok(Some(run)) => Json(run).into_response(),
+            Ok(None) => (axum::http::StatusCode::NOT_FOUND, "Run not found").into_response(),
+            Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+        }
     }
 }
 
@@ -117,7 +176,6 @@ async fn start_run(
         representation_level: req.representation_level.unwrap_or_else(|| "L1".to_string()),
     };
     
-    let traces_dir = state.traces_dir.clone();
     let event_stream = state.event_stream.clone();
     let db = state.db.clone();
     
@@ -158,8 +216,10 @@ async fn start_run(
     
     tokio::spawn(async move {
         match crate::harness::run_benchmark(config, event_stream.clone()).await {
-            Ok((run_id, _)) => {
-                let _ = db.import_traces(&traces_dir);
+            Ok((run_id, _, run_data)) => {
+                if let Err(e) = db.save_run_output(&run_data) {
+                    tracing::warn!("Failed to save run output to DB: {}", e);
+                }
                 let _ = db.upsert_run_status(&run_id.as_str(), "completed", None);
                 tracing::info!("Run completed: {}", run_id);
             }
@@ -199,138 +259,256 @@ async fn start_run(
 }
 
 pub async fn get_strategy(
+    State(state): State<Arc<AppState>>,
     Path(id): Path<String>,
+    Query(query): Query<std::collections::HashMap<String, String>>,
 ) -> Response {
-    let strategies_dir = PathBuf::from("strategies");
-    
-    if let Ok(entries) = std::fs::read_dir(&strategies_dir) {
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if let Some(filename) = path.file_name().and_then(|n| n.to_str()) {
-                if filename.starts_with(&id) && filename.ends_with(".json") {
-                    if let Ok(content) = std::fs::read_to_string(&path) {
-                        if let Ok(data) = serde_json::from_str::<serde_json::Value>(&content) {
-                            return Json(data).into_response();
-                        }
-                    }
-                }
-            }
-        }
+    let version = query.get("version").and_then(|v| v.parse().ok());
+    match state.db.get_strategy(&id, version) {
+        Ok(Some(config)) => Json(config).into_response(),
+        Ok(None) => (axum::http::StatusCode::NOT_FOUND, "Strategy not found").into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
     }
-    
-    (axum::http::StatusCode::NOT_FOUND, "Strategy not found").into_response()
 }
 
 pub async fn get_task(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<String>,
+    Query(query): Query<std::collections::HashMap<String, String>>,
+) -> Response {
+    let version = query.get("version").and_then(|v| v.parse().ok());
+    match state.db.get_task(&id, version) {
+        Ok(Some(spec)) => Json(spec).into_response(),
+        Ok(None) => (axum::http::StatusCode::NOT_FOUND, "Task not found").into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn get_evidence(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<String>,
+    Query(query): Query<std::collections::HashMap<String, String>>,
+) -> Response {
+    let version = query.get("version").and_then(|v| v.parse().ok());
+    match state.db.get_evidence(&id, version) {
+        Ok(Some(spec)) => Json(spec).into_response(),
+        Ok(None) => (axum::http::StatusCode::NOT_FOUND, "Evidence not found").into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn get_fixture(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<String>,
+    Query(query): Query<std::collections::HashMap<String, String>>,
+) -> Response {
+    let version = query.get("version").and_then(|v| v.parse().ok());
+    match state.db.get_fixture(&id, version) {
+        Ok(Some(config)) => Json(config).into_response(),
+        Ok(None) => (axum::http::StatusCode::NOT_FOUND, "Fixture not found").into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn get_prompt(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<String>,
+    Query(query): Query<std::collections::HashMap<String, String>>,
+) -> Response {
+    let version = query.get("version").and_then(|v| v.parse().ok());
+    match state.db.get_prompt(&id, version) {
+        Ok(Some(template)) => Json(template).into_response(),
+        Ok(None) => (axum::http::StatusCode::NOT_FOUND, "Prompt not found").into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn list_strategies(State(state): State<Arc<AppState>>) -> Response {
+    match state.db.list_strategies() {
+        Ok(strategies) => Json(strategies).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn list_strategies_with_versions(State(state): State<Arc<AppState>>) -> Response {
+    match state.db.list_strategies_with_versions() {
+        Ok(strategies) => Json(strategies).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn list_tasks(State(state): State<Arc<AppState>>) -> Response {
+    match state.db.list_tasks() {
+        Ok(tasks) => Json(tasks).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn list_tasks_with_versions(State(state): State<Arc<AppState>>) -> Response {
+    match state.db.list_tasks_with_versions() {
+        Ok(tasks) => Json(tasks).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn list_fixtures(State(state): State<Arc<AppState>>) -> Response {
+    match state.db.list_fixtures() {
+        Ok(fixtures) => Json(fixtures).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn list_fixtures_with_versions(State(state): State<Arc<AppState>>) -> Response {
+    match state.db.list_fixtures_with_versions() {
+        Ok(fixtures) => Json(fixtures).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn list_prompts(State(state): State<Arc<AppState>>) -> Response {
+    match state.db.list_prompts() {
+        Ok(prompts) => Json(prompts).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn list_prompts_with_versions(State(state): State<Arc<AppState>>) -> Response {
+    match state.db.list_prompts_with_versions() {
+        Ok(prompts) => Json(prompts).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn list_strategy_versions(
+    State(state): State<Arc<AppState>>,
     Path(id): Path<String>,
 ) -> Response {
-    let tasks_dir = PathBuf::from("tasks");
-    
-    if let Ok(entries) = std::fs::read_dir(&tasks_dir) {
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if !path.is_dir() {
-                continue;
-            }
-            
-            if let Ok(subentries) = std::fs::read_dir(&path) {
-                for subentry in subentries.flatten() {
-                    let subpath = subentry.path();
-                    if let Some(filename) = subpath.file_name().and_then(|n| n.to_str()) {
-                        if filename.ends_with(".task.json") {
-                            if let Ok(content) = std::fs::read_to_string(&subpath) {
-                                if let Ok(data) = serde_json::from_str::<serde_json::Value>(&content) {
-                                    if data.get("task_id").and_then(|v| v.as_str()) == Some(&id) {
-                                        return Json(data).into_response();
-                                    }
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+    match state.db.list_strategy_versions(&id) {
+        Ok(versions) => Json(versions).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
     }
-    
-    (axum::http::StatusCode::NOT_FOUND, "Task not found").into_response()
 }
 
-pub async fn list_strategies() -> Response {
-    let strategies_dir = PathBuf::from("strategies");
-    let mut strategies = Vec::new();
-    
-    if let Ok(entries) = std::fs::read_dir(&strategies_dir) {
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if path.extension().and_then(|e| e.to_str()) == Some("json") {
-                if let Some(filename) = path.file_stem().and_then(|n| n.to_str()) {
-                    strategies.push(filename.to_string());
-                }
-            }
-        }
+pub async fn list_task_versions(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<String>,
+) -> Response {
+    match state.db.list_task_versions(&id) {
+        Ok(versions) => Json(versions).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
     }
-    
-    strategies.sort();
-    Json(strategies).into_response()
 }
 
-pub async fn list_tasks() -> Response {
-    let tasks_dir = PathBuf::from("tasks");
-    let mut task_paths = Vec::new();
-    
-    if let Ok(entries) = std::fs::read_dir(&tasks_dir) {
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if !path.is_dir() {
-                continue;
-            }
-            
-            if let Ok(subentries) = std::fs::read_dir(&path) {
-                for subentry in subentries.flatten() {
-                    let subpath = subentry.path();
-                    if subpath.extension().and_then(|e| e.to_str()) == Some("json") {
-                        if let Some(filename) = subpath.file_name().and_then(|n| n.to_str()) {
-                            if filename.ends_with(".task.json") {
-                                if let Ok(rel_path) = subpath.strip_prefix(&tasks_dir) {
-                                    task_paths.push(rel_path.to_string_lossy().to_string());
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        }
+pub async fn list_fixture_versions(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<String>,
+) -> Response {
+    match state.db.list_fixture_versions(&id) {
+        Ok(versions) => Json(versions).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
     }
-    
-    task_paths.sort();
-    Json(task_paths).into_response()
 }
 
-pub async fn list_fixtures() -> Response {
-    let fixtures_dir = PathBuf::from("fixtures");
-    let mut fixture_paths = Vec::new();
-    
-    if let Ok(entries) = std::fs::read_dir(&fixtures_dir) {
-        for entry in entries.flatten() {
-            let path = entry.path();
-            if !path.is_dir() {
-                continue;
-            }
-            
-            if let Ok(subentries) = std::fs::read_dir(&path) {
-                for subentry in subentries.flatten() {
-                    let subpath = subentry.path();
-                    if subpath.extension().and_then(|e| e.to_str()) == Some("json") {
-                        if let Ok(rel_path) = subpath.strip_prefix(&fixtures_dir) {
-                            fixture_paths.push(rel_path.to_string_lossy().to_string());
-                        }
-                    }
-                }
-            }
-        }
+pub async fn list_prompt_versions(
+    State(state): State<Arc<AppState>>,
+    Path(id): Path<String>,
+) -> Response {
+    match state.db.list_prompt_versions(&id) {
+        Ok(versions) => Json(versions).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
     }
-    
-    fixture_paths.sort();
-    Json(fixture_paths).into_response()
+}
+
+// ============ CREATE ENDPOINTS ============
+
+#[derive(serde::Deserialize)]
+pub struct CreateStrategyRequest {
+    pub name: String,
+    pub config: serde_json::Value,
+    pub description: Option<String>,
+}
+
+pub async fn create_strategy(
+    State(state): State<Arc<AppState>>,
+    Json(req): Json<CreateStrategyRequest>,
+) -> Response {
+    match state.db.insert_strategy(&req.name, &req.config, req.description.as_deref()) {
+        Ok(version) => Json(json!({ "name": req.name, "version": version })).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+#[derive(serde::Deserialize)]
+pub struct CreateTaskRequest {
+    pub task_id: String,
+    pub spec: serde_json::Value,
+}
+
+pub async fn create_task(
+    State(state): State<Arc<AppState>>,
+    Json(req): Json<CreateTaskRequest>,
+) -> Response {
+    match state.db.insert_task(&req.task_id, &req.spec) {
+        Ok(version) => Json(json!({ "task_id": req.task_id, "version": version })).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+#[derive(serde::Deserialize)]
+pub struct CreateEvidenceRequest {
+    pub task_id: String,
+    pub evidence_id: String,
+    pub spec: serde_json::Value,
+}
+
+pub async fn create_evidence(
+    State(state): State<Arc<AppState>>,
+    Json(req): Json<CreateEvidenceRequest>,
+) -> Response {
+    match state.db.insert_evidence(&req.task_id, &req.evidence_id, &req.spec) {
+        Ok(version) => Json(json!({ "evidence_id": req.evidence_id, "version": version })).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+pub async fn list_evidence(State(state): State<Arc<AppState>>) -> Response {
+    match state.db.list_all_evidence() {
+        Ok(evidence) => Json(evidence).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+#[derive(serde::Deserialize)]
+pub struct CreateFixtureRequest {
+    pub name: String,
+    pub config: serde_json::Value,
+    pub graph_snapshot: Option<serde_json::Value>,
+}
+
+pub async fn create_fixture(
+    State(state): State<Arc<AppState>>,
+    Json(req): Json<CreateFixtureRequest>,
+) -> Response {
+    match state.db.insert_fixture(&req.name, &req.config, req.graph_snapshot.as_ref()) {
+        Ok(version) => Json(json!({ "name": req.name, "version": version })).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
+}
+
+#[derive(serde::Deserialize)]
+pub struct CreatePromptRequest {
+    pub name: String,
+    pub template: serde_json::Value,
+    pub description: Option<String>,
+}
+
+pub async fn create_prompt(
+    State(state): State<Arc<AppState>>,
+    Json(req): Json<CreatePromptRequest>,
+) -> Response {
+    match state.db.insert_prompt(&req.name, &req.template, req.description.as_deref()) {
+        Ok(version) => Json(json!({ "name": req.name, "version": version })).into_response(),
+        Err(e) => (axum::http::StatusCode::INTERNAL_SERVER_ERROR, e.to_string()).into_response(),
+    }
 }
 

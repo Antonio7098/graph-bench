@@ -1,0 +1,15 @@
+{
+  "kind": "tool_call",
+  "prompt_version": "v1",
+  "model_slug": "nvidia/nemotron-3-nano-30b-a3b:free",
+  "provider": "openrouter",
+  "assistant_message": "Looking up schema version constant definitions",
+  "tool_call": {
+    "tool_name": "graph.describe@v1",
+    "payload": {
+      "selector": "symbol:crates/graphbench-core/src/artifacts.rs::RUN_MANIFEST_SCHEMA_VERSION"
+    }
+  },
+  "acquired_fact_ids": [],
+  "readiness_state": "not_ready"
+}

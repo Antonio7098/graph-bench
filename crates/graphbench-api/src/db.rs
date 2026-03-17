@@ -3,6 +3,8 @@ use rusqlite::{params, Connection};
 use std::path::Path;
 use std::sync::Mutex;
 
+use crate::harness::RunOutputData;
+
 pub struct Database {
     conn: Mutex<Connection>,
 }
@@ -105,6 +107,8 @@ impl Database {
                 efficiency_score REAL,
                 explanation_score REAL,
                 raw_data TEXT,
+                turn_ledger_data TEXT,
+                observability_data TEXT,
                 status TEXT DEFAULT 'completed'
             );
             
@@ -129,6 +133,64 @@ impl Database {
             
             CREATE INDEX IF NOT EXISTS idx_runs_started ON runs(started_at DESC);
             CREATE INDEX IF NOT EXISTS idx_runs_status ON runs(status);
+            CREATE INDEX IF NOT EXISTS idx_turns_run ON turns(run_id);
+            CREATE INDEX IF NOT EXISTS idx_run_events_run ON run_events(run_id, seq);
+            
+            -- Versioned entities (append-only)
+            CREATE TABLE IF NOT EXISTS strategies (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                version INTEGER NOT NULL,
+                name TEXT NOT NULL,
+                config JSON NOT NULL,
+                description TEXT,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(name, version)
+            );
+            
+            CREATE TABLE IF NOT EXISTS tasks (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                version INTEGER NOT NULL,
+                task_id TEXT NOT NULL,
+                spec JSON NOT NULL,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(task_id, version)
+            );
+            
+            CREATE TABLE IF NOT EXISTS evidence (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                version INTEGER NOT NULL,
+                task_id TEXT NOT NULL,
+                evidence_id TEXT NOT NULL,
+                spec JSON NOT NULL,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(evidence_id, version)
+            );
+            
+            CREATE TABLE IF NOT EXISTS fixtures (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                version INTEGER NOT NULL,
+                name TEXT NOT NULL,
+                config JSON NOT NULL,
+                graph_snapshot JSON,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(name, version)
+            );
+            
+            CREATE TABLE IF NOT EXISTS prompts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                version INTEGER NOT NULL,
+                name TEXT NOT NULL,
+                template JSON NOT NULL,
+                description TEXT,
+                created_at TEXT DEFAULT CURRENT_TIMESTAMP,
+                UNIQUE(name, version)
+            );
+            
+            CREATE INDEX IF NOT EXISTS idx_strategies_name ON strategies(name, version DESC);
+            CREATE INDEX IF NOT EXISTS idx_tasks_task_id ON tasks(task_id, version DESC);
+            CREATE INDEX IF NOT EXISTS idx_evidence_task ON evidence(task_id, version DESC);
+            CREATE INDEX IF NOT EXISTS idx_fixtures_name ON fixtures(name, version DESC);
+            CREATE INDEX IF NOT EXISTS idx_prompts_name ON prompts(name, version DESC);
             
             CREATE TABLE IF NOT EXISTS turns (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -215,7 +277,7 @@ impl Database {
         let conn = self.conn.lock().unwrap();
 
         let mut stmt = conn.prepare(
-            "SELECT run_id, fixture_id, task_id, strategy_id, provider, model_slug, harness_version, started_at, completed_at, outcome, turn_count, raw_data FROM runs WHERE run_id = ?"
+            "SELECT run_id, fixture_id, task_id, strategy_id, provider, model_slug, harness_version, started_at, completed_at, outcome, turn_count, raw_data, turn_ledger_data FROM runs WHERE run_id = ?"
         )?;
 
         let result = stmt.query_row([run_id], |row| {
@@ -231,6 +293,7 @@ impl Database {
             let outcome: String = row.get(9)?;
             let _turn_count: i32 = row.get(10)?;
             let raw_data: String = row.get(11)?;
+            let turn_ledger_data: Option<String> = row.get(12)?;
 
             Ok((
                 run_id,
@@ -244,6 +307,7 @@ impl Database {
                 completed_at,
                 outcome,
                 raw_data,
+                turn_ledger_data,
             ))
         });
 
@@ -260,8 +324,11 @@ impl Database {
                 completed_at,
                 outcome,
                 raw_data,
+                turn_ledger_data,
             )) => {
-                let data: serde_json::Value = serde_json::from_str(&raw_data).unwrap_or_default();
+                // Prefer turn_ledger_data if available, otherwise fall back to raw_data
+                let data_str = turn_ledger_data.as_ref().unwrap_or(&raw_data);
+                let data: serde_json::Value = serde_json::from_str(data_str).unwrap_or_default();
                 let entries = data
                     .get("entries")
                     .and_then(|e| e.as_array())
@@ -622,6 +689,717 @@ impl Database {
         }
 
         Ok(events)
+    }
+
+    pub fn save_run_output(&self, output: &RunOutputData) -> Result<()> {
+        let conn = self.conn.lock().unwrap();
+
+        let turn_ledger_json = serde_json::to_string(&output.turn_ledger)?;
+        let observability_json = serde_json::to_string(&output.observability_bundle)?;
+
+        conn.execute(
+            "INSERT OR REPLACE INTO runs (run_id, raw_data, turn_ledger_data, observability_data, completed_at, status, outcome)
+             VALUES (?, ?, ?, ?, datetime('now'), 'completed', 'success')
+             ON CONFLICT(run_id) DO UPDATE SET 
+                raw_data = excluded.raw_data,
+                turn_ledger_data = excluded.turn_ledger_data,
+                observability_data = excluded.observability_data,
+                completed_at = excluded.completed_at,
+                status = excluded.status,
+                outcome = excluded.outcome",
+            params![
+                output.run_id,
+                turn_ledger_json,
+                turn_ledger_json,
+                observability_json,
+            ],
+        )?;
+
+        Ok(())
+    }
+
+    // ============ STRATEGIES (append-only) ============
+
+    pub fn insert_strategy(
+        &self,
+        name: &str,
+        config: &serde_json::Value,
+        description: Option<&str>,
+    ) -> Result<i64> {
+        let conn = self.conn.lock().unwrap();
+
+        let version: i64 = conn.query_row(
+            "SELECT COALESCE(MAX(version), 0) + 1 FROM strategies WHERE name = ?",
+            [name],
+            |row| row.get(0),
+        )?;
+
+        conn.execute(
+            "INSERT INTO strategies (version, name, config, description) VALUES (?, ?, ?, ?)",
+            params![version, name, config.to_string(), description],
+        )?;
+
+        Ok(version)
+    }
+
+    pub fn get_strategy(
+        &self,
+        name: &str,
+        version: Option<i64>,
+    ) -> Result<Option<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+
+        let result = if let Some(v) = version {
+            conn.query_row(
+                "SELECT config FROM strategies WHERE name = ? AND version = ?",
+                params![name, v],
+                |row| row.get::<_, String>(0),
+            )
+        } else {
+            conn.query_row(
+                "SELECT config FROM strategies WHERE name = ? ORDER BY version DESC LIMIT 1",
+                [name],
+                |row| row.get::<_, String>(0),
+            )
+        };
+
+        match result {
+            Ok(config_str) => Ok(Some(
+                serde_json::from_str(&config_str).unwrap_or(serde_json::Value::Null),
+            )),
+            Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
+            Err(e) => Err(e.into()),
+        }
+    }
+
+    pub fn list_strategies(&self) -> Result<Vec<String>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare("SELECT DISTINCT name FROM strategies ORDER BY name")?;
+        let names = stmt
+            .query_map([], |row| row.get(0))?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(names)
+    }
+
+    pub fn list_strategies_with_versions(&self) -> Result<Vec<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare(
+            "SELECT s.name, s.version, s.description, s.created_at 
+             FROM strategies s
+             INNER JOIN (
+                 SELECT name, MAX(version) as max_version
+                 FROM strategies
+                 GROUP BY name
+             ) latest ON s.name = latest.name AND s.version = latest.max_version
+             ORDER BY s.name",
+        )?;
+        let results = stmt
+            .query_map([], |row| {
+                Ok(serde_json::json!({
+                    "name": row.get::<_, String>(0)?,
+                    "version": row.get::<_, i64>(1)?,
+                    "description": row.get::<_, Option<String>>(2)?,
+                    "created_at": row.get::<_, String>(3)?,
+                }))
+            })?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(results)
+    }
+
+    pub fn list_strategy_versions(&self, name: &str) -> Result<Vec<i64>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt =
+            conn.prepare("SELECT version FROM strategies WHERE name = ? ORDER BY version DESC")?;
+        let versions = stmt
+            .query_map([name], |row| row.get(0))?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(versions)
+    }
+
+    // ============ TASKS (append-only) ============
+
+    pub fn insert_task(&self, task_id: &str, spec: &serde_json::Value) -> Result<i64> {
+        let conn = self.conn.lock().unwrap();
+
+        let version: i64 = conn.query_row(
+            "SELECT COALESCE(MAX(version), 0) + 1 FROM tasks WHERE task_id = ?",
+            [task_id],
+            |row| row.get(0),
+        )?;
+
+        conn.execute(
+            "INSERT INTO tasks (version, task_id, spec) VALUES (?, ?, ?)",
+            params![version, task_id, spec.to_string()],
+        )?;
+
+        Ok(version)
+    }
+
+    pub fn get_task(
+        &self,
+        task_id: &str,
+        version: Option<i64>,
+    ) -> Result<Option<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+
+        let result = if let Some(v) = version {
+            conn.query_row(
+                "SELECT spec FROM tasks WHERE task_id = ? AND version = ?",
+                params![task_id, v],
+                |row| row.get::<_, String>(0),
+            )
+        } else {
+            conn.query_row(
+                "SELECT spec FROM tasks WHERE task_id = ? ORDER BY version DESC LIMIT 1",
+                [task_id],
+                |row| row.get::<_, String>(0),
+            )
+        };
+
+        match result {
+            Ok(spec_str) => Ok(Some(
+                serde_json::from_str(&spec_str).unwrap_or(serde_json::Value::Null),
+            )),
+            Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
+            Err(e) => Err(e.into()),
+        }
+    }
+
+    pub fn list_tasks(&self) -> Result<Vec<String>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare("SELECT DISTINCT task_id FROM tasks ORDER BY task_id")?;
+        let ids = stmt
+            .query_map([], |row| row.get(0))?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(ids)
+    }
+
+    pub fn list_tasks_with_versions(&self) -> Result<Vec<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare(
+            "SELECT t.task_id, t.version, t.spec, t.created_at 
+             FROM tasks t
+             INNER JOIN (
+                 SELECT task_id, MAX(version) as max_version
+                 FROM tasks
+                 GROUP BY task_id
+             ) latest ON t.task_id = latest.task_id AND t.version = latest.max_version
+             ORDER BY t.task_id",
+        )?;
+        let results = stmt.query_map([], |row| {
+            let spec_str: String = row.get(2)?;
+            Ok(serde_json::json!({
+                "task_id": row.get::<_, String>(0)?,
+                "version": row.get::<_, i64>(1)?,
+                "spec": serde_json::from_str::<serde_json::Value>(&spec_str).unwrap_or(serde_json::Value::Null),
+                "created_at": row.get::<_, String>(3)?,
+            }))
+        })?.filter_map(|r| r.ok()).collect();
+        Ok(results)
+    }
+
+    pub fn list_task_versions(&self, task_id: &str) -> Result<Vec<i64>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt =
+            conn.prepare("SELECT version FROM tasks WHERE task_id = ? ORDER BY version DESC")?;
+        let versions = stmt
+            .query_map([task_id], |row| row.get(0))?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(versions)
+    }
+
+    // ============ EVIDENCE (append-only) ============
+
+    pub fn insert_evidence(
+        &self,
+        task_id: &str,
+        evidence_id: &str,
+        spec: &serde_json::Value,
+    ) -> Result<i64> {
+        let conn = self.conn.lock().unwrap();
+
+        let version: i64 = conn.query_row(
+            "SELECT COALESCE(MAX(version), 0) + 1 FROM evidence WHERE evidence_id = ?",
+            [evidence_id],
+            |row| row.get(0),
+        )?;
+
+        conn.execute(
+            "INSERT INTO evidence (version, task_id, evidence_id, spec) VALUES (?, ?, ?, ?)",
+            params![version, task_id, evidence_id, spec.to_string()],
+        )?;
+
+        Ok(version)
+    }
+
+    pub fn get_evidence(
+        &self,
+        evidence_id: &str,
+        version: Option<i64>,
+    ) -> Result<Option<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+
+        let result = if let Some(v) = version {
+            conn.query_row(
+                "SELECT spec FROM evidence WHERE evidence_id = ? AND version = ?",
+                params![evidence_id, v],
+                |row| row.get::<_, String>(0),
+            )
+        } else {
+            conn.query_row(
+                "SELECT spec FROM evidence WHERE evidence_id = ? ORDER BY version DESC LIMIT 1",
+                [evidence_id],
+                |row| row.get::<_, String>(0),
+            )
+        };
+
+        match result {
+            Ok(spec_str) => Ok(Some(
+                serde_json::from_str(&spec_str).unwrap_or(serde_json::Value::Null),
+            )),
+            Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
+            Err(e) => Err(e.into()),
+        }
+    }
+
+    pub fn list_evidence_for_task(&self, task_id: &str) -> Result<Vec<String>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare(
+            "SELECT DISTINCT evidence_id FROM evidence WHERE task_id = ? ORDER BY evidence_id",
+        )?;
+        let ids = stmt
+            .query_map([task_id], |row| row.get(0))?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(ids)
+    }
+
+    pub fn list_all_evidence(&self) -> Result<Vec<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare(
+            "SELECT task_id, evidence_id, version, spec FROM evidence ORDER BY task_id, evidence_id, version DESC",
+        )?;
+        let mut results = Vec::new();
+        let rows = stmt.query_map([], |row| {
+            let spec_str: String = row.get(3)?;
+            Ok((
+                row.get::<_, String>(0)?,
+                row.get::<_, String>(1)?,
+                row.get::<_, i64>(2)?,
+                serde_json::from_str::<serde_json::Value>(&spec_str)
+                    .unwrap_or(serde_json::Value::Null),
+            ))
+        })?;
+        for row in rows {
+            if let Ok((task_id, evidence_id, version, spec)) = row {
+                // Only add latest version of each evidence
+                if !results.iter().any(|e: &serde_json::Value| {
+                    e.get("evidence_id").and_then(|v| v.as_str()) == Some(&evidence_id)
+                }) {
+                    results.push(serde_json::json!({
+                        "task_id": task_id,
+                        "evidence_id": evidence_id,
+                        "version": version,
+                        "spec": spec,
+                    }));
+                }
+            }
+        }
+        Ok(results)
+    }
+
+    // ============ FIXTURES (append-only) ============
+
+    pub fn insert_fixture(
+        &self,
+        name: &str,
+        config: &serde_json::Value,
+        graph_snapshot: Option<&serde_json::Value>,
+    ) -> Result<i64> {
+        let conn = self.conn.lock().unwrap();
+
+        let version: i64 = conn.query_row(
+            "SELECT COALESCE(MAX(version), 0) + 1 FROM fixtures WHERE name = ?",
+            [name],
+            |row| row.get(0),
+        )?;
+
+        conn.execute(
+            "INSERT INTO fixtures (version, name, config, graph_snapshot) VALUES (?, ?, ?, ?)",
+            params![
+                version,
+                name,
+                config.to_string(),
+                graph_snapshot.map(|g| g.to_string())
+            ],
+        )?;
+
+        Ok(version)
+    }
+
+    pub fn get_fixture(
+        &self,
+        name: &str,
+        version: Option<i64>,
+    ) -> Result<Option<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+
+        let result = if let Some(v) = version {
+            conn.query_row(
+                "SELECT config FROM fixtures WHERE name = ? AND version = ?",
+                params![name, v],
+                |row| row.get::<_, String>(0),
+            )
+        } else {
+            conn.query_row(
+                "SELECT config FROM fixtures WHERE name = ? ORDER BY version DESC LIMIT 1",
+                [name],
+                |row| row.get::<_, String>(0),
+            )
+        };
+
+        match result {
+            Ok(config_str) => Ok(Some(
+                serde_json::from_str(&config_str).unwrap_or(serde_json::Value::Null),
+            )),
+            Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
+            Err(e) => Err(e.into()),
+        }
+    }
+
+    pub fn get_fixture_with_graph(
+        &self,
+        name: &str,
+        version: Option<i64>,
+    ) -> Result<Option<(serde_json::Value, Option<serde_json::Value>)>> {
+        let conn = self.conn.lock().unwrap();
+
+        let result = if let Some(v) = version {
+            conn.query_row(
+                "SELECT config, graph_snapshot FROM fixtures WHERE name = ? AND version = ?",
+                params![name, v],
+                |row| Ok((row.get::<_, String>(0)?, row.get::<_, Option<String>>(1)?)),
+            )
+        } else {
+            conn.query_row(
+                "SELECT config, graph_snapshot FROM fixtures WHERE name = ? ORDER BY version DESC LIMIT 1",
+                [name],
+                |row| Ok((row.get::<_, String>(0)?, row.get::<_, Option<String>>(1)?)),
+            )
+        };
+
+        match result {
+            Ok((config_str, graph_str)) => {
+                let config = serde_json::from_str(&config_str).unwrap_or(serde_json::Value::Null);
+                let graph = graph_str.and_then(|g| serde_json::from_str(&g).ok());
+                Ok(Some((config, graph)))
+            }
+            Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
+            Err(e) => Err(e.into()),
+        }
+    }
+
+    pub fn list_fixtures(&self) -> Result<Vec<String>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare("SELECT DISTINCT name FROM fixtures ORDER BY name")?;
+        let names = stmt
+            .query_map([], |row| row.get(0))?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(names)
+    }
+
+    pub fn list_fixtures_with_versions(&self) -> Result<Vec<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare(
+            "SELECT f.name, f.version, f.config, f.graph_snapshot, f.created_at 
+             FROM fixtures f
+             INNER JOIN (
+                 SELECT name, MAX(version) as max_version
+                 FROM fixtures
+                 GROUP BY name
+             ) latest ON f.name = latest.name AND f.version = latest.max_version
+             ORDER BY f.name",
+        )?;
+        let results = stmt.query_map([], |row| {
+            let config_str: String = row.get(2)?;
+            let graph_str: Option<String> = row.get(3)?;
+            let graph_snapshot: serde_json::Value = graph_str
+                .and_then(|g| serde_json::from_str(&g).ok())
+                .unwrap_or(serde_json::Value::Null);
+            Ok(serde_json::json!({
+                "name": row.get::<_, String>(0)?,
+                "version": row.get::<_, i64>(1)?,
+                "config": serde_json::from_str::<serde_json::Value>(&config_str).unwrap_or(serde_json::Value::Null),
+                "graph_snapshot": graph_snapshot,
+                "created_at": row.get::<_, String>(4)?,
+            }))
+        })?.filter_map(|r| r.ok()).collect();
+        Ok(results)
+    }
+
+    pub fn list_fixture_versions(&self, name: &str) -> Result<Vec<i64>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt =
+            conn.prepare("SELECT version FROM fixtures WHERE name = ? ORDER BY version DESC")?;
+        let versions = stmt
+            .query_map([name], |row| row.get(0))?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(versions)
+    }
+
+    // ============ PROMPTS (append-only) ============
+
+    pub fn insert_prompt(
+        &self,
+        name: &str,
+        template: &serde_json::Value,
+        description: Option<&str>,
+    ) -> Result<i64> {
+        let conn = self.conn.lock().unwrap();
+
+        let version: i64 = conn.query_row(
+            "SELECT COALESCE(MAX(version), 0) + 1 FROM prompts WHERE name = ?",
+            [name],
+            |row| row.get(0),
+        )?;
+
+        conn.execute(
+            "INSERT INTO prompts (version, name, template, description) VALUES (?, ?, ?, ?)",
+            params![version, name, template.to_string(), description],
+        )?;
+
+        Ok(version)
+    }
+
+    pub fn get_prompt(
+        &self,
+        name: &str,
+        version: Option<i64>,
+    ) -> Result<Option<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+
+        let result = if let Some(v) = version {
+            conn.query_row(
+                "SELECT template FROM prompts WHERE name = ? AND version = ?",
+                params![name, v],
+                |row| row.get::<_, String>(0),
+            )
+        } else {
+            conn.query_row(
+                "SELECT template FROM prompts WHERE name = ? ORDER BY version DESC LIMIT 1",
+                [name],
+                |row| row.get::<_, String>(0),
+            )
+        };
+
+        match result {
+            Ok(template_str) => Ok(Some(
+                serde_json::from_str(&template_str).unwrap_or(serde_json::Value::Null),
+            )),
+            Err(rusqlite::Error::QueryReturnedNoRows) => Ok(None),
+            Err(e) => Err(e.into()),
+        }
+    }
+
+    pub fn list_prompts(&self) -> Result<Vec<String>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare("SELECT DISTINCT name FROM prompts ORDER BY name")?;
+        let names = stmt
+            .query_map([], |row| row.get(0))?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(names)
+    }
+
+    pub fn list_prompts_with_versions(&self) -> Result<Vec<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt = conn.prepare(
+            "SELECT p.name, p.version, p.description, p.created_at 
+             FROM prompts p
+             INNER JOIN (
+                 SELECT name, MAX(version) as max_version
+                 FROM prompts
+                 GROUP BY name
+             ) latest ON p.name = latest.name AND p.version = latest.max_version
+             ORDER BY p.name",
+        )?;
+        let results = stmt
+            .query_map([], |row| {
+                Ok(serde_json::json!({
+                    "name": row.get::<_, String>(0)?,
+                    "version": row.get::<_, i64>(1)?,
+                    "description": row.get::<_, Option<String>>(2)?,
+                    "created_at": row.get::<_, String>(3)?,
+                }))
+            })?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(results)
+    }
+
+    pub fn list_prompt_versions(&self, name: &str) -> Result<Vec<i64>> {
+        let conn = self.conn.lock().unwrap();
+        let mut stmt =
+            conn.prepare("SELECT version FROM prompts WHERE name = ? ORDER BY version DESC")?;
+        let versions = stmt
+            .query_map([name], |row| row.get(0))?
+            .filter_map(|r| r.ok())
+            .collect();
+        Ok(versions)
+    }
+
+    // ============ IMPORT FROM FILES ============
+
+    pub fn import_strategies_from_dir(&self, dir: &Path) -> Result<usize> {
+        let mut imported = 0;
+
+        if !dir.exists() {
+            return Ok(0);
+        }
+
+        for entry in std::fs::read_dir(dir)? {
+            let entry = entry?;
+            let path = entry.path();
+
+            if path.extension().and_then(|e| e.to_str()) != Some("json") {
+                continue;
+            }
+
+            if let Ok(content) = std::fs::read_to_string(&path) {
+                if let Ok(config) = serde_json::from_str::<serde_json::Value>(&content) {
+                    let name = path
+                        .file_stem()
+                        .and_then(|n| n.to_str())
+                        .unwrap_or("unknown")
+                        .to_string();
+
+                    if self.insert_strategy(&name, &config, None).is_ok() {
+                        imported += 1;
+                    }
+                }
+            }
+        }
+
+        Ok(imported)
+    }
+
+    pub fn import_tasks_from_dir(&self, dir: &Path) -> Result<usize> {
+        let mut imported = 0;
+
+        if !dir.exists() {
+            return Ok(0);
+        }
+
+        for entry in std::fs::read_dir(dir)? {
+            let task_dir = entry?;
+            let task_path = task_dir.path();
+
+            if !task_path.is_dir() {
+                continue;
+            }
+
+            // Look for task.json file
+            for subentry in std::fs::read_dir(&task_path)? {
+                let subentry = subentry?;
+                let subpath = subentry.path();
+
+                if let Some(filename) = subpath.file_name().and_then(|n| n.to_str()) {
+                    if filename.ends_with(".task.json") {
+                        if let Ok(content) = std::fs::read_to_string(&subpath) {
+                            if let Ok(spec) = serde_json::from_str::<serde_json::Value>(&content) {
+                                if let Some(task_id) = spec.get("task_id").and_then(|v| v.as_str())
+                                {
+                                    if self.insert_task(task_id, &spec).is_ok() {
+                                        imported += 1;
+                                    }
+                                }
+                            }
+                        }
+                    }
+
+                    // Also import evidence files
+                    if filename.ends_with(".evidence.json") {
+                        if let Ok(content) = std::fs::read_to_string(&subpath) {
+                            if let Ok(spec) = serde_json::from_str::<serde_json::Value>(&content) {
+                                let evidence_id = filename.trim_end_matches(".evidence.json");
+                                let task_id = task_path
+                                    .file_name()
+                                    .and_then(|n| n.to_str())
+                                    .unwrap_or("unknown");
+
+                                if self.insert_evidence(task_id, evidence_id, &spec).is_ok() {
+                                    imported += 1;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        Ok(imported)
+    }
+
+    pub fn import_fixtures_from_dir(&self, dir: &Path) -> Result<usize> {
+        let mut imported = 0;
+
+        if !dir.exists() {
+            return Ok(0);
+        }
+
+        for entry in std::fs::read_dir(dir)? {
+            let fixture_dir = entry?;
+            let fixture_path = fixture_dir.path();
+
+            if !fixture_path.is_dir() {
+                continue;
+            }
+
+            let name = fixture_path
+                .file_name()
+                .and_then(|n| n.to_str())
+                .unwrap_or("unknown")
+                .to_string();
+
+            let mut config: Option<serde_json::Value> = None;
+            let mut graph_snapshot: Option<serde_json::Value> = None;
+
+            // Look for fixture.json and graph.snapshot.json
+            for subentry in std::fs::read_dir(&fixture_path)? {
+                let subentry = subentry?;
+                let subpath = subentry.path();
+
+                if let Some(filename) = subpath.file_name().and_then(|n| n.to_str()) {
+                    if filename == "fixture.json" {
+                        if let Ok(content) = std::fs::read_to_string(&subpath) {
+                            config = serde_json::from_str(&content).ok();
+                        }
+                    } else if filename == "graph.snapshot.json" {
+                        if let Ok(content) = std::fs::read_to_string(&subpath) {
+                            graph_snapshot = serde_json::from_str(&content).ok();
+                        }
+                    }
+                }
+            }
+
+            if let Some(cfg) = config {
+                if self
+                    .insert_fixture(&name, &cfg, graph_snapshot.as_ref())
+                    .is_ok()
+                {
+                    imported += 1;
+                }
+            }
+        }
+
+        Ok(imported)
     }
 }
 

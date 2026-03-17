@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\": [],\n  \"assistant_message\": \"Expanding file symbols for artifacts.rs to gather structural evidence\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"not_ready\",\n  \"tool_call\": {\n    \"payload\": {\n      \"target\": \"F1\"\n    },\n    \"tool_name\": \"session.expand_file@v1\"\n  }\n}",
+          "reasoning": "We need to respond JSON with kind: think|tool_call|complete. Need to convey status of reasoning, possibly tool call to expand_file or something. We need to follow instructions: Use exact short ids when referring to graph nodes. Short ids are like F1, S3, D2, R1. In this context, F1 is the file node. S1 etc are symbols. We want to expand file symbols for artifacts.rs? Already done many expands. The current recommended next action is expand_file [F1] priority=112 candidates=28. So we can issue a tool_call session.expand_file@v1 with target selector. Which selector? Probably the file symbol identifier: maybe \"crates/graphbench-core/src/artifacts.rs\". The short id for that file is likely F1. Use that. So payload target_selector: \"F1\"? According to tool spec, session.expand_file expects target selector. Likely \"F1\". So tool_call: {\"tool_name\":\"session.expand_file@v1\",\"payload\":{\"target\":\"F1\"}}. Also we can include depth? Not required. We'll just provide target. So response JSON shape: {\"kind\":\"tool_call\",\"assistant_message\":\"...\"} maybe some brief status. Also need acquired_fact_ids? Not needed unless evidence_acquired? It says acquired_fact_ids list. We can maybe leave empty array. readiness_state: \"evidence_visible\" or \"not_ready\"? Since we are about to call expand_file, maybe readiness_state \"not_ready\". Actually we are about to make tool call, so readiness_state maybe \"not_ready\". Provide assistant_message short status. Provide tool_call. No other fields.\n\nLet's construct:\n\n{\n \"kind\":\"tool_call\",\n \"assistant_message\":\"Expanding file symbols for artifacts.rs to gather structural evidence\",\n \"tool_call\":{\n   \"tool_name\":\"session.expand_file@v1\",\n   \"payload\":{\"target\":\"F1\"}\n },\n \"acquired_fact_ids\":[],\n \"readiness_state\":\"not_ready\"\n}\n\nMake sure JSON valid, no extra fields. No trailing commas. Provide exactly that shape.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to respond JSON with kind: think|tool_call|complete. Need to convey status of reasoning, possibly tool call to expand_file or something. We need to follow instructions: Use exact short ids when referring to graph nodes. Short ids are like F1, S3, D2, R1. In this context, F1 is the file node. S1 etc are symbols. We want to expand file symbols for artifacts.rs? Already done many expands. The current recommended next action is expand_file [F1] priority=112 candidates=28. So we can issue a tool_call session.expand_file@v1 with target selector. Which selector? Probably the file symbol identifier: maybe \"crates/graphbench-core/src/artifacts.rs\". The short id for that file is likely F1. Use that. So payload target_selector: \"F1\"? According to tool spec, session.expand_file expects target selector. Likely \"F1\". So tool_call: {\"tool_name\":\"session.expand_file@v1\",\"payload\":{\"target\":\"F1\"}}. Also we can include depth? Not required. We'll just provide target. So response JSON shape: {\"kind\":\"tool_call\",\"assistant_message\":\"...\"} maybe some brief status. Also need acquired_fact_ids? Not needed unless evidence_acquired? It says acquired_fact_ids list. We can maybe leave empty array. readiness_state: \"evidence_visible\" or \"not_ready\"? Since we are about to call expand_file, maybe readiness_state \"not_ready\". Actually we are about to make tool call, so readiness_state maybe \"not_ready\". Provide assistant_message short status. Provide tool_call. No other fields.\n\nLet's construct:\n\n{\n \"kind\":\"tool_call\",\n \"assistant_message\":\"Expanding file symbols for artifacts.rs to gather structural evidence\",\n \"tool_call\":{\n   \"tool_name\":\"session.expand_file@v1\",\n   \"payload\":{\"target\":\"F1\"}\n },\n \"acquired_fact_ids\":[],\n \"readiness_state\":\"not_ready\"\n}\n\nMake sure JSON valid, no extra fields. No trailing commas. Provide exactly that shape.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773688414,
+    "id": "gen-1773688414-nNDpNxEka1P1itkwr81p",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 523,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 475
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4693,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5216
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd6136d28a3a0b2-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 19:13:34 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

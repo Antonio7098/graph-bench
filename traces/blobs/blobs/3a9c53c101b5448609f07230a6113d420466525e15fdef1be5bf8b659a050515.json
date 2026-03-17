@@ -1,0 +1,68 @@
+{
+  "envelope": {
+    "choices": [
+      {
+        "finish_reason": "stop",
+        "index": 0,
+        "logprobs": null,
+        "message": {
+          "content": "{\n  \"acquired_fact_ids\": [],\n  \"assistant_message\": \"Expanding file symbols for artifacts.rs\",\n  \"kind\": \"tool_call\",\n  \"readiness_state\": \"not_ready\",\n  \"tool_call\": {\n    \"payload\": {},\n    \"tool_name\": \"session.expand_file@v1\"\n  }\n}",
+          "reasoning": "We need to produce JSON with specific schema. The current state: we have been expanding file symbols. The heuristic next action: expand_file [F1] priority=112 candidates=28. That likely corresponds to some selector. The user wants an action step. We need to decide kind: tool_call maybe, with tool_call tool_name \"session.expand_file@v1\". Provide payload with target selector. Also need acquired_fact_ids list (maybe empty?). readiness_state maybe \"not_ready\" or \"evidence_visible\"? We are preparing to edit, need evidence. We likely haven't got evidence yet. So readiness_state: \"not_ready\". assistant_message brief status.\n\nWe must include tool_call field with tool_name and payload. payload format? Probably includes target selector and optional depth etc. Use default? The contract says payload: {}. But we can include fields? The example shows payload:{{}} - maybe empty object is okay. But we can include fields? The spec says payload:{{}} but not restricted. Use empty object.\n\nWe also need acquired_fact_ids: list of fact ids we have acquired. Possibly none. Use empty array.\n\nReadiness_state: \"not_ready\" maybe.\n\nThus output JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Expanding file symbols for artifacts.rs\",\n  \"tool_call\":{\"tool_name\":\"session.expand_file@v1\",\"payload\":{}},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure no extra fields. Ensure JSON only, no markdown.\n",
+          "reasoning_details": [
+            {
+              "format": "unknown",
+              "index": 0,
+              "text": "We need to produce JSON with specific schema. The current state: we have been expanding file symbols. The heuristic next action: expand_file [F1] priority=112 candidates=28. That likely corresponds to some selector. The user wants an action step. We need to decide kind: tool_call maybe, with tool_call tool_name \"session.expand_file@v1\". Provide payload with target selector. Also need acquired_fact_ids list (maybe empty?). readiness_state maybe \"not_ready\" or \"evidence_visible\"? We are preparing to edit, need evidence. We likely haven't got evidence yet. So readiness_state: \"not_ready\". assistant_message brief status.\n\nWe must include tool_call field with tool_name and payload. payload format? Probably includes target selector and optional depth etc. Use default? The contract says payload: {}. But we can include fields? The example shows payload:{{}} - maybe empty object is okay. But we can include fields? The spec says payload:{{}} but not restricted. Use empty object.\n\nWe also need acquired_fact_ids: list of fact ids we have acquired. Possibly none. Use empty array.\n\nReadiness_state: \"not_ready\" maybe.\n\nThus output JSON:\n\n{\n  \"kind\":\"tool_call\",\n  \"assistant_message\":\"Expanding file symbols for artifacts.rs\",\n  \"tool_call\":{\"tool_name\":\"session.expand_file@v1\",\"payload\":{}},\n  \"acquired_fact_ids\":[],\n  \"readiness_state\":\"not_ready\"\n}\n\nMake sure no extra fields. Ensure JSON only, no markdown.\n",
+              "type": "reasoning.text"
+            }
+          ],
+          "refusal": null,
+          "role": "assistant"
+        },
+        "native_finish_reason": "stop"
+      }
+    ],
+    "created": 1773688392,
+    "id": "gen-1773688392-wjv9eGMEZMATSL3YitPr",
+    "model": "nvidia/nemotron-3-nano-30b-a3b:free",
+    "object": "chat.completion",
+    "provider": "Nvidia",
+    "system_fingerprint": null,
+    "usage": {
+      "completion_tokens": 398,
+      "completion_tokens_details": {
+        "audio_tokens": 0,
+        "image_tokens": 0,
+        "reasoning_tokens": 369
+      },
+      "cost": 0,
+      "cost_details": {
+        "upstream_inference_completions_cost": 0,
+        "upstream_inference_cost": 0,
+        "upstream_inference_prompt_cost": 0
+      },
+      "is_byok": false,
+      "prompt_tokens": 4698,
+      "prompt_tokens_details": {
+        "audio_tokens": 0,
+        "cache_write_tokens": 0,
+        "cached_tokens": 0,
+        "video_tokens": 0
+      },
+      "total_tokens": 5096
+    }
+  },
+  "headers": {
+    "access-control-allow-origin": "*",
+    "cf-ray": "9dd612e32df3a0b2-LHR",
+    "connection": "keep-alive",
+    "content-type": "application/json",
+    "date": "Mon, 16 Mar 2026 19:13:12 GMT",
+    "permissions-policy": "payment=(self \"https://checkout.stripe.com\" \"https://connect-js.stripe.com\" \"https://js.stripe.com\" \"https://*.js.stripe.com\" \"https://hooks.stripe.com\")",
+    "referrer-policy": "no-referrer, strict-origin-when-cross-origin",
+    "server": "cloudflare",
+    "transfer-encoding": "chunked",
+    "x-content-type-options": "nosniff"
+  },
+  "status": 200
+}

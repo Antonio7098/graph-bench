@@ -16,11 +16,29 @@ export interface RunSummary {
   started_at: string;
   completed_at: string;
   outcome: string;
+  status?: string;
   turn_count: number;
   visibility_score?: number;
   acquisition_score?: number;
   efficiency_score?: number;
   explanation_score?: number;
+}
+
+export interface RunEvent {
+  run_id: string;
+  seq: number;
+  captured_at: string;
+  stream: string;
+  component: string;
+  event_type: string;
+  level: string;
+  message: string;
+  turn_index?: number;
+  tool_name?: string;
+  provider_request_id?: string;
+  metrics?: Record<string, unknown>;
+  tags: string[];
+  details: Record<string, unknown>;
 }
 
 export interface EvidenceMatchRecord {
@@ -263,6 +281,15 @@ export class RunStoreClient {
     return response.json();
   }
 
+  async getRunEvents(runId: string, fromSeq?: number): Promise<RunEvent[]> {
+    const url = fromSeq 
+      ? `${this.baseUrl}/runs/${runId}/events?from_seq=${fromSeq}`
+      : `${this.baseUrl}/runs/${runId}/events`;
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`Failed to get events: ${response.statusText}`);
+    return response.json();
+  }
+
   async getScoreReport(runId: string): Promise<ScoreReport | null> {
     const response = await fetch(`${this.baseUrl}/runs/${runId}/score`);
     if (response.status === 404) return null;
@@ -292,9 +319,16 @@ export class RunStoreClient {
     return response.json();
   }
 
-  async getStrategy(strategyId: string): Promise<Record<string, unknown>> {
-    const response = await fetch(`${this.baseUrl}/strategies/${strategyId}`);
+  async getStrategy(strategyId: string, version?: number): Promise<Record<string, unknown>> {
+    const versionPart = version ? `?version=${version}` : '';
+    const response = await fetch(`${this.baseUrl}/strategies/${strategyId}${versionPart}`);
     if (!response.ok) throw new Error(`Failed to get strategy: ${response.statusText}`);
+    return response.json();
+  }
+
+  async listStrategyVersions(strategyId: string): Promise<number[]> {
+    const response = await fetch(`${this.baseUrl}/strategies/${strategyId}/versions`);
+    if (!response.ok) throw new Error(`Failed to list strategy versions: ${response.statusText}`);
     return response.json();
   }
 
@@ -304,15 +338,136 @@ export class RunStoreClient {
     return response.json();
   }
 
-  async getTask(taskId: string): Promise<Record<string, unknown>> {
-    const response = await fetch(`${this.baseUrl}/tasks/${taskId}`);
+  async getTask(taskId: string, version?: number): Promise<Record<string, unknown>> {
+    const versionPart = version ? `?version=${version}` : '';
+    const response = await fetch(`${this.baseUrl}/tasks/${taskId}${versionPart}`);
     if (!response.ok) throw new Error(`Failed to get task: ${response.statusText}`);
+    return response.json();
+  }
+
+  async listTaskVersions(taskId: string): Promise<number[]> {
+    const response = await fetch(`${this.baseUrl}/tasks/${taskId}/versions`);
+    if (!response.ok) throw new Error(`Failed to list task versions: ${response.statusText}`);
     return response.json();
   }
 
   async listFixtures(): Promise<string[]> {
     const response = await fetch(`${this.baseUrl}/fixtures`);
     if (!response.ok) throw new Error(`Failed to list fixtures: ${response.statusText}`);
+    return response.json();
+  }
+
+  async getFixture(fixtureId: string, version?: number): Promise<Record<string, unknown>> {
+    const versionPart = version ? `?version=${version}` : '';
+    const response = await fetch(`${this.baseUrl}/fixtures/${fixtureId}${versionPart}`);
+    if (!response.ok) throw new Error(`Failed to get fixture: ${response.statusText}`);
+    return response.json();
+  }
+
+  async listFixtureVersions(fixtureId: string): Promise<number[]> {
+    const response = await fetch(`${this.baseUrl}/fixtures/${fixtureId}/versions`);
+    if (!response.ok) throw new Error(`Failed to list fixture versions: ${response.statusText}`);
+    return response.json();
+  }
+
+  async listPrompts(): Promise<string[]> {
+    const response = await fetch(`${this.baseUrl}/prompts`);
+    if (!response.ok) throw new Error(`Failed to list prompts: ${response.statusText}`);
+    return response.json();
+  }
+
+  async getPrompt(promptId: string, version?: number): Promise<Record<string, unknown>> {
+    const versionPart = version ? `?version=${version}` : '';
+    const response = await fetch(`${this.baseUrl}/prompts/${promptId}${versionPart}`);
+    if (!response.ok) throw new Error(`Failed to get prompt: ${response.statusText}`);
+    return response.json();
+  }
+
+  async listPromptVersions(promptId: string): Promise<number[]> {
+    const response = await fetch(`${this.baseUrl}/prompts/${promptId}/versions`);
+    if (!response.ok) throw new Error(`Failed to list prompt versions: ${response.statusText}`);
+    return response.json();
+  }
+
+  // List with versions (for Library page)
+  async listStrategiesWithVersions(): Promise<Array<{name: string; version: number; description?: string; created_at: string}>> {
+    const response = await fetch(`${this.baseUrl}/strategies/all`);
+    if (!response.ok) throw new Error(`Failed to list strategies: ${response.statusText}`);
+    return response.json();
+  }
+
+  async listTasksWithVersions(): Promise<Array<{task_id: string; version: number; spec: Record<string, unknown>; created_at: string}>> {
+    const response = await fetch(`${this.baseUrl}/tasks/all`);
+    if (!response.ok) throw new Error(`Failed to list tasks: ${response.statusText}`);
+    return response.json();
+  }
+
+  async listFixturesWithVersions(): Promise<Array<{name: string; version: number; config: Record<string, unknown>; graph_snapshot?: Record<string, unknown>; created_at: string}>> {
+    const response = await fetch(`${this.baseUrl}/fixtures/all`);
+    if (!response.ok) throw new Error(`Failed to list fixtures: ${response.statusText}`);
+    return response.json();
+  }
+
+  async listPromptsWithVersions(): Promise<Array<{name: string; version: number; description?: string; created_at: string}>> {
+    const response = await fetch(`${this.baseUrl}/prompts/all`);
+    if (!response.ok) throw new Error(`Failed to list prompts: ${response.statusText}`);
+    return response.json();
+  }
+
+  async listAllEvidence(): Promise<Array<{task_id: string; evidence_id: string; version: number; spec: Record<string, unknown>}>> {
+    const response = await fetch(`${this.baseUrl}/evidence`);
+    if (!response.ok) throw new Error(`Failed to list evidence: ${response.statusText}`);
+    return response.json();
+  }
+
+  // Create methods
+  async createStrategy(name: string, config: Record<string, unknown>, description?: string): Promise<{name: string; version: number}> {
+    const response = await fetch(`${this.baseUrl}/strategies`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, config, description }),
+    });
+    if (!response.ok) throw new Error(`Failed to create strategy: ${response.statusText}`);
+    return response.json();
+  }
+
+  async createTask(taskId: string, spec: Record<string, unknown>): Promise<{task_id: string; version: number}> {
+    const response = await fetch(`${this.baseUrl}/tasks`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ task_id: taskId, spec }),
+    });
+    if (!response.ok) throw new Error(`Failed to create task: ${response.statusText}`);
+    return response.json();
+  }
+
+  async createEvidence(taskId: string, evidenceId: string, spec: Record<string, unknown>): Promise<{evidence_id: string; version: number}> {
+    const response = await fetch(`${this.baseUrl}/evidence`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ task_id: taskId, evidence_id: evidenceId, spec }),
+    });
+    if (!response.ok) throw new Error(`Failed to create evidence: ${response.statusText}`);
+    return response.json();
+  }
+
+  async createFixture(name: string, config: Record<string, unknown>, graphSnapshot?: Record<string, unknown>): Promise<{name: string; version: number}> {
+    const response = await fetch(`${this.baseUrl}/fixtures`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, config, graph_snapshot: graphSnapshot }),
+    });
+    if (!response.ok) throw new Error(`Failed to create fixture: ${response.statusText}`);
+    return response.json();
+  }
+
+  async createPrompt(name: string, template: Record<string, unknown>, description?: string): Promise<{name: string; version: number}> {
+    const response = await fetch(`${this.baseUrl}/prompts`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, template, description }),
+    });
+    if (!response.ok) throw new Error(`Failed to create prompt: ${response.statusText}`);
     return response.json();
   }
 }
