@@ -351,21 +351,30 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
     }
   }, [runId, isDemo]);
 
+  // Auto-switch to Live Logs tab when run is running
+  useEffect(() => {
+    if (runStatus === "running" && activeTab === "overview") {
+      setActiveTab("stream");
+    }
+  }, [runStatus, activeTab]);
+
   // Poll for events and status during run
   useEffect(() => {
     if (isDemo) return;
-    
+
     let intervalId: ReturnType<typeof setInterval>;
     let lastSeq = 0;
+    let lastTurnsLoad = 0;
     const isRunning = { current: true };
-    
+    let hasLoadedStatus = false;
+
     async function pollEvents() {
       if (!isRunning.current) return;
-      
+
       try {
         const events = await apiClient.getRunEvents(runId, lastSeq || undefined);
         if (!isRunning.current) return;
-        
+
         if (events.length > 0) {
           setStreamEvents(prev => {
             const existingSeqs = new Set(prev.map(e => e.seq));
@@ -379,24 +388,35 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
               isRunning.current = false;
               setRunStatus(latestEvent.event_type === "run.completed" ? "completed" : "failed");
               loadRunDetail();
-            } else if (!runStatus) {
-              setRunStatus("running");
+            } else {
+              if (!hasLoadedStatus) {
+                hasLoadedStatus = true;
+                setRunStatus("running");
+              }
+              // Reload turns data periodically (every 5 seconds)
+              const now = Date.now();
+              if (now - lastTurnsLoad > 5000) {
+                lastTurnsLoad = now;
+                loadRunDetail();
+              }
             }
           }
-        } else if (streamEvents.length === 0) {
+        } else if (!hasLoadedStatus) {
           const runs = await apiClient.listRuns();
           const thisRun = runs.find(r => r.run_id === runId);
           if (thisRun?.status && isRunning.current) {
             if (thisRun.status === "completed" || thisRun.status === "failed") {
               isRunning.current = false;
+              hasLoadedStatus = true;
               setRunStatus(thisRun.status as "completed" | "failed");
               loadRunDetail();
             } else {
+              hasLoadedStatus = true;
               setRunStatus("running");
             }
           }
         }
-        
+
         if (isRunning.current) {
           streamEventsRef.current?.scrollIntoView({ behavior: "smooth" });
         }
@@ -404,10 +424,10 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
         // Silently ignore polling errors
       }
     }
-    
+
     pollEvents();
     intervalId = setInterval(pollEvents, 2000);
-    
+
     return () => {
       isRunning.current = false;
       if (intervalId) clearInterval(intervalId);
@@ -439,6 +459,21 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
       return;
     }
     setModal({ isOpen: true, title: `Turn ${turn.turn_index}`, content: "", jsonData: turn });
+  }
+
+  function openToolEventDetails(event: RunEvent) {
+    if (!event.tool_name) return;
+    const details = event.details || {};
+    const toolData = {
+      tool_name: event.tool_name,
+      turn_index: event.turn_index,
+      component: event.component,
+      event_type: event.event_type,
+      message: event.message,
+      captured_at: event.captured_at,
+      ...details,
+    };
+    setModal({ isOpen: true, title: `Tool: ${event.tool_name}`, content: "", jsonData: toolData });
   }
 
   async function openStrategyModal() {
@@ -553,7 +588,7 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
             onClick={() => setActiveTab("stream")}
             style={{ color: "#10b981", fontWeight: "bold" }}
           >
-            Live Stream {streamEvents.length > 0 && `(${streamEvents.length})`}
+            Live Logs {streamEvents.length > 0 && `(${streamEvents.length})`}
           </button>
         )}
         <button 
@@ -638,9 +673,15 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
                           padding: "0.25rem 0", 
                           borderBottom: "1px solid var(--color-border)", 
                           color: event.level === "error" ? "#ef4444" : event.event_type?.includes("completed") ? "#10b981" : event.event_type?.includes("started") ? "#3b82f6" : "var(--color-text)",
-                          cursor: event.turn_index !== undefined && event.turn_index !== null ? "pointer" : "default",
+                          cursor: "pointer",
                         }}
-                        onClick={() => openTurnFromEvent(event.turn_index)}
+                        onClick={() => {
+                          if (event.event_type?.startsWith("tool.")) {
+                            openToolEventDetails(event);
+                          } else {
+                            openTurnFromEvent(event.turn_index);
+                          }
+                        }}
                       >
                         <span style={{ color: "var(--color-text-muted)", marginRight: "0.5rem" }}>[{new Date(event.captured_at).toLocaleTimeString()}]</span>
                         <span style={{ color: "#8b5cf6", marginRight: "0.5rem" }}>{event.component}</span>

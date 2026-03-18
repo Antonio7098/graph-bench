@@ -7,10 +7,11 @@ import { Button } from "./Button";
 interface RunListProps {
   onSelectRun: (runId: string) => void;
   onRunComplete?: (runId: string) => void;
+  onRunStarted?: (runId: string) => void;
   runs?: RunSummary[];
 }
 
-export function RunList({ onSelectRun, onRunComplete, runs: propRuns }: RunListProps): ReactElement {
+export function RunList({ onSelectRun, onRunComplete, onRunStarted, runs: propRuns }: RunListProps): ReactElement {
   const [runs, setRuns] = useState<RunSummary[]>([]);
   const [loading, setLoading] = useState(!propRuns);
   const [filter, setFilter] = useState<RunFilter>({});
@@ -25,6 +26,14 @@ export function RunList({ onSelectRun, onRunComplete, runs: propRuns }: RunListP
       setRuns(propRuns);
     }
   }, [filter, isDemo, propRuns]);
+
+  useEffect(() => {
+    if (isDemo) return;
+    const interval = setInterval(() => {
+      loadRuns();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [isDemo]);
 
   async function loadRuns() {
     setLoading(true);
@@ -163,7 +172,7 @@ export function RunList({ onSelectRun, onRunComplete, runs: propRuns }: RunListP
         if (onRunComplete) {
           onRunComplete(runId);
         }
-      }} />}
+      }} onRunStarted={onRunStarted} />}
     </>
   );
 }
@@ -171,6 +180,7 @@ export function RunList({ onSelectRun, onRunComplete, runs: propRuns }: RunListP
 interface RunBenchmarkModalProps {
   onClose: () => void;
   onRunComplete: (runId: string) => void;
+  onRunStarted?: (runId: string) => void;
 }
 
 interface LogLine {
@@ -196,7 +206,7 @@ interface StreamEvent {
   [key: string]: unknown;
 }
 
-function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): ReactElement {
+function RunBenchmarkModal({ onClose, onRunComplete, onRunStarted }: RunBenchmarkModalProps): ReactElement {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [taskId, setTaskId] = useState("");
@@ -310,6 +320,14 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
           addLog(formatEvent(event), 'error', event as Record<string, unknown>);
           return;
         }
+
+        if (event.event_type === 'run.started') {
+          addLog(formatEvent(event), 'success', event as Record<string, unknown>);
+          if (onRunStarted) {
+            onRunStarted(runId);
+          }
+          return;
+        }
         
         const message = formatEvent(event);
         addLog(message, event.level === 'error' ? 'error' : 'event', event as Record<string, unknown>);
@@ -328,7 +346,7 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
         addLog('Connection closed', 'info');
       }
     };
-  }, [addLog, onRunComplete, status]);
+  }, [addLog, onRunComplete, onRunStarted, status]);
 
   const checkRunStatus = useCallback(async (runId: string) => {
     try {
@@ -414,8 +432,11 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
       if (result.run_id) {
         setCurrentRunId(result.run_id);
         addLog(`Run initialized: ${result.run_id}`, "info");
-        addLog('Waiting for run to complete...', "info");
+        addLog('Navigating to run page...', "info");
         connectToWebSocket(result.run_id);
+        if (onRunStarted) {
+          onRunStarted(result.run_id);
+        }
       } else {
         addLog(`✗ Run failed`, "error");
         addLog(result.output || 'Unknown error', "error");

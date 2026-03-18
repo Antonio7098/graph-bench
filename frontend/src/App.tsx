@@ -24,11 +24,16 @@ function RunsPage({ mode, onSelectRun }: { mode: Mode; onSelectRun: (runId: stri
     navigate(`/runs/${runId}`);
   };
 
+  const handleRunStarted = (runId: string) => {
+    navigate(`/runs/${runId}`);
+  };
+
   return (
     <RunList 
       key={refreshKey}
       onSelectRun={handleSelectRun}
       onRunComplete={handleRunComplete}
+      onRunStarted={handleRunStarted}
       runs={mode === "demo" ? mockRuns : undefined}
     />
   );
