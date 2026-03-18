@@ -1,7 +1,7 @@
 use graphbench_core::{
     ContextWindowCompactionPolicy, ContextWindowStrategyPolicy, GraphDiscoveryMode, ProjectionMode,
-    RereadMode, STRATEGY_CONFIG_SCHEMA_VERSION, SectionTrimDirection, StrategyConfig,
-    StrategySectionBudget,
+    RereadMode, SectionTrimDirection, StrategyConfig, StrategySectionBudget,
+    STRATEGY_CONFIG_SCHEMA_VERSION,
 };
 
 pub fn broad_graph_discovery() -> StrategyConfig {
@@ -25,7 +25,7 @@ pub fn broad_graph_discovery() -> StrategyConfig {
             section_budget("code_navigation_items", 420, SectionTrimDirection::Tail),
             section_budget("graph_relations", 260, SectionTrimDirection::Tail),
             section_budget("graph_frontier", 300, SectionTrimDirection::Tail),
-            section_budget("tool_contracts", 180, SectionTrimDirection::Tail),
+            section_budget("tool_contracts", 2000, SectionTrimDirection::Tail),
         ],
     )
 }
@@ -51,7 +51,7 @@ pub fn graph_then_targeted_lexical_read() -> StrategyConfig {
             section_budget("code_navigation_items", 260, SectionTrimDirection::Tail),
             section_budget("graph_relations", 180, SectionTrimDirection::Tail),
             section_budget("graph_frontier", 200, SectionTrimDirection::Tail),
-            section_budget("tool_contracts", 180, SectionTrimDirection::Tail),
+            section_budget("tool_contracts", 2000, SectionTrimDirection::Tail),
         ],
     )
 }
@@ -77,7 +77,7 @@ pub fn high_recall_projection() -> StrategyConfig {
             section_budget("code_navigation_items", 640, SectionTrimDirection::Tail),
             section_budget("graph_relations", 320, SectionTrimDirection::Tail),
             section_budget("graph_frontier", 360, SectionTrimDirection::Tail),
-            section_budget("tool_contracts", 220, SectionTrimDirection::Tail),
+            section_budget("tool_contracts", 2000, SectionTrimDirection::Tail),
         ],
     )
 }
@@ -103,7 +103,7 @@ pub fn minimal_projection() -> StrategyConfig {
             section_budget("code_navigation_items", 180, SectionTrimDirection::Tail),
             section_budget("graph_relations", 120, SectionTrimDirection::Tail),
             section_budget("graph_frontier", 140, SectionTrimDirection::Tail),
-            section_budget("tool_contracts", 140, SectionTrimDirection::Tail),
+            section_budget("tool_contracts", 2000, SectionTrimDirection::Tail),
         ],
     )
 }
@@ -129,7 +129,7 @@ pub fn strict_no_reread() -> StrategyConfig {
             section_budget("code_navigation_items", 240, SectionTrimDirection::Tail),
             section_budget("graph_relations", 160, SectionTrimDirection::Tail),
             section_budget("graph_frontier", 180, SectionTrimDirection::Tail),
-            section_budget("tool_contracts", 180, SectionTrimDirection::Tail),
+            section_budget("tool_contracts", 2000, SectionTrimDirection::Tail),
         ],
     )
 }

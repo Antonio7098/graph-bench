@@ -109,14 +109,53 @@ impl EventStream {
 
     pub fn replay(&self, run_id: Option<&str>) -> Vec<StreamEvent> {
         let history = self.history.lock().expect("event history lock");
-        history
+        let mut events: Vec<StreamEvent> = history
             .iter()
             .filter(|event| match run_id {
                 Some(run_id) => event.run_id.as_deref() == Some(run_id),
                 None => true,
             })
             .cloned()
-            .collect()
+            .collect();
+
+        // If we have a database and a run_id, also fetch from DB to get historical events
+        // that may have been evicted from the in-memory history
+        if let (Some(run_id), Some(db)) = (run_id, &self.db) {
+            if let Ok(db_events) = db.get_events_for_run(run_id, None) {
+                let db_events: Vec<StreamEvent> = db_events
+                    .into_iter()
+                    .map(|e| StreamEvent {
+                        seq: e.seq as u64,
+                        captured_at: e.captured_at,
+                        stream: e.stream,
+                        run_id: Some(e.run_id),
+                        component: e.component,
+                        event_type: e.event_type,
+                        level: e.level,
+                        message: e.message,
+                        turn_index: e.turn_index.map(|v| v as u32),
+                        tool_name: e.tool_name,
+                        provider_request_id: e.provider_request_id,
+                        metrics: e.metrics,
+                        tags: e.tags,
+                        details: e.details,
+                    })
+                    .collect();
+
+                // Merge and dedup by seq
+                let existing_seqs: std::collections::HashSet<u64> =
+                    events.iter().map(|e| e.seq).collect();
+                for db_event in db_events {
+                    if !existing_seqs.contains(&db_event.seq) {
+                        events.push(db_event);
+                    }
+                }
+            }
+        }
+
+        // Sort by seq
+        events.sort_by_key(|e| e.seq);
+        events
     }
 }
 

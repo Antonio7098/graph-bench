@@ -23,6 +23,7 @@ pub struct AppState {
     pub db: Arc<Database>,
     pub event_stream: Arc<EventStream>,
     pub traces_dir: PathBuf,
+    pub fixtures_dir: PathBuf,
 }
 
 #[tokio::main]
@@ -43,11 +44,15 @@ async fn main() -> anyhow::Result<()> {
 
     let traces_dir = std::env::var("TRACES_DIR")
         .map(PathBuf::from)
-        .unwrap_or_else(|_| PathBuf::from("traces"));
+        .unwrap_or_else(|_| PathBuf::from("/home/antonio/programming/Hivemind/graph-bench/traces"));
 
     let data_dir = std::env::var("DATA_DIR")
         .map(PathBuf::from)
-        .unwrap_or_else(|_| PathBuf::from("data"));
+        .unwrap_or_else(|_| PathBuf::from("/home/antonio/programming/Hivemind/graph-bench/data"));
+
+    let fixtures_dir = std::env::var("FIXTURES_DIR")
+        .map(PathBuf::from)
+        .unwrap_or_else(|_| PathBuf::from("/home/antonio/programming/Hivemind/graph-bench/fixtures"));
 
     std::fs::create_dir_all(&data_dir)?;
     std::fs::create_dir_all(&traces_dir)?;
@@ -66,6 +71,7 @@ async fn main() -> anyhow::Result<()> {
         db,
         event_stream,
         traces_dir,
+        fixtures_dir,
     };
 
     let state = Arc::new(state);

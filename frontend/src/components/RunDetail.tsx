@@ -1,7 +1,8 @@
 import { useState, useEffect, useRef } from "react";
 import type { ReactElement } from "react";
-import { apiClient, type RunDetail as RunDetailType, type TurnTrace, type RunEvent } from "../api/client";
+import { apiClient, type RunDetail as RunDetailType, type TurnTrace, type RunEvent, type RenderedSection } from "../api/client";
 import { Button } from "./Button";
+import { JsonToggle } from "./JsonToggle";
 
 interface RunDetailProps {
   runId: string;
@@ -14,7 +15,8 @@ type Tab = "overview" | "timeline" | "evidence" | "graph" | "omissions" | "strea
 interface ModalState {
   isOpen: boolean;
   title: string;
-  content: string;
+  content?: string;
+  jsonData?: unknown;
 }
 
 interface GraphViewProps {
@@ -261,6 +263,72 @@ function GraphView({ sessionJson, turnIndex }: GraphViewProps): ReactElement {
   );
 }
 
+interface PromptModalContentProps {
+  data: { sections: RenderedSection[] | undefined };
+}
+
+function PromptModalContent({ data }: PromptModalContentProps): ReactElement {
+  const [viewMode, setViewMode] = useState<"text" | "rendered" | "json">("text");
+
+  const sections = data.sections;
+  const fullText = sections
+    ? sections.map(section => `=== ${section.title} ===\n\n${section.content}`).join("\n\n")
+    : "No prompt sections available.";
+
+  return (
+    <div className="json-toggle-container" style={{ flex: 1, minHeight: 0, display: "flex", flexDirection: "column" }}>
+      <div className="detail-header">
+        <span className="json-toggle-label">{sections?.length ?? 0} section{(sections?.length ?? 0) !== 1 ? "s" : ""}</span>
+        <div className="view-toggle">
+          <button className={viewMode === "text" ? "active" : ""} onClick={() => setViewMode("text")}>Text</button>
+          <button className={viewMode === "rendered" ? "active" : ""} onClick={() => setViewMode("rendered")}>Rendered</button>
+          <button className={viewMode === "json" ? "active" : ""} onClick={() => setViewMode("json")}>JSON</button>
+        </div>
+      </div>
+      <div style={{ flex: 1, overflow: "auto", minHeight: 0 }}>
+        {viewMode === "text" && (
+          <pre className="modal-pre" style={{ whiteSpace: "pre-wrap", wordBreak: "break-word", margin: 0 }}>{fullText}</pre>
+        )}
+        {viewMode === "rendered" && sections && (
+          <div className="rendered-view">
+            {sections.map((section, idx) => (
+              <div key={idx} className="rendered-array-item" style={{ marginBottom: "1rem", padding: "0.75rem", background: "var(--color-bg-secondary)", borderRadius: "var(--radius-sm)" }}>
+                <div className="rendered-field">
+                  <label className="rendered-label">section_id</label>
+                  <span className="rendered-string">{section.section_id}</span>
+                </div>
+                <div className="rendered-field">
+                  <label className="rendered-label">title</label>
+                  <span className="rendered-string">{section.title}</span>
+                </div>
+                <div className="rendered-field">
+                  <label className="rendered-label">content</label>
+                  <div className="rendered-string-block" style={{ maxHeight: "200px", overflow: "auto", whiteSpace: "pre-wrap", wordBreak: "break-word" }}>{section.content}</div>
+                </div>
+                <div className="rendered-field">
+                  <label className="rendered-label">byte_count</label>
+                  <span className="rendered-number">{section.byte_count}</span>
+                </div>
+                <div className="rendered-field">
+                  <label className="rendered-label">token_count</label>
+                  <span className="rendered-number">{section.token_count}</span>
+                </div>
+                <div className="rendered-field">
+                  <label className="rendered-label">schema_version</label>
+                  <span className="rendered-number">{section.schema_version}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+        {viewMode === "json" && (
+          <JsonToggle data={sections || []} />
+        )}
+      </div>
+    </div>
+  );
+}
+
 export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps): ReactElement {
   const [data, setData] = useState<RunDetailType | null>(propDetail || null);
   const [loading, setLoading] = useState(!propDetail);
@@ -359,55 +427,18 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
     }
   }
 
-  function openModal(title: string, content: string) {
-    setModal({ isOpen: true, title, content });
+  function openModal(title: string, content?: string, jsonData?: unknown) {
+    setModal({ isOpen: true, title, content, jsonData });
   }
 
   function openTurnFromEvent(turnIndex: number | null | undefined) {
     if (turnIndex === null || turnIndex === undefined) return;
     const turn = turns.find(t => t.turn_index === turnIndex);
     if (!turn) {
-      openModal(`Turn ${turnIndex}`, "Turn data not yet available. The turn may still be in progress.");
+      setModal({ isOpen: true, title: `Turn ${turnIndex}`, content: "Turn data not yet available. The turn may still be in progress." });
       return;
     }
-    const content = `=== Turn ${turn.turn_index} ===
-
-State: ${turn.readiness_state}
-Readiness Reason: ${turn.readiness_reason || "N/A"}
-
---- Telemetry ---
-Prompt Bytes: ${turn.telemetry.prompt_bytes}
-Prompt Tokens: ${turn.telemetry.prompt_tokens}
-Latency: ${turn.telemetry.latency_ms}ms
-Tool Calls: ${turn.telemetry.tool_calls}
-
---- Request ---
-Prompt Version: ${turn.request.prompt_version}
-Prompt Hash: ${turn.request.prompt_hash}
-Context Hash: ${turn.request.context_hash}
-
---- Response ---
-Provider: ${turn.response.provider}
-Model: ${turn.response.model_slug}
-Validated: ${turn.response.validated ? "Yes" : "No"}
-
---- Selected Context Objects (${turn.selection.selected_context_objects.length}) ---
-${turn.selection.selected_context_objects.join('\n')}
-
---- Omitted Candidates (${turn.selection.omitted_candidates.length}) ---
-${turn.selection.omitted_candidates.map(o => `${o.candidate_id}: ${o.reason}`).join('\n') || "None"}
-
---- Evidence Delta (${turn.evidence_delta.length}) ---
-${turn.evidence_delta.join('\n')}
-
---- Hashes ---
-Turn Hash: ${turn.hashes.turn_hash}
-
-${turn.tool_calls && turn.tool_calls.length > 0 ? `--- Tool Calls (${turn.tool_calls.length}) ---
-${turn.tool_calls.map((tc, i) => `### Tool ${i + 1}: ${tc.tool_name}
-Payload: ${JSON.stringify(tc.payload, null, 2)}
-Result: ${tc.result || "(no result)"}`).join('\n\n')}` : "--- Tool Calls ---\nNo tool calls"}`;
-    openModal(`Turn ${turn.turn_index}`, content);
+    setModal({ isOpen: true, title: `Turn ${turn.turn_index}`, content: "", jsonData: turn });
   }
 
   async function openStrategyModal() {
@@ -418,7 +449,8 @@ Result: ${tc.result || "(no result)"}`).join('\n\n')}` : "--- Tool Calls ---\nNo
       setModal({ 
         isOpen: true, 
         title: `Strategy: ${strategyId}`, 
-        content: `Strategy Version: ${strategy.strategy_version}\nGraph Discovery: ${strategy.graph_discovery}\nProjection: ${strategy.projection}\nReread Policy: ${strategy.reread_policy}\n\nContext Window:\n${JSON.stringify(strategy.context_window, null, 2)}` 
+        content: "",
+        jsonData: strategy,
       });
     } catch (e) {
       setModal({ 
@@ -433,24 +465,12 @@ Result: ${tc.result || "(no result)"}`).join('\n\n')}` : "--- Tool Calls ---\nNo
     const taskId = manifest.task_id;
     setModal({ isOpen: true, title: `Task: ${taskId}`, content: "Loading..." });
     try {
-      const task = await apiClient.getTask(taskId) as Record<string, unknown>;
-      const taskAny = task as Record<string, unknown>;
-      const content = `Task ID: ${task.task_id}
-Title: ${task.title}
-Statement: ${task.statement}
-Task Class: ${task.task_class}
-Difficulty: ${task.difficulty}
-Turn Budget: ${task.turn_budget}
-Allowed Tools: ${(taskAny.allowed_tools as string[])?.join(', ') || 'N/A'}
-Seed Paths: ${(taskAny.seed_paths as string[])?.join(', ') || 'N/A'}
-Seed Selectors: ${(taskAny.seed_selectors as string[])?.join(', ') || 'N/A'}
-Evidence Spec Ref: ${task.evidence_spec_ref || 'N/A'}
-Expected Edit Loci: ${(taskAny.expected_edit_loci as string[])?.join(', ') || 'N/A'}
-Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
+      const task = await apiClient.getTask(taskId);
       setModal({ 
         isOpen: true, 
         title: `Task: ${taskId}`, 
-        content 
+        content: "",
+        jsonData: task,
       });
     } catch (e) {
       setModal({ 
@@ -465,18 +485,12 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
     setModal({ isOpen: false, title: "", content: "" });
   }
 
-  function getFullPrompt(turn: TurnTrace): string {
-    return turn.selection.rendered_sections
-      .map(section => `=== ${section.title} ===\n\n${section.content}`)
-      .join("\n\n");
-  }
-
-  function getToolCallsText(turn: TurnTrace): string {
-    if (!turn.tool_calls || turn.tool_calls.length === 0) {
-      return "No tool calls recorded for this turn.";
+  function getFullPromptText(sections: RenderedSection[] | undefined): string {
+    if (!sections || sections.length === 0) {
+      return "No prompt sections available for this turn.";
     }
-    return turn.tool_calls
-      .map((tc, i) => `--- Tool Call ${i + 1} ---\nTool: ${tc.tool_name}\nPayload: ${JSON.stringify(tc.payload, null, 2)}\n\nResult: ${tc.result || "(no result)"}`)
+    return sections
+      .map(section => `=== ${section.title} ===\n\n${section.content}`)
       .join("\n\n");
   }
 
@@ -651,9 +665,15 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
                 <h3 className="card-title">Run Metadata</h3>
               </div>
               <div className="card-body">
-                <div style={{ display: "grid", gridTemplateColumns: "repeat(2, 1fr)", gap: "1rem" }}>
+                <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem" }}>
                   <div>
-                    <div className="section-title">Fixture</div>
+                    <div className="section-title">Status</div>
+                    <div className={`run-outcome ${manifest.outcome || runStatus || "unknown"}`}>
+                      {manifest.outcome || runStatus || "unknown"}
+                    </div>
+                  </div>
+                  <div>
+                    <div className="section-title"> Fixture</div>
                     <div>{manifest.fixture_id}</div>
                   </div>
                   <div>
@@ -727,42 +747,37 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
                     </div>
                   </div>
                   
-                  <div style={{ marginTop: "1.5rem" }}>
-                    <div className="section-title">Metrics</div>
-                      {score_report && score_report.metrics && (
-                        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginTop: "0.75rem" }}>
-                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                            <span className="metric-label">Evidence Recall</span>
-                            <span className="metric-value">{((score_report.metrics.required_evidence_recall ?? 0) * 100).toFixed(1)}%</span>
-                          </div>
-                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                            <span className="metric-label">Evidence Precision</span>
-                            <span className="metric-value">{((score_report.metrics.evidence_precision ?? 0) * 100).toFixed(1)}%</span>
-                          </div>
-                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                            <span className="metric-label">Irrelevant Material</span>
-                            <span className="metric-value">{((score_report.metrics.irrelevant_material_ratio ?? 0) * 100).toFixed(1)}%</span>
-                          </div>
-                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                            <span className="metric-label">Turns to Ready</span>
-                            <span className="metric-value">{score_report.metrics.turns_to_readiness ?? "N/A"}</span>
-                          </div>
-                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                            <span className="metric-label">Reread Count</span>
-                            <span className="metric-value">{score_report.metrics.reread_count}</span>
-                          </div>
-                          <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
-                            <span className="metric-label">Post-Ready Drift</span>
-                            <span className="metric-value">{score_report.metrics.post_readiness_drift_turns}</span>
-                          </div>
+                  {score_report.metrics && (
+                    <div style={{ marginTop: "1.5rem" }}>
+                      <div className="section-title">Metrics</div>
+                      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "1rem", marginTop: "0.75rem" }}>
+                        <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                          <span className="metric-label">Evidence Recall</span>
+                          <span className="metric-value">{((score_report.metrics.required_evidence_recall ?? 0) * 100).toFixed(1)}%</span>
                         </div>
-                      )}
-
-                      <div className="section-title" style={{ marginTop: "1rem" }}>Run Results</div>
-                      <div style={{ display: "flex", gap: "1rem", marginTop: "0.5rem" }}>
-                        <div>Status: <span className={runStatus === "completed" ? "score-excellent" : runStatus === "failed" ? "score-poor" : ""}>{runStatus || "unknown"}</span></div>
+                        <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                          <span className="metric-label">Evidence Precision</span>
+                          <span className="metric-value">{((score_report.metrics.evidence_precision ?? 0) * 100).toFixed(1)}%</span>
+                        </div>
+                        <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                          <span className="metric-label">Irrelevant Material</span>
+                          <span className="metric-value">{((score_report.metrics.irrelevant_material_ratio ?? 0) * 100).toFixed(1)}%</span>
+                        </div>
+                        <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                          <span className="metric-label">Turns to Ready</span>
+                          <span className="metric-value">{score_report.metrics.turns_to_readiness ?? "N/A"}</span>
+                        </div>
+                        <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                          <span className="metric-label">Reread Count</span>
+                          <span className="metric-value">{score_report.metrics.reread_count}</span>
+                        </div>
+                        <div className="metric-row" style={{ flexDirection: "column", gap: "0.25rem" }}>
+                          <span className="metric-label">Post-Ready Drift</span>
+                          <span className="metric-value">{score_report.metrics.post_readiness_drift_turns}</span>
+                        </div>
                       </div>
                     </div>
+                  )}
                 </div>
               </div>
             )}
@@ -815,14 +830,14 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
                     <div style={{ display: "flex", gap: "0.75rem", marginBottom: "1rem" }}>
                       <button 
                         className="modal-btn"
-                        onClick={(e) => { e.stopPropagation(); openModal(`Full Prompt - Turn ${turn.turn_index}`, getFullPrompt(turn)); }}
+                        onClick={(e) => { e.stopPropagation(); openModal(`Full Prompt - Turn ${turn.turn_index}`, "", { sections: turn.selection?.rendered_sections }); }}
                       >
                         📝 View Full Prompt
                       </button>
                       {turn.tool_calls && turn.tool_calls.length > 0 && (
                         <button 
                           className="modal-btn"
-                          onClick={(e) => { e.stopPropagation(); openModal(`Tool Calls - Turn ${turn.turn_index}`, getToolCallsText(turn)); }}
+                          onClick={(e) => { e.stopPropagation(); openModal(`Tool Calls - Turn ${turn.turn_index}`, "", turn.tool_calls); }}
                         >
                           🔧 View Tool Calls ({turn.tool_calls.length})
                         </button>
@@ -842,51 +857,67 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
                       )}
                     </div>
                     
-                    <div className="section-title" style={{ marginBottom: "0.75rem" }}>Request</div>
-                    <div className="section-content" style={{ marginBottom: "1rem" }}>
-                      <div><strong>Prompt Version:</strong> {turn.request.prompt_version}</div>
-                      <div><strong>Prompt Hash:</strong> <code style={{ fontSize: "0.7rem" }}>{turn.request.prompt_hash}</code></div>
-                      <div><strong>Context Hash:</strong> <code style={{ fontSize: "0.7rem" }}>{turn.request.context_hash}</code></div>
-                    </div>
+                    {turn.request && (
+                      <>
+                        <div className="section-title" style={{ marginBottom: "0.75rem" }}>Request</div>
+                        <div className="section-content" style={{ marginBottom: "1rem" }}>
+                          <div><strong>Prompt Version:</strong> {turn.request.prompt_version ?? "N/A"}</div>
+                          <div><strong>Prompt Hash:</strong> <code style={{ fontSize: "0.7rem" }}>{turn.request.prompt_hash ?? "N/A"}</code></div>
+                          <div><strong>Context Hash:</strong> <code style={{ fontSize: "0.7rem" }}>{turn.request.context_hash ?? "N/A"}</code></div>
+                        </div>
+                      </>
+                    )}
                     
-                    <div className="section-title" style={{ marginBottom: "0.75rem" }}>Response</div>
-                    <div className="section-content" style={{ marginBottom: "1rem" }}>
-                      <div><strong>Provider:</strong> {turn.response.provider}</div>
-                      <div><strong>Model:</strong> {turn.response.model_slug}</div>
-                      <div><strong>Validated:</strong> {turn.response.validated ? "✓ Yes" : "✗ No"}</div>
-                    </div>
+                    {turn.response && (
+                      <>
+                        <div className="section-title" style={{ marginBottom: "0.75rem" }}>Response</div>
+                        <div className="section-content" style={{ marginBottom: "1rem" }}>
+                          <div><strong>Provider:</strong> {turn.response.provider ?? "N/A"}</div>
+                          <div><strong>Model:</strong> {turn.response.model_slug ?? "N/A"}</div>
+                          <div><strong>Validated:</strong> {turn.response.validated ? "✓ Yes" : "✗ No"}</div>
+                        </div>
+                      </>
+                    )}
                     
-                    <div className="section-title" style={{ marginBottom: "0.75rem" }}>Selection</div>
-                    <div className="section-content" style={{ marginBottom: "1rem" }}>
-                      <div><strong>Selected Context Objects:</strong></div>
-                      <ul style={{ margin: "0.5rem 0", paddingLeft: "1.25rem" }}>
-                        {turn.selection.selected_context_objects.map((ctx, i) => (
-                          <li key={i} style={{ fontFamily: "var(--font-mono)", fontSize: "0.8rem" }}>{ctx}</li>
-                        ))}
-                      </ul>
-                      {turn.selection.omitted_candidates.length > 0 && (
-                        <>
-                          <div style={{ marginTop: "0.75rem" }}><strong>Omitted Candidates:</strong></div>
+                    {turn.selection && (
+                      <>
+                        <div className="section-title" style={{ marginBottom: "0.75rem" }}>Selection</div>
+                        <div className="section-content" style={{ marginBottom: "1rem" }}>
+                          <div><strong>Selected Context Objects:</strong></div>
                           <ul style={{ margin: "0.5rem 0", paddingLeft: "1.25rem" }}>
-                            {turn.selection.omitted_candidates.map((omission, i) => (
-                              <li key={i} style={{ fontSize: "0.8rem", color: "var(--color-accent-red)" }}>
-                                {omission.candidate_id} - {omission.reason}
-                              </li>
+                            {(turn.selection.selected_context_objects ?? []).map((ctx, i) => (
+                              <li key={i} style={{ fontFamily: "var(--font-mono)", fontSize: "0.8rem" }}>{ctx}</li>
                             ))}
                           </ul>
-                        </>
-                      )}
-                    </div>
+                          {(turn.selection.omitted_candidates ?? []).length > 0 && (
+                            <>
+                              <div style={{ marginTop: "0.75rem" }}><strong>Omitted Candidates:</strong></div>
+                              <ul style={{ margin: "0.5rem 0", paddingLeft: "1.25rem" }}>
+                                {turn.selection.omitted_candidates.map((omission, i) => (
+                                  <li key={i} style={{ fontSize: "0.8rem", color: "var(--color-accent-red)" }}>
+                                    {omission.candidate_id} - {omission.reason}
+                                  </li>
+                                ))}
+                              </ul>
+                            </>
+                          )}
+                        </div>
+                      </>
+                    )}
                     
-                    <div className="section-title" style={{ marginBottom: "0.75rem" }}>Telemetry</div>
-                    <div className="section-content" style={{ marginBottom: "1rem" }}>
-                      <div><strong>Prompt Bytes:</strong> {turn.telemetry.prompt_bytes}</div>
-                      <div><strong>Prompt Tokens:</strong> {turn.telemetry.prompt_tokens}</div>
-                      <div><strong>Latency:</strong> {turn.telemetry.latency_ms}ms</div>
-                      <div><strong>Tool Calls:</strong> {turn.telemetry.tool_calls}</div>
-                    </div>
+                    {turn.telemetry && (
+                      <>
+                        <div className="section-title" style={{ marginBottom: "0.75rem" }}>Telemetry</div>
+                        <div className="section-content" style={{ marginBottom: "1rem" }}>
+                          <div><strong>Prompt Bytes:</strong> {turn.telemetry.prompt_bytes ?? 0}</div>
+                          <div><strong>Prompt Tokens:</strong> {turn.telemetry.prompt_tokens ?? 0}</div>
+                          <div><strong>Latency:</strong> {turn.telemetry.latency_ms ?? 0}ms</div>
+                          <div><strong>Tool Calls:</strong> {turn.telemetry.tool_calls ?? 0}</div>
+                        </div>
+                      </>
+                    )}
                     
-                    {turn.evidence_delta.length > 0 && (
+                    {(turn.evidence_delta ?? []).length > 0 && (
                       <>
                         <div className="section-title" style={{ marginBottom: "0.75rem" }}>Evidence Delta</div>
                         <div className="section-content">
@@ -897,11 +928,15 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
                       </>
                     )}
                     
-                    <div className="section-title" style={{ marginBottom: "0.75rem", marginTop: "1rem" }}>Hashes</div>
-                    <div className="section-content">
-                      <div><strong>Turn Hash:</strong></div>
-                      <code style={{ fontSize: "0.65rem", wordBreak: "break-all" }}>{turn.hashes.turn_hash}</code>
-                    </div>
+                    {turn.hashes && (
+                      <>
+                        <div className="section-title" style={{ marginBottom: "0.75rem", marginTop: "1rem" }}>Hashes</div>
+                        <div className="section-content">
+                          <div><strong>Turn Hash:</strong></div>
+                          <code style={{ fontSize: "0.65rem", wordBreak: "break-all" }}>{turn.hashes.turn_hash ?? "N/A"}</code>
+                        </div>
+                      </>
+                    )}
                   </div>
                 )}
               </div>
@@ -935,7 +970,7 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
         {activeTab === "omissions" && (
           <div className="fade-in">
             {turns.map((turn) => {
-              const omissions = turn.selection.omitted_candidates;
+              const omissions = turn.selection?.omitted_candidates ?? [];
               if (omissions.length === 0) return null;
               return (
                 <div key={turn.turn_index} className="context-section">
@@ -951,7 +986,7 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
                 </div>
               );
             })}
-            {turns.every(t => t.selection.omitted_candidates.length === 0) && (
+            {turns.every(t => (t.selection?.omitted_candidates ?? []).length === 0) && (
               <div className="empty-state">
                 <div className="empty-icon">✅</div>
                 <div className="empty-title">No Omissions</div>
@@ -1045,8 +1080,14 @@ Verification Targets: ${JSON.stringify(task.verification_targets, null, 2)}`;
                 />
               </div>
             ) : (
-              <div className="modal-body">
-                <pre className="modal-pre">{modal.content}</pre>
+              <div className="modal-body" style={{ flex: 1, overflow: "auto" }}>
+                {modal.title.startsWith("Full Prompt") && modal.jsonData ? (
+                  <PromptModalContent data={modal.jsonData as { sections: RenderedSection[] | undefined }} />
+                ) : modal.jsonData ? (
+                  <JsonToggle data={modal.jsonData} />
+                ) : (
+                  <pre className="modal-pre">{modal.content}</pre>
+                )}
               </div>
             )}
           </div>

@@ -1,37 +1,97 @@
 import { useState } from "react";
 import type { ReactElement } from "react";
+import { BrowserRouter, Routes, Route, useNavigate, useParams } from "react-router-dom";
 import { RunList } from "./components/RunList";
 import { RunDetail } from "./components/RunDetail";
+import { TaskDetail } from "./components/TaskDetail";
 import { Leaderboard } from "./components/Leaderboard";
 import { Library } from "./components/Library";
 import { mockRuns, mockRunDetail, createMockRunDetail } from "./api/mock";
 import type { RunSummary, RunDetail as RunDetailType } from "./api/client";
 
-type View = "runs" | "detail" | "library" | "leaderboard";
 type Mode = "demo" | "live";
 
-export function App(): ReactElement {
-  const [currentView, setCurrentView] = useState<View>("runs");
-  const [selectedRunId, setSelectedRunId] = useState<string | null>(null);
+function RunsPage({ mode, onSelectRun }: { mode: Mode; onSelectRun: (runId: string) => void }): ReactElement {
   const [refreshKey, setRefreshKey] = useState(0);
-  const [mode, setMode] = useState<Mode>("live");
-  const isDemo = mode === "demo";
+  const navigate = useNavigate();
 
   const handleSelectRun = (runId: string) => {
-    setSelectedRunId(runId);
-    setCurrentView("detail");
-  };
-
-  const handleBack = () => {
-    setSelectedRunId(null);
-    setCurrentView("runs");
-    setRefreshKey(k => k + 1);
+    onSelectRun(runId);
+    navigate(`/runs/${runId}`);
   };
 
   const handleRunComplete = (runId: string) => {
-    setSelectedRunId(runId);
-    setCurrentView("detail");
+    navigate(`/runs/${runId}`);
   };
+
+  return (
+    <RunList 
+      key={refreshKey}
+      onSelectRun={handleSelectRun}
+      onRunComplete={handleRunComplete}
+      runs={mode === "demo" ? mockRuns : undefined}
+    />
+  );
+}
+
+function RunPage({ mode }: { mode: Mode }): ReactElement {
+  const { runId } = useParams<{ runId: string }>();
+  const navigate = useNavigate();
+
+  if (!runId) {
+    navigate("/runs");
+    return <div>Redirecting...</div>;
+  }
+
+  return (
+    <RunDetail 
+      runId={runId} 
+      onBack={() => navigate("/runs")}
+      detail={mode === "demo" ? createMockRunDetail(runId) : undefined}
+    />
+  );
+}
+
+function TaskPage({ mode }: { mode: Mode }): ReactElement {
+  const { taskId } = useParams<{ taskId: string }>();
+  const navigate = useNavigate();
+
+  if (!taskId) {
+    navigate("/library");
+    return <div>Redirecting...</div>;
+  }
+
+  return (
+    <TaskDetail
+      taskId={taskId}
+      onBack={() => navigate("/library")}
+    />
+  );
+}
+
+function LeaderboardPage({ mode }: { mode: Mode }): ReactElement {
+  const navigate = useNavigate();
+  return (
+    <Leaderboard 
+      onSelectRun={(runId) => navigate(`/runs/${runId}`)}
+      runs={mode === "demo" ? mockRuns : undefined}
+    />
+  );
+}
+
+function LibraryPage(): ReactElement {
+  const navigate = useNavigate();
+  return (
+    <Library 
+      onBack={() => navigate("/runs")}
+      onSelectTask={(taskId) => navigate(`/tasks/${taskId}`)}
+    />
+  );
+}
+
+function AppLayout({ mode, setMode }: { mode: Mode; setMode: (m: Mode) => void }): ReactElement {
+  const navigate = useNavigate();
+  const isDemo = mode === "demo";
 
   return (
     <div className="app-shell">
@@ -58,22 +118,22 @@ export function App(): ReactElement {
         </div>
         <nav className="sidebar-nav">
           <button 
-            className={`nav-item ${currentView === "runs" ? "active" : ""}`}
-            onClick={() => { setCurrentView("runs"); setSelectedRunId(null); }}
+            className="nav-item"
+            onClick={() => navigate("/runs")}
           >
             <span className="nav-icon">📊</span>
             Runs
           </button>
           <button 
-            className={`nav-item ${currentView === "leaderboard" ? "active" : ""}`}
-            onClick={() => { setCurrentView("leaderboard"); setSelectedRunId(null); }}
+            className="nav-item"
+            onClick={() => navigate("/leaderboard")}
           >
             <span className="nav-icon">🏆</span>
             Leaderboard
           </button>
           <button 
-            className={`nav-item ${currentView === "library" ? "active" : ""}`}
-            onClick={() => setCurrentView("library")}
+            className="nav-item"
+            onClick={() => navigate("/library")}
           >
             <span className="nav-icon">📚</span>
             Library
@@ -81,33 +141,25 @@ export function App(): ReactElement {
         </nav>
       </aside>
       <main className="main-content">
-        {currentView === "runs" && (
-          <RunList 
-            key={refreshKey}
-            onSelectRun={handleSelectRun}
-            onRunComplete={handleRunComplete}
-            runs={isDemo ? mockRuns : undefined}
-          />
-        )}
-        {currentView === "leaderboard" && (
-          <Leaderboard 
-            onSelectRun={handleSelectRun}
-            runs={isDemo ? mockRuns : undefined}
-          />
-        )}
-        {currentView === "detail" && selectedRunId && (
-          <RunDetail 
-            runId={selectedRunId} 
-            onBack={handleBack}
-            detail={isDemo ? mockRunDetail : undefined}
-          />
-        )}
-        {currentView === "library" && (
-          <Library 
-            onBack={() => setCurrentView("runs")} 
-          />
-        )}
+        <Routes>
+          <Route path="/" element={<RunsPage mode={mode} onSelectRun={() => {}} />} />
+          <Route path="/runs" element={<RunsPage mode={mode} onSelectRun={() => {}} />} />
+          <Route path="/runs/:runId" element={<RunPage mode={mode} />} />
+          <Route path="/leaderboard" element={<LeaderboardPage mode={mode} />} />
+          <Route path="/library" element={<LibraryPage />} />
+          <Route path="/tasks/:taskId" element={<TaskPage mode={mode} />} />
+        </Routes>
       </main>
     </div>
+  );
+}
+
+export function App(): ReactElement {
+  const [mode, setMode] = useState<Mode>("live");
+
+  return (
+    <BrowserRouter>
+      <AppLayout mode={mode} setMode={setMode} />
+    </BrowserRouter>
   );
 }

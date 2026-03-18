@@ -25,19 +25,12 @@ use tracing::{info, warn};
 use crate::event_stream::{now_rfc3339, EventStream, StreamEvent};
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct RunOutputData {
-    pub run_id: String,
-    pub turn_ledger: TurnLedger,
-    pub observability_bundle: ObservabilityBundle,
-    pub final_state: String,
-    pub final_message: String,
-}
-
-#[derive(Debug)]
 pub struct BenchmarkConfig {
     pub run_id: String,
     pub task_spec_path: String,
+    pub task_spec_json: Option<serde_json::Value>,
     pub fixture_path: String,
+    pub fixture_json: Option<serde_json::Value>,
     pub model_id: Option<String>,
     pub api_key: Option<String>,
     pub strategy: String,
@@ -48,6 +41,15 @@ pub struct BenchmarkConfig {
     pub seed_overview: u32,
     pub initial_select: String,
     pub representation_level: String,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct RunOutputData {
+    pub run_id: String,
+    pub turn_ledger: graphbench_harness::TurnLedger,
+    pub observability_bundle: graphbench_harness::observability::ObservabilityBundle,
+    pub final_state: String,
+    pub final_message: String,
 }
 
 pub async fn run_benchmark(
@@ -150,8 +152,12 @@ fn run_benchmark_sync(
     let mut tools = ToolRegistry::default();
     live_graph_state.register_tools(&mut tools);
 
-    let task = load_task_spec(&config.task_spec_path)
-        .context(format!("Failed to load task spec from {}", config.task_spec_path))?;
+    let task = if let Some(task_json) = &config.task_spec_json {
+        serde_json::from_value(task_json.clone()).context("Failed to parse task spec JSON")?
+    } else {
+        load_task_spec(&config.task_spec_path)
+            .context(format!("Failed to load task spec from {}", config.task_spec_path))?
+    };
     let snapshot = live_graph_state.snapshot()?;
     let strategy = match config.strategy.as_str() {
         "graph_then_targeted_lexical_read" => graph_then_targeted_lexical_read(),

@@ -143,6 +143,8 @@ export function RunList({ onSelectRun, onRunComplete, runs: propRuns }: RunListP
                     <span style={{ color: "#10b981", fontWeight: "bold" }}>● Running</span>
                   ) : run.status === "failed" ? (
                     <span className="run-outcome failure">Failed</span>
+                  ) : run.outcome === "success" ? (
+                    <span className="run-outcome success">Passed</span>
                   ) : (
                     <span className={`run-outcome ${run.outcome}`}>{run.outcome}</span>
                   )}
@@ -197,8 +199,8 @@ interface StreamEvent {
 function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): ReactElement {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [taskSpecPath, setTaskSpecPath] = useState("tasks/prepare-to-edit/task-01.task.json");
-  const [fixturePath, setFixturePath] = useState("fixtures/graphbench-internal/fixture.json");
+  const [taskId, setTaskId] = useState("");
+  const [fixtureId, setFixtureId] = useState("graphbench-internal");
   const [modelId, setModelId] = useState("");
   const [apiKey, setApiKey] = useState("");
   const [strategy, setStrategy] = useState("graph_then_targeted_lexical_read");
@@ -207,7 +209,7 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
   const [tokenBudget, setTokenBudget] = useState("2000000");
   const [promptHeadroom, setPromptHeadroom] = useState("24576");
   const [seedOverview, setSeedOverview] = useState("2");
-  const [initialSelect, setInitialSelect] = useState("crates/graphbench-core/src/artifacts.rs");
+  const [initialSelect, setInitialSelect] = useState("crates/graphbench-core/src/lib.rs");
   const [representationLevel, setRepresentationLevel] = useState("L1");
   const [logs, setLogs] = useState<LogLine[]>([]);
   const [status, setStatus] = useState<"idle" | "running" | "complete" | "error">("idle");
@@ -223,14 +225,6 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
   useEffect(() => {
     logsEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [logs]);
-
-  useEffect(() => {
-    return () => {
-      if (wsRef.current) {
-        wsRef.current.close();
-      }
-    };
-  }, []);
 
   useEffect(() => {
     async function loadOptions() {
@@ -270,6 +264,20 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
     return `${prefix}${message}${toolBit}${metricBits ? ` ${metricBits}` : ""}`;
   }
 
+  const [pollInterval, setPollInterval] = useState<number | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
+      if (pollInterval) {
+        clearInterval(pollInterval);
+      }
+    };
+  }, [pollInterval]);
+
   const connectToWebSocket = useCallback((runId: string) => {
     const ws = new WebSocket(`ws://localhost:3001/ws?run_id=${encodeURIComponent(runId)}`);
     wsRef.current = ws;
@@ -289,15 +297,16 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
         if (event.event_type === 'run.completed') {
           setStatus("complete");
           addLog(formatEvent(event), 'success', event as Record<string, unknown>);
+          ws.close();
           setTimeout(() => {
             onRunComplete(runId);
           }, 1500);
-          ws.close();
           return;
         }
 
         if (event.event_type === 'run.failed') {
           setStatus("error");
+          setError(event.message || "Run failed");
           addLog(formatEvent(event), 'error', event as Record<string, unknown>);
           return;
         }
@@ -311,15 +320,54 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
     };
     
     ws.onerror = () => {
-      addLog('Connection error, waiting for completion...', 'info');
+      addLog('WebSocket error, falling back to polling...', 'info');
     };
     
     ws.onclose = () => {
-      if (status !== 'complete') {
+      if (status !== 'complete' && status !== 'error') {
         addLog('Connection closed', 'info');
       }
     };
-  }, [onRunComplete]);
+  }, [addLog, onRunComplete, status]);
+
+  const checkRunStatus = useCallback(async (runId: string) => {
+    try {
+      const response = await fetch(`http://localhost:3001/api/runs/${runId}`);
+      if (!response.ok) return null;
+      const data = await response.json() as { manifest: { outcome: string; completed_at: string | null } };
+      const run = data.manifest;
+      
+      if (run.completed_at && run.outcome) {
+        if (run.outcome === 'completed' || run.outcome === 'success') {
+          setStatus("complete");
+          addLog(`Run completed successfully`, 'success');
+          clearInterval(pollInterval!);
+          setPollInterval(null);
+          setTimeout(() => {
+            onRunComplete(runId);
+          }, 1500);
+        } else {
+          setStatus("error");
+          setError(`Run ${run.outcome}`);
+          addLog(`Run failed: ${run.outcome}`, 'error');
+          clearInterval(pollInterval!);
+          setPollInterval(null);
+        }
+        return true;
+      }
+      return false;
+    } catch (e) {
+      console.error('Error checking run status:', e);
+      return false;
+    }
+  }, [addLog, onRunComplete, pollInterval]);
+
+  const startPolling = useCallback((runId: string) => {
+    const interval = window.setInterval(() => {
+      checkRunStatus(runId);
+    }, 2000);
+    setPollInterval(interval);
+  }, [checkRunStatus]);
 
   async function handleRun() {
     setLoading(true);
@@ -327,8 +375,8 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
     setLogs([]);
     setStatus("running");
     addLog(`Starting benchmark run...`, "info");
-    addLog(`Task: ${taskSpecPath}`, "info");
-    addLog(`Fixture: ${fixturePath}`, "info");
+    addLog(`Task: ${taskId}`, "info");
+    addLog(`Fixture: ${fixtureId}`, "info");
     addLog(`Strategy: ${strategy}`, "info");
     if (modelId) addLog(`Model: ${modelId}`, "info");
     
@@ -337,8 +385,8 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          task_spec_path: taskSpecPath,
-          fixture_path: fixturePath,
+          task_id: taskId || undefined,
+          fixture_id: fixtureId || undefined,
           model_id: modelId || undefined,
           api_key: apiKey || undefined,
           strategy: strategy || undefined,
@@ -352,23 +400,26 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
         }),
       });
       
-      if (!response.ok) {
-        throw new Error(`Failed to start run: ${response.statusText}`);
+      const result = await response.json() as { success: boolean; run_id?: string; output?: string; error?: string };
+      
+      if (!response.ok || !result.success) {
+        const errMsg = result.error || result.output || `Failed to start run: ${response.statusText}`;
+        addLog(`✗ Error: ${errMsg}`, "error");
+        setError(errMsg);
+        setStatus("error");
+        setLoading(false);
+        return;
       }
       
-      const result = await response.json() as { success: boolean; run_id?: string; output?: string };
-      
-      if (result.success && result.run_id) {
+      if (result.run_id) {
         setCurrentRunId(result.run_id);
         addLog(`Run initialized: ${result.run_id}`, "info");
-        
-        // Navigate immediately to run detail page
-        addLog('Navigating to run page...', "info");
-        onRunComplete(result.run_id);
+        addLog('Waiting for run to complete...', "info");
+        connectToWebSocket(result.run_id);
       } else {
         addLog(`✗ Run failed`, "error");
         addLog(result.output || 'Unknown error', "error");
-        setError("Run failed");
+        setError(result.output || "Run failed");
         setStatus("error");
       }
     } catch (e) {
@@ -382,9 +433,15 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
   }
 
   function handleCancel() {
-    if (wsRef.current) {
-      wsRef.current.close();
-      wsRef.current = null;
+    if (status === "error") {
+      setLogs([]);
+      setStatus("idle");
+      setError(null);
+      return;
+    }
+    if (pollInterval) {
+      clearInterval(pollInterval);
+      setPollInterval(null);
     }
     addLog("Run cancelled", "info");
     setLoading(false);
@@ -420,12 +477,14 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
                 <div className="form-group">
                   <label>Task</label>
                   <select
-                    value={taskSpecPath}
-                    onChange={(e) => setTaskSpecPath(e.target.value)}
+                    value={taskId}
+                    onChange={(e) => setTaskId(e.target.value)}
+                    required
                   >
+                    <option value="">-- Select task --</option>
                     {availableTasks.map(task => (
-                      <option key={task} value={`tasks/${task}`}>
-                        {task.split('/').pop()}
+                      <option key={task} value={task}>
+                        {task}
                       </option>
                     ))}
                   </select>
@@ -434,12 +493,14 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
                 <div className="form-group">
                   <label>Fixture</label>
                   <select
-                    value={fixturePath}
-                    onChange={(e) => setFixturePath(e.target.value)}
+                    value={fixtureId}
+                    onChange={(e) => setFixtureId(e.target.value)}
+                    required
                   >
+                    <option value="">-- Select fixture --</option>
                     {availableFixtures.map(fixture => (
-                      <option key={fixture} value={`fixtures/${fixture}`}>
-                        {fixture.split('/').pop()}
+                      <option key={fixture} value={fixture}>
+                        {fixture}
                       </option>
                     ))}
                   </select>
@@ -565,20 +626,46 @@ function RunBenchmarkModal({ onClose, onRunComplete }: RunBenchmarkModalProps): 
           </div>
         )}
 
-        {error && <div className="error">{error}</div>}
+        {error && (
+          <div className="modal-body">
+            <div className="error-message" style={{ padding: "1rem", background: "rgba(239, 68, 68, 0.1)", border: "1px solid #ef4444", borderRadius: "8px", color: "#ef4444" }}>
+              <strong>Error:</strong> {error}
+            </div>
+          </div>
+        )}
 
         <div className="modal-footer">
-          {status !== "idle" && status !== "running" && (
-            <Button variant="secondary" onClick={() => { setLogs([]); setStatus("idle"); }}>
+          {status === "error" && (
+            <Button variant="primary" onClick={() => { setLogs([]); setStatus("idle"); setError(null); }}>
+              Try Again
+            </Button>
+          )}
+          {status !== "error" && status !== "idle" && status !== "running" && (
+            <Button variant="secondary" onClick={() => { setLogs([]); setStatus("idle"); setError(null); }}>
               New Run
             </Button>
           )}
           <Button 
             variant="secondary" 
-            onClick={handleCancel}
+            onClick={() => {
+              if (wsRef.current) {
+                wsRef.current.close();
+                wsRef.current = null;
+              }
+              if (pollInterval) {
+                clearInterval(pollInterval);
+                setPollInterval(null);
+              }
+              setLoading(false);
+              setStatus("idle");
+              setCurrentRunId(null);
+              setLogs([]);
+              setError(null);
+              onClose();
+            }}
             disabled={loading && status === "complete"}
           >
-            {status === "complete" ? "Done" : status === "running" ? "Cancel" : "Cancel"}
+            {status === "error" ? "Close" : status === "complete" ? "Done" : status === "running" ? "Cancel" : "Cancel"}
           </Button>
           {status === "idle" && (
             <Button variant="primary" onClick={handleRun} disabled={loading || loadingOptions || !!optionsError || availableTasks.length === 0}>

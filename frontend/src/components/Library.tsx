@@ -1,12 +1,131 @@
 import { useState, useEffect, ReactElement } from "react";
 import { apiClient } from "../api/client";
 import { Button } from "./Button";
+import { JsonToggle } from "./JsonToggle";
+import { StructuredForm } from "./StructuredForm";
 
 interface LibraryProps {
   onBack: () => void;
+  onSelectTask?: (taskId: string) => void;
 }
 
 type TabType = "strategies" | "tasks" | "fixtures" | "evidence" | "prompts";
+
+const FORM_SCHEMAS: Record<TabType, { sections: Array<{ name: string; label: string; fields: Array<{ name: string; type: string; label?: string; placeholder?: string; required?: boolean }> }> }> = {
+  strategies: {
+    sections: [
+      {
+        name: "_top",
+        label: "Basic Info",
+        fields: [
+          { name: "name", type: "string", label: "Name", placeholder: "e.g., graph.targeted-lexical-read.v1", required: true },
+          { name: "description", type: "string", label: "Description", placeholder: "Optional description" },
+        ],
+      },
+      {
+        name: "config",
+        label: "Strategy Config",
+        fields: [
+          { name: "strategy_id", type: "string", label: "Strategy ID", placeholder: "e.g., graph.targeted-lexical-read", required: true },
+          { name: "strategy_version", type: "string", label: "Version", placeholder: "e.g., v1", required: true },
+          { name: "graph_discovery", type: "string", label: "Graph Discovery", placeholder: "graph_then_targeted_lexical_read" },
+          { name: "projection", type: "string", label: "Projection", placeholder: "balanced" },
+          { name: "reread_policy", type: "string", label: "Reread Policy", placeholder: "allow" },
+        ],
+      },
+    ],
+  },
+  tasks: {
+    sections: [
+      {
+        name: "_top",
+        label: "Basic Info",
+        fields: [
+          { name: "task_id", type: "string", label: "Task ID", placeholder: "e.g., prepare-edit.command-surface", required: true },
+        ],
+      },
+      {
+        name: "spec",
+        label: "Task Spec",
+        fields: [
+          { name: "title", type: "string", label: "Title" },
+          { name: "task_class", type: "string", label: "Task Class" },
+          { name: "difficulty", type: "string", label: "Difficulty", placeholder: "easy" },
+          { name: "statement", type: "string", label: "Statement" },
+          { name: "fixture_id", type: "string", label: "Fixture ID" },
+          { name: "turn_budget", type: "number", label: "Turn Budget" },
+        ],
+      },
+      {
+        name: "tools",
+        label: "Allowed Tools",
+        fields: [
+          { name: "allowed_tools", type: "array-string", label: "Tools", placeholder: "Add tool name" },
+        ],
+      },
+    ],
+  },
+  fixtures: {
+    sections: [
+      {
+        name: "_top",
+        label: "Basic Info",
+        fields: [
+          { name: "name", type: "string", label: "Name", placeholder: "e.g., graphbench-internal", required: true },
+        ],
+      },
+      {
+        name: "config",
+        label: "Fixture Config",
+        fields: [
+          { name: "fixture_id", type: "string", label: "Fixture ID" },
+          { name: "title", type: "string", label: "Title" },
+          { name: "schema_version", type: "number", label: "Schema Version" },
+        ],
+      },
+    ],
+  },
+  evidence: {
+    sections: [
+      {
+        name: "_top",
+        label: "Basic Info",
+        fields: [
+          { name: "task_id", type: "string", label: "Task ID", required: true },
+          { name: "evidence_id", type: "string", label: "Evidence ID", required: true },
+        ],
+      },
+      {
+        name: "spec",
+        label: "Evidence Spec",
+        fields: [
+          { name: "description", type: "string", label: "Description" },
+          { name: "content", type: "string", label: "Content" },
+        ],
+      },
+    ],
+  },
+  prompts: {
+    sections: [
+      {
+        name: "_top",
+        label: "Basic Info",
+        fields: [
+          { name: "name", type: "string", label: "Name", placeholder: "e.g., system.prompt.v1", required: true },
+          { name: "description", type: "string", label: "Description" },
+        ],
+      },
+      {
+        name: "template",
+        label: "Prompt Template",
+        fields: [
+          { name: "system", type: "string", label: "System Prompt" },
+          { name: "version", type: "string", label: "Version" },
+        ],
+      },
+    ],
+  },
+};
 
 export function Library({ onBack }: LibraryProps): ReactElement {
   const [activeTab, setActiveTab] = useState<TabType>("strategies");
@@ -75,26 +194,62 @@ export function Library({ onBack }: LibraryProps): ReactElement {
   async function handleAddItem() {
     try {
       if (activeTab === "strategies") {
+        const config = {
+          strategy_id: newItem.strategy_id,
+          strategy_version: newItem.strategy_version,
+          graph_discovery: newItem.graph_discovery || "graph_then_targeted_lexical_read",
+          projection: newItem.projection || "balanced",
+          reread_policy: newItem.reread_policy || "allow",
+        };
         await apiClient.createStrategy(
           newItem.name as string,
-          newItem.config as Record<string, unknown>,
+          config as Record<string, unknown>,
           newItem.description as string | undefined
         );
       } else if (activeTab === "tasks") {
+        const spec = {
+          task_id: newItem.task_id,
+          title: newItem.title,
+          task_class: newItem.task_class,
+          difficulty: newItem.difficulty,
+          statement: newItem.statement,
+          fixture_id: newItem.fixture_id,
+          turn_budget: newItem.turn_budget,
+          allowed_tools: newItem.allowed_tools,
+        };
         await apiClient.createTask(
           newItem.task_id as string,
-          newItem.spec as Record<string, unknown>
+          spec as Record<string, unknown>
         );
       } else if (activeTab === "fixtures") {
+        const config = {
+          fixture_id: newItem.fixture_id,
+          title: newItem.title,
+          schema_version: newItem.schema_version || 1,
+        };
         await apiClient.createFixture(
           newItem.name as string,
-          newItem.config as Record<string, unknown>,
+          config as Record<string, unknown>,
           newItem.graph_snapshot as Record<string, unknown> | undefined
         );
+      } else if (activeTab === "evidence") {
+        const spec = {
+          description: newItem.description,
+          content: newItem.content,
+        };
+        await apiClient.createEvidence(
+          newItem.task_id as string,
+          newItem.evidence_id as string,
+          spec as Record<string, unknown>
+        );
       } else if (activeTab === "prompts") {
+        const template = {
+          system: newItem.system,
+          version: newItem.version,
+        };
         await apiClient.createPrompt(
           newItem.name as string,
-          newItem.template as Record<string, unknown>,
+          template as Record<string, unknown>,
           newItem.description as string | undefined
         );
       }
@@ -206,7 +361,7 @@ export function Library({ onBack }: LibraryProps): ReactElement {
 
         <div className="library-detail">
           {selectedItem && itemDetails ? (
-            <pre>{JSON.stringify(itemDetails, null, 2)}</pre>
+            <JsonToggle data={itemDetails} />
           ) : (
             <div className="empty-state">Select an item to view details</div>
           )}
@@ -215,36 +370,24 @@ export function Library({ onBack }: LibraryProps): ReactElement {
 
       {showAddForm && (
         <div className="modal-overlay" onClick={() => setShowAddForm(false)}>
-          <div className="modal" onClick={e => e.stopPropagation()}>
+          <div className="modal-content modal-large" onClick={e => e.stopPropagation()} style={{ overflow: "auto", maxWidth: "1000px" }}>
             <h3>Add New {activeTab.slice(0, -1)}</h3>
-            {activeTab === "strategies" && (
-              <>
-                <input placeholder="Name" value={(newItem.name as string) || ""} onChange={e => setNewItem({...newItem, name: e.target.value})} />
-                <textarea placeholder="Config (JSON)" value={newItem.config ? JSON.stringify(newItem.config) : ""} onChange={e => { try { setNewItem({...newItem, config: JSON.parse(e.target.value)}); } catch {} }} />
-                <input placeholder="Description (optional)" value={(newItem.description as string) || ""} onChange={e => setNewItem({...newItem, description: e.target.value})} />
-              </>
+            {activeTab !== "evidence" && (
+              <StructuredForm
+                sections={FORM_SCHEMAS[activeTab].sections as never}
+                value={newItem}
+                onChange={setNewItem}
+              />
             )}
-            {activeTab === "tasks" && (
-              <>
-                <input placeholder="Task ID" value={(newItem.task_id as string) || ""} onChange={e => setNewItem({...newItem, task_id: e.target.value})} />
-                <textarea placeholder="Spec (JSON)" value={newItem.spec ? JSON.stringify(newItem.spec) : ""} onChange={e => { try { setNewItem({...newItem, spec: JSON.parse(e.target.value)}); } catch {} }} />
-              </>
-            )}
-            {activeTab === "fixtures" && (
-              <>
-                <input placeholder="Name" value={(newItem.name as string) || ""} onChange={e => setNewItem({...newItem, name: e.target.value})} />
-                <textarea placeholder="Config (JSON)" value={newItem.config ? JSON.stringify(newItem.config) : ""} onChange={e => { try { setNewItem({...newItem, config: JSON.parse(e.target.value)}); } catch {} }} />
-              </>
-            )}
-            {activeTab === "prompts" && (
-              <>
-                <input placeholder="Name" value={(newItem.name as string) || ""} onChange={e => setNewItem({...newItem, name: e.target.value})} />
-                <textarea placeholder="Template (JSON)" value={newItem.template ? JSON.stringify(newItem.template) : ""} onChange={e => { try { setNewItem({...newItem, template: JSON.parse(e.target.value)}); } catch {} }} />
-                <input placeholder="Description (optional)" value={(newItem.description as string) || ""} onChange={e => setNewItem({...newItem, description: e.target.value})} />
-              </>
+            {activeTab === "evidence" && (
+              <StructuredForm
+                sections={FORM_SCHEMAS.evidence.sections as never}
+                value={newItem}
+                onChange={setNewItem}
+              />
             )}
             <div className="modal-actions">
-              <Button variant="secondary" onClick={() => setShowAddForm(false)}>Cancel</Button>
+              <Button variant="secondary" onClick={() => { setShowAddForm(false); setNewItem({}); }}>Cancel</Button>
               <Button variant="primary" onClick={handleAddItem}>Add</Button>
             </div>
           </div>

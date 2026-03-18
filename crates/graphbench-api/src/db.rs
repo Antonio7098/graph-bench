@@ -133,7 +133,6 @@ impl Database {
             
             CREATE INDEX IF NOT EXISTS idx_runs_started ON runs(started_at DESC);
             CREATE INDEX IF NOT EXISTS idx_runs_status ON runs(status);
-            CREATE INDEX IF NOT EXISTS idx_turns_run ON turns(run_id);
             CREATE INDEX IF NOT EXISTS idx_run_events_run ON run_events(run_id, seq);
             
             -- Versioned entities (append-only)
@@ -192,17 +191,6 @@ impl Database {
             CREATE INDEX IF NOT EXISTS idx_fixtures_name ON fixtures(name, version DESC);
             CREATE INDEX IF NOT EXISTS idx_prompts_name ON prompts(name, version DESC);
             
-            CREATE TABLE IF NOT EXISTS turns (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                run_id TEXT,
-                turn_index INTEGER,
-                turn_data TEXT,
-                graph_session_after TEXT,
-                tool_traces TEXT,
-                FOREIGN KEY (run_id) REFERENCES runs(run_id)
-            );
-            
-            CREATE INDEX IF NOT EXISTS idx_turns_run ON turns(run_id);
             CREATE INDEX IF NOT EXISTS idx_events_run ON run_events(run_id);
             CREATE INDEX IF NOT EXISTS idx_events_seq ON run_events(run_id, seq);
             ",
@@ -275,6 +263,30 @@ impl Database {
 
     pub fn get_run(&self, run_id: &str) -> Result<Option<RunDetail>> {
         let conn = self.conn.lock().unwrap();
+
+        // First check if the run exists
+        let exists: bool = conn
+            .query_row(
+                "SELECT EXISTS(SELECT 1 FROM runs WHERE run_id = ?)",
+                [run_id],
+                |row| row.get(0),
+            )
+            .unwrap_or(false);
+
+        if !exists {
+            return Ok(None);
+        }
+
+        // Get raw_data to debug
+        let raw_data: String = conn
+            .query_row(
+                "SELECT raw_data FROM runs WHERE run_id = ?",
+                [run_id],
+                |row| row.get(0),
+            )
+            .unwrap_or_default();
+
+        tracing::debug!("get_run {}: raw_data len = {}", run_id, raw_data.len());
 
         let mut stmt = conn.prepare(
             "SELECT run_id, fixture_id, task_id, strategy_id, provider, model_slug, harness_version, started_at, completed_at, outcome, turn_count, raw_data, turn_ledger_data FROM runs WHERE run_id = ?"
@@ -552,6 +564,33 @@ impl Database {
         run_id: &str,
         status: &str,
         details: Option<&str>,
+        task_id: Option<&str>,
+        strategy_id: Option<&str>,
+        fixture_id: Option<&str>,
+        model_slug: Option<&str>,
+    ) -> Result<()> {
+        self.upsert_run_status_with_turns(
+            run_id,
+            status,
+            details,
+            task_id,
+            strategy_id,
+            fixture_id,
+            model_slug,
+            0,
+        )
+    }
+
+    pub fn upsert_run_status_with_turns(
+        &self,
+        run_id: &str,
+        status: &str,
+        details: Option<&str>,
+        task_id: Option<&str>,
+        strategy_id: Option<&str>,
+        fixture_id: Option<&str>,
+        model_slug: Option<&str>,
+        turn_count: i32,
     ) -> Result<()> {
         let conn = self.conn.lock().unwrap();
 
@@ -560,19 +599,19 @@ impl Database {
         conn.execute(
             "INSERT INTO runs (run_id, status, started_at, completed_at, outcome, task_id, strategy_id, provider, model_slug, fixture_id, turn_count, raw_data)
              VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-             ON CONFLICT(run_id) DO UPDATE SET status = excluded.status, outcome = excluded.outcome, completed_at = excluded.completed_at, raw_data = COALESCE(excluded.raw_data, runs.raw_data)",
+             ON CONFLICT(run_id) DO UPDATE SET status = excluded.status, outcome = excluded.outcome, completed_at = excluded.completed_at, turn_count = excluded.turn_count, raw_data = COALESCE(excluded.raw_data, runs.raw_data)",
             params![
                 run_id,
                 status,
                 now,
                 if status == "completed" || status == "failed" { now.clone() } else { String::new() },
                 status,  // outcome matches status
-                details.unwrap_or("benchmark"),
-                "benchmark",
+                task_id.unwrap_or("benchmark"),
+                strategy_id.unwrap_or("benchmark"),
                 "openrouter",
-                "benchmark-model",
-                "benchmark-internal",
-                0,
+                model_slug.unwrap_or("benchmark-model"),
+                fixture_id.unwrap_or("benchmark-internal"),
+                turn_count,
                 details.unwrap_or("{}"),
             ],
         )?;
@@ -716,6 +755,31 @@ impl Database {
         )?;
 
         Ok(())
+    }
+
+    pub fn get_run_output(&self, run_id: &str) -> Result<Option<serde_json::Value>> {
+        let conn = self.conn.lock().unwrap();
+
+        let result = conn.query_row(
+            "SELECT turn_ledger_data FROM runs WHERE run_id = ?",
+            [run_id],
+            |row| {
+                let data: Option<String> = row.get(0)?;
+                Ok(data)
+            },
+        );
+
+        match result {
+            Ok(Some(json_str)) => match serde_json::from_str(&json_str) {
+                Ok(value) => Ok(Some(value)),
+                Err(e) => {
+                    tracing::warn!("Failed to parse turn_ledger_data for {}: {}", run_id, e);
+                    Ok(None)
+                }
+            },
+            Ok(None) => Ok(None),
+            Err(_) => Ok(None),
+        }
     }
 
     // ============ STRATEGIES (append-only) ============
