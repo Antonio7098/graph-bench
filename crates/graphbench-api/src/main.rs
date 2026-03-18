@@ -22,7 +22,6 @@ use crate::websocket::ws_handler;
 pub struct AppState {
     pub db: Arc<Database>,
     pub event_stream: Arc<EventStream>,
-    pub traces_dir: PathBuf,
     pub fixtures_dir: PathBuf,
 }
 
@@ -42,10 +41,6 @@ async fn main() -> anyhow::Result<()> {
         .unwrap_or_else(|_| "3001".to_string())
         .parse::<u16>()?;
 
-    let traces_dir = std::env::var("TRACES_DIR")
-        .map(PathBuf::from)
-        .unwrap_or_else(|_| PathBuf::from("/home/antonio/programming/Hivemind/graph-bench/traces"));
-
     let data_dir = std::env::var("DATA_DIR")
         .map(PathBuf::from)
         .unwrap_or_else(|_| PathBuf::from("/home/antonio/programming/Hivemind/graph-bench/data"));
@@ -55,7 +50,6 @@ async fn main() -> anyhow::Result<()> {
         .unwrap_or_else(|_| PathBuf::from("/home/antonio/programming/Hivemind/graph-bench/fixtures"));
 
     std::fs::create_dir_all(&data_dir)?;
-    std::fs::create_dir_all(&traces_dir)?;
 
     let db_path = data_dir.join("graphbench.db");
     let db = Arc::new(Database::new(&db_path)?);
@@ -70,7 +64,6 @@ async fn main() -> anyhow::Result<()> {
     let state = AppState {
         db,
         event_stream,
-        traces_dir,
         fixtures_dir,
     };
 
