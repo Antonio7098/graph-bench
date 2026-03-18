@@ -133,23 +133,144 @@ impl Database {
                 FOREIGN KEY (run_id) REFERENCES runs(run_id)
             );
 
+            CREATE TABLE IF NOT EXISTS run_turn_states (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                state_type TEXT NOT NULL,
+                state_value TEXT NOT NULL,
+                PRIMARY KEY (run_id, turn_index, state_type),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_requests (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                schema_version INTEGER,
+                prompt_version TEXT,
+                prompt_hash TEXT,
+                context_hash TEXT,
+                PRIMARY KEY (run_id, turn_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_responses (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                provider TEXT,
+                model_slug TEXT,
+                schema_version INTEGER,
+                validated INTEGER,
+                PRIMARY KEY (run_id, turn_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_selections (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                selected_context_object TEXT,
+                PRIMARY KEY (run_id, turn_index, selected_context_object),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_omitted_candidates (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                candidate_index INTEGER NOT NULL,
+                candidate_id TEXT,
+                reason TEXT,
+                PRIMARY KEY (run_id, turn_index, candidate_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_rendered_sections (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                section_index INTEGER NOT NULL,
+                section_id TEXT,
+                schema_version INTEGER,
+                title TEXT,
+                content TEXT,
+                byte_count INTEGER,
+                token_count INTEGER,
+                PRIMARY KEY (run_id, turn_index, section_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_context_ids (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                context_index INTEGER NOT NULL,
+                context_object_id TEXT,
+                PRIMARY KEY (run_id, turn_index, context_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_compactions (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                compaction_index INTEGER NOT NULL,
+                summary_item_id TEXT,
+                source_item_id TEXT,
+                PRIMARY KEY (run_id, turn_index, compaction_index, source_item_id),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_section_accounting (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                section_id TEXT,
+                byte_count INTEGER,
+                token_count INTEGER,
+                PRIMARY KEY (run_id, turn_index, section_id),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_telemetry (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                prompt_bytes INTEGER,
+                prompt_tokens INTEGER,
+                latency_ms INTEGER,
+                tool_calls INTEGER,
+                PRIMARY KEY (run_id, turn_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_hashes (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                turn_hash TEXT,
+                PRIMARY KEY (run_id, turn_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_readiness (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                readiness_state TEXT,
+                readiness_reason TEXT,
+                PRIMARY KEY (run_id, turn_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_evidence_delta (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                evidence_index INTEGER NOT NULL,
+                evidence_id TEXT,
+                PRIMARY KEY (run_id, turn_index, evidence_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
             CREATE TABLE IF NOT EXISTS run_turns (
                 run_id TEXT NOT NULL,
                 turn_index INTEGER NOT NULL,
-                state_before_json TEXT,
-                state_after_json TEXT,
                 graph_session_before TEXT,
                 graph_session_after TEXT,
-                ordered_context_object_ids_json TEXT,
-                compactions_json TEXT,
-                section_accounting_json TEXT,
                 rendered_prompt TEXT,
                 rendered_context TEXT,
                 replay_hash TEXT,
-                request_json TEXT,
-                response_json TEXT,
                 provider_request_id TEXT,
-                telemetry_json TEXT,
                 PRIMARY KEY (run_id, turn_index),
                 FOREIGN KEY (run_id) REFERENCES runs(run_id)
             );
@@ -195,12 +316,31 @@ impl Database {
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
             );
 
-            CREATE TABLE IF NOT EXISTS run_event_details (
+            CREATE TABLE IF NOT EXISTS run_event_metrics (
                 event_id INTEGER PRIMARY KEY,
                 run_id TEXT NOT NULL,
-                metrics_json TEXT,
-                tags_json TEXT,
-                details_json TEXT,
+                prompt_tokens INTEGER,
+                completion_tokens INTEGER,
+                total_tokens INTEGER,
+                latency_ms INTEGER,
+                FOREIGN KEY (run_id) REFERENCES runs(run_id),
+                FOREIGN KEY (event_id) REFERENCES run_events(id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_event_tags (
+                event_id INTEGER PRIMARY KEY,
+                run_id TEXT NOT NULL,
+                tag_index INTEGER NOT NULL,
+                tag TEXT,
+                FOREIGN KEY (run_id) REFERENCES runs(run_id),
+                FOREIGN KEY (event_id) REFERENCES run_events(id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_event_details_data (
+                event_id INTEGER PRIMARY KEY,
+                run_id TEXT NOT NULL,
+                details_key TEXT,
+                details_value TEXT,
                 FOREIGN KEY (run_id) REFERENCES runs(run_id),
                 FOREIGN KEY (event_id) REFERENCES run_events(id)
             );
@@ -208,7 +348,12 @@ impl Database {
             CREATE TABLE IF NOT EXISTS run_structured_logs (
                 run_id TEXT NOT NULL,
                 log_index INTEGER NOT NULL,
-                log_entry_json TEXT,
+                log_level TEXT,
+                log_component TEXT,
+                log_message TEXT,
+                log_timestamp TEXT,
+                turn_index INTEGER,
+                tool_name TEXT,
                 PRIMARY KEY (run_id, log_index),
                 FOREIGN KEY (run_id) REFERENCES runs(run_id)
             );
@@ -478,7 +623,7 @@ impl Database {
         };
 
         let mut turns_stmt = conn.prepare(
-            "SELECT turn_index, rendered_prompt, rendered_context, provider_request_id, telemetry_json FROM run_turns WHERE run_id = ? ORDER BY turn_index"
+            "SELECT turn_index, graph_session_before, graph_session_after, rendered_prompt, rendered_context, replay_hash, provider_request_id FROM run_turns WHERE run_id = ? ORDER BY turn_index"
         )?;
 
         let mut turns: Vec<serde_json::Value> = Vec::new();
@@ -487,16 +632,164 @@ impl Database {
 
         while let Some(row) = turn_rows.next()? {
             let turn_index: u32 = row.get(0)?;
-            let rendered_prompt: String = row.get(1)?;
-            let rendered_context: String = row.get(2)?;
-            let provider_request_id: Option<String> = row.get(3)?;
-            let telemetry_json: String = row.get(4)?;
+            let graph_session_before: String = row.get(1)?;
+            let graph_session_after: String = row.get(2)?;
+            let rendered_prompt: String = row.get(3)?;
+            let rendered_context: String = row.get(4)?;
+            let replay_hash: String = row.get(5)?;
+            let provider_request_id: Option<String> = row.get(6)?;
 
-            let telemetry: serde_json::Value =
-                serde_json::from_str(&telemetry_json).unwrap_or(serde_json::json!({
-                    "prompt_bytes": 0, "prompt_tokens": 0, "latency_ms": 0, "tool_calls": 0
+            // Get state before/after
+            let mut state_stmt = conn.prepare(
+                "SELECT state_type, state_value FROM run_turn_states WHERE run_id = ? AND turn_index = ?"
+            )?;
+            let mut states: std::collections::HashMap<String, String> =
+                std::collections::HashMap::new();
+            let mut state_rows = state_stmt.query(params![&run_id_clone, turn_index])?;
+            while let Some(state_row) = state_rows.next()? {
+                let state_type: String = state_row.get(0)?;
+                let state_value: String = state_row.get(1)?;
+                states.insert(state_type, state_value);
+            }
+
+            // Get request
+            let mut req_stmt = conn.prepare(
+                "SELECT schema_version, prompt_version, prompt_hash, context_hash FROM run_turn_requests WHERE run_id = ? AND turn_index = ?"
+            )?;
+            let request: serde_json::Value = if let Ok(row) =
+                req_stmt.query_row(params![&run_id_clone, turn_index], |row| {
+                    Ok((
+                        row.get::<_, i32>(0)?,
+                        row.get::<_, String>(1)?,
+                        row.get::<_, String>(2)?,
+                        row.get::<_, String>(3)?,
+                    ))
+                }) {
+                serde_json::json!({
+                    "schema_version": row.0,
+                    "prompt_version": row.1,
+                    "prompt_hash": row.2,
+                    "context_hash": row.3,
+                })
+            } else {
+                serde_json::json!({})
+            };
+
+            // Get response
+            let mut resp_stmt = conn.prepare(
+                "SELECT provider, model_slug, schema_version, validated FROM run_turn_responses WHERE run_id = ? AND turn_index = ?"
+            )?;
+            let response: serde_json::Value = if let Ok(row) =
+                resp_stmt.query_row(params![&run_id_clone, turn_index], |row| {
+                    Ok((
+                        row.get::<_, String>(0)?,
+                        row.get::<_, String>(1)?,
+                        row.get::<_, i32>(2)?,
+                        row.get::<_, i32>(3)?,
+                    ))
+                }) {
+                serde_json::json!({
+                    "provider": row.0,
+                    "model_slug": row.1,
+                    "schema_version": row.2,
+                    "validated": row.3 != 0,
+                })
+            } else {
+                serde_json::json!({})
+            };
+
+            // Get telemetry
+            let mut tel_stmt = conn.prepare(
+                "SELECT prompt_bytes, prompt_tokens, latency_ms, tool_calls FROM run_turn_telemetry WHERE run_id = ? AND turn_index = ?"
+            )?;
+            let telemetry: serde_json::Value = if let Ok(row) =
+                tel_stmt.query_row(params![&run_id_clone, turn_index], |row| {
+                    Ok((
+                        row.get::<_, i32>(0)?,
+                        row.get::<_, i32>(1)?,
+                        row.get::<_, i32>(2)?,
+                        row.get::<_, i32>(3)?,
+                    ))
+                }) {
+                serde_json::json!({
+                    "prompt_bytes": row.0,
+                    "prompt_tokens": row.1,
+                    "latency_ms": row.2,
+                    "tool_calls": row.3,
+                })
+            } else {
+                serde_json::json!({"prompt_bytes": 0, "prompt_tokens": 0, "latency_ms": 0, "tool_calls": 0})
+            };
+
+            // Get hashes
+            let mut hash_stmt = conn.prepare(
+                "SELECT turn_hash FROM run_turn_hashes WHERE run_id = ? AND turn_index = ?",
+            )?;
+            let turn_hash: String = hash_stmt
+                .query_row(params![&run_id_clone, turn_index], |row| row.get(0))
+                .unwrap_or_default();
+
+            // Get readiness
+            let mut readiness_stmt = conn.prepare(
+                "SELECT readiness_state, readiness_reason FROM run_turn_readiness WHERE run_id = ? AND turn_index = ?"
+            )?;
+            let (readiness_state, readiness_reason): (String, String) = readiness_stmt
+                .query_row(params![&run_id_clone, turn_index], |row| {
+                    Ok((row.get::<_, String>(0)?, row.get::<_, String>(1)?))
+                })
+                .unwrap_or(("Unknown".to_string(), "".to_string()));
+
+            // Get selection - context objects
+            let mut sel_stmt = conn.prepare(
+                "SELECT selected_context_object FROM run_turn_selections WHERE run_id = ? AND turn_index = ?"
+            )?;
+            let mut selected_context_objects: Vec<String> = Vec::new();
+            let mut sel_rows = sel_stmt.query(params![&run_id_clone, turn_index])?;
+            while let Some(sel_row) = sel_rows.next()? {
+                selected_context_objects.push(sel_row.get(0)?);
+            }
+
+            // Get omitted candidates
+            let mut om_stmt = conn.prepare(
+                "SELECT candidate_id, reason FROM run_turn_omitted_candidates WHERE run_id = ? AND turn_index = ? ORDER BY candidate_index"
+            )?;
+            let mut omitted_candidates: Vec<serde_json::Value> = Vec::new();
+            let mut om_rows = om_stmt.query(params![&run_id_clone, turn_index])?;
+            while let Some(om_row) = om_rows.next()? {
+                omitted_candidates.push(serde_json::json!({
+                    "candidate_id": om_row.get::<_, String>(0)?,
+                    "reason": om_row.get::<_, String>(1)?,
                 }));
+            }
 
+            // Get rendered sections
+            let mut sec_stmt = conn.prepare(
+                "SELECT section_id, schema_version, title, content, byte_count, token_count FROM run_turn_rendered_sections WHERE run_id = ? AND turn_index = ? ORDER BY section_index"
+            )?;
+            let mut rendered_sections: Vec<serde_json::Value> = Vec::new();
+            let mut sec_rows = sec_stmt.query(params![&run_id_clone, turn_index])?;
+            while let Some(sec_row) = sec_rows.next()? {
+                rendered_sections.push(serde_json::json!({
+                    "section_id": sec_row.get::<_, String>(0)?,
+                    "schema_version": sec_row.get::<_, i32>(1)?,
+                    "title": sec_row.get::<_, String>(2)?,
+                    "content": sec_row.get::<_, String>(3)?,
+                    "byte_count": sec_row.get::<_, i32>(4)?,
+                    "token_count": sec_row.get::<_, i32>(5)?,
+                }));
+            }
+
+            // Get evidence delta
+            let mut ev_stmt = conn.prepare(
+                "SELECT evidence_id FROM run_turn_evidence_delta WHERE run_id = ? AND turn_index = ? ORDER BY evidence_index"
+            )?;
+            let mut evidence_delta: Vec<String> = Vec::new();
+            let mut ev_rows = ev_stmt.query(params![&run_id_clone, turn_index])?;
+            while let Some(ev_row) = ev_rows.next()? {
+                evidence_delta.push(ev_row.get(0)?);
+            }
+
+            // Get tool traces
             let mut tool_traces_stmt = conn.prepare(
                 "SELECT trace_index, tool_name, latency_ms, outcome, input_payload_json, output_payload_json FROM run_turn_tool_traces WHERE run_id = ? AND turn_index = ? ORDER BY trace_index"
             )?;
@@ -505,7 +798,6 @@ impl Database {
             let mut trace_rows = tool_traces_stmt.query(params![&run_id_clone, turn_index])?;
 
             while let Some(trace_row) = trace_rows.next()? {
-                let trace_index: i32 = trace_row.get(0)?;
                 let tool_name: String = trace_row.get(1)?;
                 let latency_ms: u32 = trace_row.get(2)?;
                 let outcome: String = trace_row.get(3)?;
@@ -521,6 +813,7 @@ impl Database {
                 }));
             }
 
+            // Get blobs
             let mut payload_stmt = conn.prepare(
                 "SELECT payload_type, blob_id, media_type, byte_count, inline_content FROM run_turn_payloads WHERE run_id = ? AND turn_index = ?"
             )?;
@@ -544,6 +837,31 @@ impl Database {
                 }));
             }
 
+            // Construct turn_trace
+            let turn_trace = serde_json::json!({
+                "run_id": run_id_clone,
+                "turn_index": turn_index,
+                "task_id": "",
+                "fixture_id": "",
+                "strategy_id": "",
+                "request": request,
+                "response": response,
+                "selection": {
+                    "selected_context_objects": selected_context_objects,
+                    "omitted_candidates": omitted_candidates,
+                    "rendered_sections": rendered_sections,
+                },
+                "telemetry": telemetry,
+                "evidence_delta": evidence_delta,
+                "readiness_state": readiness_state,
+                "readiness_reason": readiness_reason,
+                "hashes": {
+                    "turn_hash": turn_hash,
+                },
+                "graph_session_before": graph_session_before,
+                "graph_session_after": graph_session_after,
+            });
+
             turns.push(serde_json::json!({
                 "turn_index": turn_index,
                 "rendered_prompt": rendered_prompt,
@@ -552,6 +870,7 @@ impl Database {
                 "telemetry": telemetry,
                 "tool_traces": tool_traces,
                 "blob_references": blob_references,
+                "turn_trace": turn_trace,
             }));
         }
 
@@ -919,6 +1238,7 @@ impl Database {
         let conn = self.conn.lock().unwrap();
         let bundle = &output.observability_bundle;
         let manifest = &bundle.run_manifest;
+        let turn_ledger = &output.turn_ledger;
 
         conn.execute(
             "INSERT OR REPLACE INTO runs (run_id, completed_at, status, outcome)
@@ -962,24 +1282,234 @@ impl Database {
             ],
         )?;
 
-        for turn in &bundle.turns {
-            let telemetry_json = serde_json::to_string(&turn.telemetry)?;
+        // Save turn data from TurnLedger
+        for (turn_idx, entry) in turn_ledger.entries.iter().enumerate() {
+            let turn_index = entry.turn_trace.turn_index;
 
+            // Basic turn data
             conn.execute(
                 "INSERT OR REPLACE INTO run_turns 
-                 (run_id, turn_index, rendered_prompt, rendered_context, provider_request_id, telemetry_json)
-                 VALUES (?, ?, ?, ?, ?, ?)",
+                 (run_id, turn_index, graph_session_before, graph_session_after, rendered_prompt, rendered_context, replay_hash)
+                 VALUES (?, ?, ?, ?, ?, ?, ?)",
                 params![
                     output.run_id,
-                    turn.turn_index,
-                    turn.prompt_blob.inline_content.as_deref().unwrap_or(""),
-                    turn.context_blob.inline_content.as_deref().unwrap_or(""),
-                    turn.provider_request_id,
-                    telemetry_json,
+                    turn_index,
+                    entry.graph_session_before,
+                    entry.graph_session_after,
+                    entry.rendered_prompt,
+                    entry.rendered_context,
+                    entry.replay_hash,
                 ],
             )?;
 
-            for (trace_idx, trace) in turn.tool_traces.iter().enumerate() {
+            // State before/after
+            conn.execute(
+                "INSERT OR REPLACE INTO run_turn_states 
+                 (run_id, turn_index, state_type, state_value)
+                 VALUES (?, ?, 'before', ?)",
+                params![
+                    output.run_id,
+                    turn_index,
+                    format!("{:?}", entry.state_before)
+                ],
+            )?;
+            conn.execute(
+                "INSERT OR REPLACE INTO run_turn_states 
+                 (run_id, turn_index, state_type, state_value)
+                 VALUES (?, ?, 'after', ?)",
+                params![
+                    output.run_id,
+                    turn_index,
+                    format!("{:?}", entry.state_after)
+                ],
+            )?;
+
+            // Request
+            conn.execute(
+                "INSERT OR REPLACE INTO run_turn_requests 
+                 (run_id, turn_index, schema_version, prompt_version, prompt_hash, context_hash)
+                 VALUES (?, ?, ?, ?, ?, ?)",
+                params![
+                    output.run_id,
+                    turn_index,
+                    entry.turn_trace.request.schema_version as i32,
+                    entry.turn_trace.request.prompt_version,
+                    entry.turn_trace.request.prompt_hash,
+                    entry.turn_trace.request.context_hash,
+                ],
+            )?;
+
+            // Response
+            conn.execute(
+                "INSERT OR REPLACE INTO run_turn_responses 
+                 (run_id, turn_index, provider, model_slug, schema_version, validated)
+                 VALUES (?, ?, ?, ?, ?, ?)",
+                params![
+                    output.run_id,
+                    turn_index,
+                    entry.turn_trace.response.provider,
+                    entry.turn_trace.response.model_slug,
+                    entry.turn_trace.response.schema_version as i32,
+                    entry.turn_trace.response.validated as i32,
+                ],
+            )?;
+
+            // Selection - context objects
+            for (ctx_idx, ctx_id) in entry
+                .turn_trace
+                .selection
+                .selected_context_objects
+                .iter()
+                .enumerate()
+            {
+                conn.execute(
+                    "INSERT OR REPLACE INTO run_turn_selections 
+                     (run_id, turn_index, selected_context_object)
+                     VALUES (?, ?, ?)",
+                    params![output.run_id, turn_index, ctx_id],
+                )?;
+            }
+
+            // Omitted candidates
+            for (om_idx, om_cand) in entry
+                .turn_trace
+                .selection
+                .omitted_candidates
+                .iter()
+                .enumerate()
+            {
+                conn.execute(
+                    "INSERT OR REPLACE INTO run_turn_omitted_candidates 
+                     (run_id, turn_index, candidate_index, candidate_id, reason)
+                     VALUES (?, ?, ?, ?, ?)",
+                    params![
+                        output.run_id,
+                        turn_index,
+                        om_idx as i32,
+                        om_cand.candidate_id,
+                        om_cand.reason
+                    ],
+                )?;
+            }
+
+            // Rendered sections
+            for (sec_idx, section) in entry
+                .turn_trace
+                .selection
+                .rendered_sections
+                .iter()
+                .enumerate()
+            {
+                conn.execute(
+                    "INSERT OR REPLACE INTO run_turn_rendered_sections 
+                     (run_id, turn_index, section_index, section_id, schema_version, title, content, byte_count, token_count)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+                    params![
+                        output.run_id,
+                        turn_index,
+                        sec_idx as i32,
+                        section.section_id,
+                        section.schema_version as i32,
+                        section.title,
+                        section.content,
+                        section.byte_count as i32,
+                        section.token_count as i32,
+                    ],
+                )?;
+            }
+
+            // Context object IDs
+            for (ctx_idx, ctx_id) in entry.ordered_context_object_ids.iter().enumerate() {
+                conn.execute(
+                    "INSERT OR REPLACE INTO run_turn_context_ids 
+                     (run_id, turn_index, context_index, context_object_id)
+                     VALUES (?, ?, ?, ?)",
+                    params![output.run_id, turn_index, ctx_idx as i32, ctx_id],
+                )?;
+            }
+
+            // Compactions
+            for (comp_idx, comp) in entry.compactions.iter().enumerate() {
+                for src_id in &comp.source_item_ids {
+                    conn.execute(
+                        "INSERT OR REPLACE INTO run_turn_compactions 
+                         (run_id, turn_index, compaction_index, summary_item_id, source_item_id)
+                         VALUES (?, ?, ?, ?, ?)",
+                        params![
+                            output.run_id,
+                            turn_index,
+                            comp_idx as i32,
+                            comp.summary_item_id,
+                            src_id
+                        ],
+                    )?;
+                }
+            }
+
+            // Section accounting
+            for section in &entry.section_accounting {
+                conn.execute(
+                    "INSERT OR REPLACE INTO run_turn_section_accounting 
+                     (run_id, turn_index, section_id, byte_count, token_count)
+                     VALUES (?, ?, ?, ?, ?)",
+                    params![
+                        output.run_id,
+                        turn_index,
+                        section.section_id,
+                        section.byte_count as i32,
+                        section.token_count as i32,
+                    ],
+                )?;
+            }
+
+            // Telemetry
+            conn.execute(
+                "INSERT OR REPLACE INTO run_turn_telemetry 
+                 (run_id, turn_index, prompt_bytes, prompt_tokens, latency_ms, tool_calls)
+                 VALUES (?, ?, ?, ?, ?, ?)",
+                params![
+                    output.run_id,
+                    turn_index,
+                    entry.turn_trace.telemetry.prompt_bytes as i32,
+                    entry.turn_trace.telemetry.prompt_tokens as i32,
+                    entry.turn_trace.telemetry.latency_ms as i32,
+                    entry.turn_trace.telemetry.tool_calls as i32,
+                ],
+            )?;
+
+            // Turn hashes
+            conn.execute(
+                "INSERT OR REPLACE INTO run_turn_hashes 
+                 (run_id, turn_index, turn_hash)
+                 VALUES (?, ?, ?)",
+                params![output.run_id, turn_index, entry.turn_trace.hashes.turn_hash],
+            )?;
+
+            // Readiness
+            conn.execute(
+                "INSERT OR REPLACE INTO run_turn_readiness 
+                 (run_id, turn_index, readiness_state, readiness_reason)
+                 VALUES (?, ?, ?, ?)",
+                params![
+                    output.run_id,
+                    turn_index,
+                    format!("{:?}", entry.turn_trace.readiness_state),
+                    entry.turn_trace.readiness_reason,
+                ],
+            )?;
+
+            // Evidence delta
+            for (ev_idx, ev_id) in entry.turn_trace.evidence_delta.iter().enumerate() {
+                conn.execute(
+                    "INSERT OR REPLACE INTO run_turn_evidence_delta 
+                     (run_id, turn_index, evidence_index, evidence_id)
+                     VALUES (?, ?, ?, ?)",
+                    params![output.run_id, turn_index, ev_idx as i32, ev_id],
+                )?;
+            }
+
+            // Tool traces from TurnLedger
+            for (trace_idx, trace) in entry.tool_traces.iter().enumerate() {
                 let input_json = serde_json::to_string(&trace.input_payload)?;
                 let output_json = serde_json::to_string(&trace.output_payload)?;
 
@@ -989,7 +1519,7 @@ impl Database {
                      VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                     params![
                         output.run_id,
-                        turn.turn_index,
+                        turn_index,
                         trace_idx as i32,
                         trace.tool_name,
                         trace.latency_ms,
@@ -999,7 +1529,10 @@ impl Database {
                     ],
                 )?;
             }
+        }
 
+        // Save blobs from ObservabilityBundle
+        for turn in &bundle.turns {
             for payload in [
                 &turn.request_blob,
                 &turn.raw_response_blob,
@@ -1036,11 +1569,33 @@ impl Database {
             }
         }
 
+        // Structured logs
         for (log_idx, log_entry) in bundle.structured_logs.iter().enumerate() {
-            let log_json = serde_json::to_string(log_entry)?;
+            let log_level = log_entry
+                .get("level")
+                .and_then(|v| v.as_str())
+                .unwrap_or("info");
+            let log_component = log_entry
+                .get("component")
+                .and_then(|v| v.as_str())
+                .unwrap_or("");
+            let log_message = log_entry
+                .get("message")
+                .and_then(|v| v.as_str())
+                .unwrap_or("");
+            let log_timestamp = log_entry
+                .get("timestamp")
+                .and_then(|v| v.as_str())
+                .unwrap_or("");
+            let turn_index = log_entry
+                .get("turn_index")
+                .and_then(|v| v.as_i64())
+                .map(|v| v as i32);
+            let tool_name = log_entry.get("tool_name").and_then(|v| v.as_str());
+
             conn.execute(
-                "INSERT INTO run_structured_logs (run_id, log_index, log_entry_json) VALUES (?, ?, ?)",
-                params![output.run_id, log_idx as i32, log_json],
+                "INSERT INTO run_structured_logs (run_id, log_index, log_level, log_component, log_message, log_timestamp, turn_index, tool_name) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                params![output.run_id, log_idx as i32, log_level, log_component, log_message, log_timestamp, turn_index, tool_name],
             )?;
         }
 

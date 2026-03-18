@@ -1,5 +1,0 @@
-{"component":"turn","error_code":null,"event":"turn.completed","fixture_id":"graphbench.internal","run_id":"smoke-openrouter-1773603083","strategy_id":"smoke-openrouter","task_id":"prepare-edit.schema-boundaries","turn_index":0}
-{"component":"turn","error_code":null,"event":"turn.completed","fixture_id":"graphbench.internal","run_id":"smoke-openrouter-1773603083","strategy_id":"smoke-openrouter","task_id":"prepare-edit.schema-boundaries","turn_index":1}
-{"component":"turn","error_code":null,"event":"turn.completed","fixture_id":"graphbench.internal","run_id":"smoke-openrouter-1773603083","strategy_id":"smoke-openrouter","task_id":"prepare-edit.schema-boundaries","turn_index":2}
-{"component":"turn","error_code":null,"event":"turn.completed","fixture_id":"graphbench.internal","run_id":"smoke-openrouter-1773603083","strategy_id":"smoke-openrouter","task_id":"prepare-edit.schema-boundaries","turn_index":3}
-{"component":"turn","error_code":null,"event":"turn.completed","fixture_id":"graphbench.internal","run_id":"smoke-openrouter-1773603083","strategy_id":"smoke-openrouter","task_id":"prepare-edit.schema-boundaries","turn_index":4}

@@ -318,6 +318,12 @@ app.post('/api/runs/run', (req, res) => {
   const runId = `smoke-openrouter-${Date.now()}`;
   activeRunId = runId;
   
+  const insertStmt = db.prepare(`
+    INSERT INTO runs (run_id, started_at, outcome)
+    VALUES (?, datetime('now'), 'running')
+  `);
+  insertStmt.run(runId);
+  
   eventsFilePath = path.join(TRACES_DIR, `${runId}.events.jsonl`);
   lastEventPosition = 0;
   
@@ -348,6 +354,11 @@ app.post('/api/runs/run', (req, res) => {
     eventsFilePath = null;
     
     if (code !== 0) {
+      const stmt = db.prepare(`
+        UPDATE runs SET outcome = 'failed', completed_at = datetime('now')
+        WHERE run_id = ?
+      `);
+      stmt.run(runId);
       return;
     }
     

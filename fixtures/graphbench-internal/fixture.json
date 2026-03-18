@@ -1,0 +1,19 @@
+{
+  "fixture_id": "graphbench.internal",
+  "schema_version": 1,
+  "repository": {
+    "source": ".",
+    "commit_sha": "d9cd2a623a733f89076f0c561a3107aceaff26ad",
+    "mirror_policy": "workspace"
+  },
+  "graph": {
+    "snapshot_id": "sha256:b8bfe46eae25f7c615b77f9d6ed0a2ce4338c5e306f35b08e8855888d3cf8be7",
+    "snapshot_format": "codegraph_portable_document",
+    "snapshot_ref": "graph.snapshot.json"
+  },
+  "languages": ["rust"],
+  "metadata": {
+    "title": "GraphBench Internal Fixture",
+    "notes": "The graphbench codebase itself for internal testing"
+  }
+}
