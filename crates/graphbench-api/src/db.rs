@@ -106,12 +106,79 @@ impl Database {
                 acquisition_score REAL,
                 efficiency_score REAL,
                 explanation_score REAL,
-                raw_data TEXT,
-                turn_ledger_data TEXT,
-                observability_data TEXT,
                 status TEXT DEFAULT 'completed'
             );
-            
+
+            CREATE TABLE IF NOT EXISTS run_manifests (
+                run_id TEXT PRIMARY KEY,
+                schema_version INTEGER,
+                harness_version TEXT,
+                provider TEXT,
+                model_slug TEXT,
+                prompt_version TEXT,
+                graph_snapshot_id TEXT,
+                started_at TEXT,
+                completed_at TEXT,
+                outcome TEXT,
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_telemetry_aggregations (
+                run_id TEXT PRIMARY KEY,
+                total_turns INTEGER,
+                aggregate_prompt_bytes INTEGER,
+                aggregate_prompt_tokens INTEGER,
+                aggregate_latency_ms INTEGER,
+                aggregate_tool_calls INTEGER,
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turns (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                state_before_json TEXT,
+                state_after_json TEXT,
+                graph_session_before TEXT,
+                graph_session_after TEXT,
+                ordered_context_object_ids_json TEXT,
+                compactions_json TEXT,
+                section_accounting_json TEXT,
+                rendered_prompt TEXT,
+                rendered_context TEXT,
+                replay_hash TEXT,
+                request_json TEXT,
+                response_json TEXT,
+                provider_request_id TEXT,
+                telemetry_json TEXT,
+                PRIMARY KEY (run_id, turn_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_tool_traces (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                trace_index INTEGER NOT NULL,
+                tool_name TEXT,
+                latency_ms INTEGER,
+                outcome TEXT,
+                input_payload_json TEXT,
+                output_payload_json TEXT,
+                PRIMARY KEY (run_id, turn_index, trace_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_turn_payloads (
+                run_id TEXT NOT NULL,
+                turn_index INTEGER NOT NULL,
+                payload_type TEXT NOT NULL,
+                blob_id TEXT,
+                media_type TEXT,
+                byte_count INTEGER,
+                inline_content TEXT,
+                PRIMARY KEY (run_id, turn_index, payload_type),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
             CREATE TABLE IF NOT EXISTS run_events (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
                 run_id TEXT NOT NULL,
@@ -125,15 +192,33 @@ impl Database {
                 turn_index INTEGER,
                 tool_name TEXT,
                 provider_request_id TEXT,
-                metrics TEXT,
-                tags TEXT,
-                details TEXT,
                 created_at TEXT DEFAULT CURRENT_TIMESTAMP
             );
-            
+
+            CREATE TABLE IF NOT EXISTS run_event_details (
+                event_id INTEGER PRIMARY KEY,
+                run_id TEXT NOT NULL,
+                metrics_json TEXT,
+                tags_json TEXT,
+                details_json TEXT,
+                FOREIGN KEY (run_id) REFERENCES runs(run_id),
+                FOREIGN KEY (event_id) REFERENCES run_events(id)
+            );
+
+            CREATE TABLE IF NOT EXISTS run_structured_logs (
+                run_id TEXT NOT NULL,
+                log_index INTEGER NOT NULL,
+                log_entry_json TEXT,
+                PRIMARY KEY (run_id, log_index),
+                FOREIGN KEY (run_id) REFERENCES runs(run_id)
+            );
+
             CREATE INDEX IF NOT EXISTS idx_runs_started ON runs(started_at DESC);
             CREATE INDEX IF NOT EXISTS idx_runs_status ON runs(status);
             CREATE INDEX IF NOT EXISTS idx_run_events_run ON run_events(run_id, seq);
+            CREATE INDEX IF NOT EXISTS idx_run_turns_run ON run_turns(run_id);
+            CREATE INDEX IF NOT EXISTS idx_run_turn_tool_traces_run ON run_turn_tool_traces(run_id, turn_index);
+            CREATE INDEX IF NOT EXISTS idx_run_structured_logs_run ON run_structured_logs(run_id);
             
             -- Versioned entities (append-only)
             CREATE TABLE IF NOT EXISTS strategies (
@@ -190,9 +275,6 @@ impl Database {
             CREATE INDEX IF NOT EXISTS idx_evidence_task ON evidence(task_id, version DESC);
             CREATE INDEX IF NOT EXISTS idx_fixtures_name ON fixtures(name, version DESC);
             CREATE INDEX IF NOT EXISTS idx_prompts_name ON prompts(name, version DESC);
-            
-            CREATE INDEX IF NOT EXISTS idx_events_run ON run_events(run_id);
-            CREATE INDEX IF NOT EXISTS idx_events_seq ON run_events(run_id, seq);
             ",
         )?;
 
@@ -264,7 +346,6 @@ impl Database {
     pub fn get_run(&self, run_id: &str) -> Result<Option<RunDetail>> {
         let conn = self.conn.lock().unwrap();
 
-        // First check if the run exists
         let exists: bool = conn
             .query_row(
                 "SELECT EXISTS(SELECT 1 FROM runs WHERE run_id = ?)",
@@ -277,150 +358,256 @@ impl Database {
             return Ok(None);
         }
 
-        // Get raw_data to debug
-        let raw_data: String = conn
-            .query_row(
-                "SELECT raw_data FROM runs WHERE run_id = ?",
-                [run_id],
-                |row| row.get(0),
-            )
-            .unwrap_or_default();
-
-        tracing::debug!("get_run {}: raw_data len = {}", run_id, raw_data.len());
-
-        let mut stmt = conn.prepare(
-            "SELECT run_id, fixture_id, task_id, strategy_id, provider, model_slug, harness_version, started_at, completed_at, outcome, turn_count, raw_data, turn_ledger_data FROM runs WHERE run_id = ?"
+        let mut run_stmt = conn.prepare(
+            "SELECT run_id, fixture_id, task_id, strategy_id, provider, model_slug, harness_version, started_at, completed_at, outcome, turn_count FROM runs WHERE run_id = ?"
         )?;
 
-        let result = stmt.query_row([run_id], |row| {
-            let run_id: String = row.get(0)?;
-            let fixture_id: String = row.get(1)?;
-            let task_id: String = row.get(2)?;
-            let strategy_id: String = row.get(3)?;
-            let provider: String = row.get(4)?;
-            let model_slug: String = row.get(5)?;
-            let harness_version: String = row.get(6)?;
-            let started_at: String = row.get(7)?;
-            let completed_at: String = row.get(8)?;
-            let outcome: String = row.get(9)?;
-            let _turn_count: i32 = row.get(10)?;
-            let raw_data: String = row.get(11)?;
-            let turn_ledger_data: Option<String> = row.get(12)?;
+        let run_id_param = run_id.to_string();
+        let (
+            run_id,
+            fixture_id,
+            task_id,
+            strategy_id,
+            provider,
+            model_slug,
+            harness_version,
+            started_at,
+            completed_at,
+            outcome,
+            _turn_count,
+        ): (
+            String,
+            String,
+            String,
+            String,
+            String,
+            String,
+            String,
+            String,
+            String,
+            String,
+            i32,
+        ) = run_stmt
+            .query_row([&run_id_param], |row| {
+                Ok((
+                    row.get(0)?,
+                    row.get(1)?,
+                    row.get(2)?,
+                    row.get(3)?,
+                    row.get(4)?,
+                    row.get(5)?,
+                    row.get(6)?,
+                    row.get(7)?,
+                    row.get(8)?,
+                    row.get(9)?,
+                    row.get(10)?,
+                ))
+            })
+            .map_err(|e| rusqlite::Error::QueryReturnedNoRows)?;
 
-            Ok((
-                run_id,
+        let manifest: RunManifest = if let Ok(row) = conn.query_row(
+            "SELECT schema_version, harness_version, provider, model_slug, prompt_version, graph_snapshot_id, started_at, completed_at, outcome FROM run_manifests WHERE run_id = ?",
+            [&run_id],
+            |row| {
+                Ok((
+                    row.get::<_, i32>(0)?,
+                    row.get::<_, String>(1)?,
+                    row.get::<_, String>(2)?,
+                    row.get::<_, String>(3)?,
+                    row.get::<_, String>(4)?,
+                    row.get::<_, String>(5)?,
+                    row.get::<_, String>(6)?,
+                    row.get::<_, String>(7)?,
+                    row.get::<_, String>(8)?,
+                ))
+            },
+        ) {
+            RunManifest {
+                run_id: run_id.clone(),
+                schema_version: row.0,
+                fixture_id: fixture_id.clone(),
+                task_id: task_id.clone(),
+                strategy_id: strategy_id.clone(),
+                strategy_config: serde_json::json!({}),
+                harness_version: row.1,
+                schema_version_set: serde_json::json!({
+                    "fixture_manifest": 1,
+                    "task_spec": 1,
+                    "evidence_spec": 1,
+                    "strategy_config": 1,
+                    "context_object": 1,
+                    "context_window_section": 1,
+                    "turn_trace": 1,
+                    "score_report": 1,
+                }),
+                provider: row.2,
+                model_slug: row.3,
+                prompt_version: row.4,
+                graph_snapshot_id: row.5,
+                started_at: row.6,
+                completed_at: row.7,
+                outcome: row.8,
+            }
+        } else {
+            RunManifest {
+                run_id: run_id.clone(),
+                schema_version: 2,
                 fixture_id,
                 task_id,
                 strategy_id,
+                strategy_config: serde_json::json!({}),
+                harness_version,
+                schema_version_set: serde_json::json!({
+                    "fixture_manifest": 1,
+                    "task_spec": 1,
+                    "evidence_spec": 1,
+                    "strategy_config": 1,
+                    "context_object": 1,
+                    "context_window_section": 1,
+                    "turn_trace": 1,
+                    "score_report": 1,
+                }),
                 provider,
                 model_slug,
-                harness_version,
+                prompt_version: "v1".to_string(),
+                graph_snapshot_id: "sha256:".to_string(),
                 started_at,
                 completed_at,
                 outcome,
-                raw_data,
-                turn_ledger_data,
-            ))
+            }
+        };
+
+        let mut turns_stmt = conn.prepare(
+            "SELECT turn_index, rendered_prompt, rendered_context, provider_request_id, telemetry_json FROM run_turns WHERE run_id = ? ORDER BY turn_index"
+        )?;
+
+        let mut turns: Vec<serde_json::Value> = Vec::new();
+        let run_id_clone = run_id.clone();
+        let mut turn_rows = turns_stmt.query([&run_id_clone])?;
+
+        while let Some(row) = turn_rows.next()? {
+            let turn_index: u32 = row.get(0)?;
+            let rendered_prompt: String = row.get(1)?;
+            let rendered_context: String = row.get(2)?;
+            let provider_request_id: Option<String> = row.get(3)?;
+            let telemetry_json: String = row.get(4)?;
+
+            let telemetry: serde_json::Value =
+                serde_json::from_str(&telemetry_json).unwrap_or(serde_json::json!({
+                    "prompt_bytes": 0, "prompt_tokens": 0, "latency_ms": 0, "tool_calls": 0
+                }));
+
+            let mut tool_traces_stmt = conn.prepare(
+                "SELECT trace_index, tool_name, latency_ms, outcome, input_payload_json, output_payload_json FROM run_turn_tool_traces WHERE run_id = ? AND turn_index = ? ORDER BY trace_index"
+            )?;
+
+            let mut tool_traces: Vec<serde_json::Value> = Vec::new();
+            let mut trace_rows = tool_traces_stmt.query(params![&run_id_clone, turn_index])?;
+
+            while let Some(trace_row) = trace_rows.next()? {
+                let trace_index: i32 = trace_row.get(0)?;
+                let tool_name: String = trace_row.get(1)?;
+                let latency_ms: u32 = trace_row.get(2)?;
+                let outcome: String = trace_row.get(3)?;
+                let input_payload_json: String = trace_row.get(4)?;
+                let output_payload_json: String = trace_row.get(5)?;
+
+                tool_traces.push(serde_json::json!({
+                    "tool_name": tool_name,
+                    "latency_ms": latency_ms,
+                    "outcome": outcome,
+                    "input_payload": serde_json::from_str(&input_payload_json).unwrap_or(serde_json::Value::Null),
+                    "output_payload": serde_json::from_str(&output_payload_json).unwrap_or(serde_json::Value::Null),
+                }));
+            }
+
+            let mut payload_stmt = conn.prepare(
+                "SELECT payload_type, blob_id, media_type, byte_count, inline_content FROM run_turn_payloads WHERE run_id = ? AND turn_index = ?"
+            )?;
+
+            let mut blob_references: Vec<serde_json::Value> = Vec::new();
+            let mut payload_rows = payload_stmt.query(params![&run_id_clone, turn_index])?;
+
+            while let Some(payload_row) = payload_rows.next()? {
+                let payload_type: String = payload_row.get(0)?;
+                let blob_id: String = payload_row.get(1)?;
+                let media_type: String = payload_row.get(2)?;
+                let byte_count: i64 = payload_row.get(3)?;
+                let inline_content: Option<String> = payload_row.get(4)?;
+
+                blob_references.push(serde_json::json!({
+                    "blob_id": blob_id,
+                    "media_type": media_type,
+                    "payload_type": payload_type,
+                    "byte_count": byte_count,
+                    "inline_content": inline_content,
+                }));
+            }
+
+            turns.push(serde_json::json!({
+                "turn_index": turn_index,
+                "rendered_prompt": rendered_prompt,
+                "rendered_context": rendered_context,
+                "provider_request_id": provider_request_id,
+                "telemetry": telemetry,
+                "tool_traces": tool_traces,
+                "blob_references": blob_references,
+            }));
+        }
+
+        let visibility_score: Option<f64> = conn
+            .query_row(
+                "SELECT visibility_score FROM runs WHERE run_id = ?",
+                [&run_id_clone],
+                |row| row.get(0),
+            )
+            .ok();
+
+        let acquisition_score: Option<f64> = conn
+            .query_row(
+                "SELECT acquisition_score FROM runs WHERE run_id = ?",
+                [&run_id_clone],
+                |row| row.get(0),
+            )
+            .ok();
+
+        let efficiency_score: Option<f64> = conn
+            .query_row(
+                "SELECT efficiency_score FROM runs WHERE run_id = ?",
+                [&run_id_clone],
+                |row| row.get(0),
+            )
+            .ok();
+
+        let explanation_score: Option<f64> = conn
+            .query_row(
+                "SELECT explanation_score FROM runs WHERE run_id = ?",
+                [&run_id_clone],
+                |row| row.get(0),
+            )
+            .ok();
+
+        let score_report = serde_json::json!({
+            "evidence_visibility_score": visibility_score.unwrap_or(0.8),
+            "evidence_acquisition_score": acquisition_score.unwrap_or(0.75),
+            "evidence_efficiency_score": efficiency_score.unwrap_or(0.72),
+            "explanation_quality_score": explanation_score.unwrap_or(0.78),
         });
 
-        match result {
-            Ok((
-                run_id,
-                fixture_id,
-                task_id,
-                strategy_id,
-                provider,
-                model_slug,
-                harness_version,
-                started_at,
-                completed_at,
-                outcome,
-                raw_data,
-                turn_ledger_data,
-            )) => {
-                // Prefer turn_ledger_data if available, otherwise fall back to raw_data
-                let data_str = turn_ledger_data.as_ref().unwrap_or(&raw_data);
-                let data: serde_json::Value = serde_json::from_str(data_str).unwrap_or_default();
-                let entries = data
-                    .get("entries")
-                    .and_then(|e| e.as_array())
-                    .cloned()
-                    .unwrap_or_default();
-
-                let turns: Vec<serde_json::Value> = entries
-                    .iter()
-                    .map(|entry| {
-                        let mut turn = entry.get("turn_trace").cloned().unwrap_or_default();
-                        if let Some(gs_after) =
-                            entry.get("graph_session_after").and_then(|v| v.as_str())
-                        {
-                            turn["graph_session_after"] =
-                                serde_json::Value::String(gs_after.to_string());
-                        }
-                        if let Some(tt) = entry.get("tool_traces") {
-                            turn["tool_traces"] = tt.clone();
-                        }
-                        turn
-                    })
-                    .collect();
-
-                let visibility_score: Option<f64> = conn
-                    .query_row(
-                        "SELECT visibility_score FROM runs WHERE run_id = ?",
-                        [&run_id],
-                        |row| row.get(0),
-                    )
-                    .ok();
-
-                let score_report = serde_json::json!({
-                    "evidence_visibility_score": visibility_score.unwrap_or(0.8),
-                    "evidence_acquisition_score": 0.75,
-                    "evidence_efficiency_score": 0.72,
-                    "explanation_quality_score": 0.78,
-                });
-
-                Ok(Some(RunDetail {
-                    manifest: RunManifest {
-                        run_id,
-                        schema_version: 2,
-                        fixture_id,
-                        task_id,
-                        strategy_id,
-                        strategy_config: serde_json::json!({}),
-                        harness_version,
-                        schema_version_set: serde_json::json!({
-                            "fixture_manifest": 1,
-                            "task_spec": 1,
-                            "evidence_spec": 1,
-                            "strategy_config": 1,
-                            "context_object": 1,
-                            "context_window_section": 1,
-                            "turn_trace": 1,
-                            "score_report": 1,
-                        }),
-                        provider,
-                        model_slug,
-                        prompt_version: "v1".to_string(),
-                        graph_snapshot_id: format!("sha256:{:a<61}", ""),
-                        started_at,
-                        completed_at,
-                        outcome,
-                    },
-                    turns,
-                    evidence_matches: vec![],
-                    score_report: Some(score_report),
-                    blob_references: vec![],
-                }))
-            }
-            Err(_) => Ok(None),
-        }
+        Ok(Some(RunDetail {
+            manifest,
+            turns,
+            evidence_matches: vec![],
+            score_report: Some(score_report),
+            blob_references: vec![],
+        }))
     }
 
-    pub fn insert_run(&self, run: &RunSummary, raw_data: &str) -> Result<()> {
+    pub fn insert_run(&self, run: &RunSummary) -> Result<()> {
         let conn = self.conn.lock().unwrap();
 
         conn.execute(
-            "INSERT OR REPLACE INTO runs (run_id, fixture_id, task_id, strategy_id, provider, model_slug, harness_version, started_at, completed_at, outcome, turn_count, visibility_score, acquisition_score, efficiency_score, explanation_score, raw_data) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
+            "INSERT OR REPLACE INTO runs (run_id, fixture_id, task_id, strategy_id, provider, model_slug, harness_version, started_at, completed_at, outcome, turn_count, visibility_score, acquisition_score, efficiency_score, explanation_score) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             params![
                 run.run_id,
                 run.fixture_id,
@@ -437,7 +624,6 @@ impl Database {
                 run.acquisition_score,
                 run.efficiency_score,
                 run.explanation_score,
-                raw_data,
             ],
         )?;
 
@@ -539,7 +725,7 @@ impl Database {
                 explanation_score: Some(0.55 + rand::random::<f64>() * 0.4),
             };
 
-            if self.insert_run(&run, &content).is_ok() {
+            if self.insert_run(&run).is_ok() {
                 imported += 1;
             }
         }
@@ -585,7 +771,7 @@ impl Database {
         &self,
         run_id: &str,
         status: &str,
-        details: Option<&str>,
+        _details: Option<&str>,
         task_id: Option<&str>,
         strategy_id: Option<&str>,
         fixture_id: Option<&str>,
@@ -597,22 +783,21 @@ impl Database {
         let now = chrono::Utc::now().to_rfc3339();
 
         conn.execute(
-            "INSERT INTO runs (run_id, status, started_at, completed_at, outcome, task_id, strategy_id, provider, model_slug, fixture_id, turn_count, raw_data)
-             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-             ON CONFLICT(run_id) DO UPDATE SET status = excluded.status, outcome = excluded.outcome, completed_at = excluded.completed_at, turn_count = excluded.turn_count, raw_data = COALESCE(excluded.raw_data, runs.raw_data)",
+            "INSERT INTO runs (run_id, status, started_at, completed_at, outcome, task_id, strategy_id, provider, model_slug, fixture_id, turn_count)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+             ON CONFLICT(run_id) DO UPDATE SET status = excluded.status, outcome = excluded.outcome, completed_at = excluded.completed_at, turn_count = excluded.turn_count",
             params![
                 run_id,
                 status,
                 now,
                 if status == "completed" || status == "failed" { now.clone() } else { String::new() },
-                status,  // outcome matches status
+                status,
                 task_id.unwrap_or("benchmark"),
                 strategy_id.unwrap_or("benchmark"),
                 "openrouter",
                 model_slug.unwrap_or("benchmark-model"),
                 fixture_id.unwrap_or("benchmark-internal"),
                 turn_count,
-                details.unwrap_or("{}"),
             ],
         )?;
 
@@ -732,27 +917,132 @@ impl Database {
 
     pub fn save_run_output(&self, output: &RunOutputData) -> Result<()> {
         let conn = self.conn.lock().unwrap();
-
-        let turn_ledger_json = serde_json::to_string(&output.turn_ledger)?;
-        let observability_json = serde_json::to_string(&output.observability_bundle)?;
+        let bundle = &output.observability_bundle;
+        let manifest = &bundle.run_manifest;
 
         conn.execute(
-            "INSERT OR REPLACE INTO runs (run_id, raw_data, turn_ledger_data, observability_data, completed_at, status, outcome)
-             VALUES (?, ?, ?, ?, datetime('now'), 'completed', 'success')
+            "INSERT OR REPLACE INTO runs (run_id, completed_at, status, outcome)
+             VALUES (?, datetime('now'), 'completed', 'success')
              ON CONFLICT(run_id) DO UPDATE SET 
-                raw_data = excluded.raw_data,
-                turn_ledger_data = excluded.turn_ledger_data,
-                observability_data = excluded.observability_data,
                 completed_at = excluded.completed_at,
                 status = excluded.status,
                 outcome = excluded.outcome",
+            params![output.run_id],
+        )?;
+
+        conn.execute(
+            "INSERT OR REPLACE INTO run_manifests 
+             (run_id, schema_version, harness_version, provider, model_slug, prompt_version, graph_snapshot_id, started_at, completed_at, outcome)
+             VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
             params![
                 output.run_id,
-                turn_ledger_json,
-                turn_ledger_json,
-                observability_json,
+                manifest.schema_version,
+                manifest.harness_version,
+                manifest.provider,
+                manifest.model_slug,
+                manifest.prompt_version,
+                manifest.graph_snapshot_id,
+                manifest.started_at,
+                manifest.completed_at,
+                manifest.outcome,
             ],
         )?;
+
+        conn.execute(
+            "INSERT OR REPLACE INTO run_telemetry_aggregations 
+             (run_id, total_turns, aggregate_prompt_bytes, aggregate_prompt_tokens, aggregate_latency_ms, aggregate_tool_calls)
+             VALUES (?, ?, ?, ?, ?, ?)",
+            params![
+                output.run_id,
+                bundle.aggregation.total_turns as i64,
+                bundle.aggregation.aggregate_prompt_bytes as i64,
+                bundle.aggregation.aggregate_prompt_tokens as i64,
+                bundle.aggregation.aggregate_latency_ms as i64,
+                bundle.aggregation.aggregate_tool_calls as i64,
+            ],
+        )?;
+
+        for turn in &bundle.turns {
+            let telemetry_json = serde_json::to_string(&turn.telemetry)?;
+
+            conn.execute(
+                "INSERT OR REPLACE INTO run_turns 
+                 (run_id, turn_index, rendered_prompt, rendered_context, provider_request_id, telemetry_json)
+                 VALUES (?, ?, ?, ?, ?, ?)",
+                params![
+                    output.run_id,
+                    turn.turn_index,
+                    turn.prompt_blob.inline_content.as_deref().unwrap_or(""),
+                    turn.context_blob.inline_content.as_deref().unwrap_or(""),
+                    turn.provider_request_id,
+                    telemetry_json,
+                ],
+            )?;
+
+            for (trace_idx, trace) in turn.tool_traces.iter().enumerate() {
+                let input_json = serde_json::to_string(&trace.input_payload)?;
+                let output_json = serde_json::to_string(&trace.output_payload)?;
+
+                conn.execute(
+                    "INSERT OR REPLACE INTO run_turn_tool_traces 
+                     (run_id, turn_index, trace_index, tool_name, latency_ms, outcome, input_payload_json, output_payload_json)
+                     VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+                    params![
+                        output.run_id,
+                        turn.turn_index,
+                        trace_idx as i32,
+                        trace.tool_name,
+                        trace.latency_ms,
+                        trace.outcome,
+                        input_json,
+                        output_json,
+                    ],
+                )?;
+            }
+
+            for payload in [
+                &turn.request_blob,
+                &turn.raw_response_blob,
+                &turn.validated_response_blob,
+                &turn.prompt_blob,
+                &turn.context_blob,
+            ] {
+                let payload_type = if payload.path.contains("request") {
+                    "request"
+                } else if payload.path.contains("raw_response") {
+                    "raw_response"
+                } else if payload.path.contains("validated") {
+                    "validated_response"
+                } else if payload.path.contains("prompt") {
+                    "prompt"
+                } else {
+                    "context"
+                };
+
+                conn.execute(
+                    "INSERT OR REPLACE INTO run_turn_payloads 
+                     (run_id, turn_index, payload_type, blob_id, media_type, byte_count, inline_content)
+                     VALUES (?, ?, ?, ?, ?, ?, ?)",
+                    params![
+                        output.run_id,
+                        turn.turn_index,
+                        payload_type,
+                        payload.blob_id,
+                        payload.media_type,
+                        payload.byte_count as i64,
+                        payload.inline_content,
+                    ],
+                )?;
+            }
+        }
+
+        for (log_idx, log_entry) in bundle.structured_logs.iter().enumerate() {
+            let log_json = serde_json::to_string(log_entry)?;
+            conn.execute(
+                "INSERT INTO run_structured_logs (run_id, log_index, log_entry_json) VALUES (?, ?, ?)",
+                params![output.run_id, log_idx as i32, log_json],
+            )?;
+        }
 
         Ok(())
     }
@@ -760,26 +1050,104 @@ impl Database {
     pub fn get_run_output(&self, run_id: &str) -> Result<Option<serde_json::Value>> {
         let conn = self.conn.lock().unwrap();
 
-        let result = conn.query_row(
-            "SELECT turn_ledger_data FROM runs WHERE run_id = ?",
-            [run_id],
-            |row| {
-                let data: Option<String> = row.get(0)?;
-                Ok(data)
-            },
-        );
+        let mut stmt = conn.prepare(
+            "SELECT rt.turn_index, rt.rendered_prompt, rt.rendered_context, rt.provider_request_id, rt.telemetry_json,
+                    rtt.trace_index, rtt.tool_name, rtt.latency_ms, rtt.outcome, rtt.input_payload_json, rtt.output_payload_json
+             FROM run_turns rt
+             LEFT JOIN run_turn_tool_traces rtt ON rt.run_id = rtt.run_id AND rt.turn_index = rtt.turn_index
+             WHERE rt.run_id = ?
+             ORDER BY rt.turn_index, rtt.trace_index"
+        )?;
 
-        match result {
-            Ok(Some(json_str)) => match serde_json::from_str(&json_str) {
-                Ok(value) => Ok(Some(value)),
-                Err(e) => {
-                    tracing::warn!("Failed to parse turn_ledger_data for {}: {}", run_id, e);
-                    Ok(None)
-                }
-            },
-            Ok(None) => Ok(None),
-            Err(_) => Ok(None),
+        let mut turns_map: std::collections::HashMap<u32, serde_json::Value> =
+            std::collections::HashMap::new();
+        let mut rows = stmt.query([run_id])?;
+
+        while let Some(row) = rows.next()? {
+            let turn_index: u32 = row.get(0)?;
+            let rendered_prompt: String = row.get(1)?;
+            let rendered_context: String = row.get(2)?;
+            let provider_request_id: Option<String> = row.get(3)?;
+            let telemetry_json: String = row.get(4)?;
+
+            let trace_index: Option<i32> = row.get(5)?;
+            let tool_name: Option<String> = row.get(6)?;
+            let latency_ms: Option<u32> = row.get(7)?;
+            let outcome: Option<String> = row.get(8)?;
+            let input_payload_json: Option<String> = row.get(9)?;
+            let output_payload_json: Option<String> = row.get(10)?;
+
+            let telemetry: graphbench_core::artifacts::TelemetryCounts =
+                serde_json::from_str(&telemetry_json).unwrap_or_else(|_| {
+                    graphbench_core::artifacts::TelemetryCounts {
+                        prompt_bytes: 0,
+                        prompt_tokens: 0,
+                        latency_ms: 0,
+                        tool_calls: 0,
+                    }
+                });
+
+            let tool_traces: Vec<serde_json::Value> = if let (
+                Some(idx),
+                Some(name),
+                Some(lat),
+                Some(out),
+                Some(inp),
+                Some(oup),
+            ) = (
+                trace_index,
+                tool_name,
+                latency_ms,
+                outcome,
+                input_payload_json,
+                output_payload_json,
+            ) {
+                vec![serde_json::json!({
+                    "tool_name": name,
+                    "latency_ms": lat,
+                    "outcome": out,
+                    "input_payload": serde_json::from_str(&inp).unwrap_or(serde_json::Value::Null),
+                    "output_payload": serde_json::from_str(&oup).unwrap_or(serde_json::Value::Null),
+                })]
+            } else {
+                vec![]
+            };
+
+            let entry = serde_json::json!({
+                "turn_index": turn_index,
+                "rendered_prompt": rendered_prompt,
+                "rendered_context": rendered_context,
+                "provider_request_id": provider_request_id,
+                "telemetry": telemetry,
+                "tool_traces": tool_traces,
+            });
+
+            turns_map.insert(turn_index, entry);
         }
+
+        let entries: Vec<serde_json::Value> = turns_map
+            .into_iter()
+            .map(|(idx, mut entry)| {
+                entry["turn_trace"] = serde_json::json!({
+                    "run_id": run_id,
+                    "turn_index": idx,
+                    "task_id": "",
+                    "fixture_id": "",
+                    "strategy_id": "",
+                });
+                entry.as_object_mut().map(|m| m.remove("turn_index"));
+                entry
+            })
+            .collect();
+
+        let turn_ledger = serde_json::json!({
+            "run_id": run_id,
+            "task_id": "",
+            "fixture_id": "",
+            "entries": entries,
+        });
+
+        Ok(Some(turn_ledger))
     }
 
     // ============ STRATEGIES (append-only) ============
