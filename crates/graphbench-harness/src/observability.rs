@@ -19,6 +19,8 @@ pub struct PayloadBlobRef {
     pub media_type: String,
     pub path: String,
     pub byte_count: u64,
+    #[serde(skip_serializing_if = "Option::is_none")]
+    pub inline_content: Option<String>,
 }
 
 #[derive(Debug, Clone, PartialEq, Eq, Serialize, Deserialize)]
@@ -290,6 +292,7 @@ impl BlobStore {
             media_type: media_type.to_owned(),
             path: path.to_string_lossy().to_string(),
             byte_count: content.len() as u64,
+            inline_content: Some(content.to_owned()),
         })
     }
 }
@@ -347,23 +350,65 @@ pub fn build_observability_bundle(
 
     for (entry, invocation) in ledger.entries.iter().zip(invocations.iter()) {
         let turn_index = entry.turn_trace.turn_index;
-        let request_blob = blob_store.write_text(
-            "blobs",
-            "application/json",
-            &serde_json::to_string_pretty(&invocation.raw_request).unwrap_or_default(),
-        )?;
-        let raw_response_blob = blob_store.write_text(
-            "blobs",
-            "application/json",
-            &serde_json::to_string_pretty(&invocation.raw_response).unwrap_or_default(),
-        )?;
-        let validated_response_blob = blob_store.write_text(
-            "blobs",
-            "application/json",
-            &serde_json::to_string_pretty(&invocation.response).unwrap_or_default(),
-        )?;
-        let prompt_blob = blob_store.write_text("blobs", "text/plain", &entry.rendered_prompt)?;
-        let context_blob = blob_store.write_text("blobs", "text/plain", &entry.rendered_context)?;
+
+        let request_content =
+            serde_json::to_string_pretty(&invocation.raw_request).unwrap_or_default();
+        let raw_response_content =
+            serde_json::to_string_pretty(&invocation.raw_response).unwrap_or_default();
+        let validated_response_content =
+            serde_json::to_string_pretty(&invocation.response).unwrap_or_default();
+
+        let request_blob = {
+            let ref_ = blob_store.write_text("blobs", "application/json", &request_content)?;
+            PayloadBlobRef {
+                blob_id: ref_.blob_id,
+                media_type: ref_.media_type,
+                path: ref_.path,
+                byte_count: ref_.byte_count,
+                inline_content: Some(request_content),
+            }
+        };
+        let raw_response_blob = {
+            let ref_ = blob_store.write_text("blobs", "application/json", &raw_response_content)?;
+            PayloadBlobRef {
+                blob_id: ref_.blob_id,
+                media_type: ref_.media_type,
+                path: ref_.path,
+                byte_count: ref_.byte_count,
+                inline_content: Some(raw_response_content),
+            }
+        };
+        let validated_response_blob = {
+            let ref_ =
+                blob_store.write_text("blobs", "application/json", &validated_response_content)?;
+            PayloadBlobRef {
+                blob_id: ref_.blob_id,
+                media_type: ref_.media_type,
+                path: ref_.path,
+                byte_count: ref_.byte_count,
+                inline_content: Some(validated_response_content),
+            }
+        };
+        let prompt_blob = {
+            let ref_ = blob_store.write_text("blobs", "text/plain", &entry.rendered_prompt)?;
+            PayloadBlobRef {
+                blob_id: ref_.blob_id,
+                media_type: ref_.media_type,
+                path: ref_.path,
+                byte_count: ref_.byte_count,
+                inline_content: Some(entry.rendered_prompt.clone()),
+            }
+        };
+        let context_blob = {
+            let ref_ = blob_store.write_text("blobs", "text/plain", &entry.rendered_context)?;
+            PayloadBlobRef {
+                blob_id: ref_.blob_id,
+                media_type: ref_.media_type,
+                path: ref_.path,
+                byte_count: ref_.byte_count,
+                inline_content: Some(entry.rendered_context.clone()),
+            }
+        };
 
         turn_captures.push(TurnTelemetryCapture {
             turn_index,
@@ -676,6 +721,7 @@ mod tests {
                     media_type: "text/plain".to_owned(),
                     path: "missing.txt".to_owned(),
                     byte_count: 0,
+                    inline_content: None,
                 }],
             }],
             turns: vec![],
@@ -759,6 +805,7 @@ mod tests {
                     media_type: "application/json".to_owned(),
                     path: temp_root.join("request.json").to_string_lossy().to_string(),
                     byte_count: 2,
+                    inline_content: None,
                 },
                 raw_response_blob: PayloadBlobRef {
                     blob_id:
@@ -770,6 +817,7 @@ mod tests {
                         .to_string_lossy()
                         .to_string(),
                     byte_count: 2,
+                    inline_content: None,
                 },
                 validated_response_blob: PayloadBlobRef {
                     blob_id:
@@ -781,6 +829,7 @@ mod tests {
                         .to_string_lossy()
                         .to_string(),
                     byte_count: 2,
+                    inline_content: None,
                 },
                 prompt_blob: PayloadBlobRef {
                     blob_id:
@@ -789,6 +838,7 @@ mod tests {
                     media_type: "text/plain".to_owned(),
                     path: temp_root.join("prompt.txt").to_string_lossy().to_string(),
                     byte_count: 2,
+                    inline_content: None,
                 },
                 context_blob: PayloadBlobRef {
                     blob_id:
@@ -797,6 +847,7 @@ mod tests {
                     media_type: "text/plain".to_owned(),
                     path: temp_root.join("context.txt").to_string_lossy().to_string(),
                     byte_count: 2,
+                    inline_content: None,
                 },
                 provider_request_id: None,
                 telemetry: graphbench_core::artifacts::TelemetryCounts {

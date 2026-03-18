@@ -6,3 +6,5 @@ target
 /.vite
 .env
 *.log
+*.db
+traces/

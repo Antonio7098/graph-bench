@@ -289,9 +289,9 @@ async fn start_run(
     };
     
     // Load fixture from DB if fixture_id is provided
-    let fixture_json = if let Some(ref fid) = fixture_id {
-        match state.db.get_fixture(fid, None) {
-            Ok(Some(fixture_spec)) => Some(fixture_spec),
+    let (fixture_json, graph_snapshot_json) = if let Some(ref fid) = fixture_id {
+        match state.db.get_fixture_with_graph(fid, None) {
+            Ok(Some((fixture_spec, graph_snapshot))) => (Some(fixture_spec), graph_snapshot),
             Ok(None) => {
                 return (axum::http::StatusCode::NOT_FOUND, format!("Fixture {} not found", fid)).into_response();
             }
@@ -300,7 +300,7 @@ async fn start_run(
             }
         }
     } else {
-        None
+        (None, None)
     };
     
     let fixtures_dir = state.fixtures_dir.clone();
@@ -311,6 +311,7 @@ async fn start_run(
         task_spec_json: task_json,
         fixture_path: fixture_path_for_config.unwrap_or_else(|| fixtures_dir.join("graphbench-internal/fixture.json").to_string_lossy().to_string()),
         fixture_json,
+        graph_snapshot_json,
         model_id: model_id_for_config,
         api_key: req.api_key,
         strategy: strategy.clone().unwrap_or_else(|| "graph_then_targeted_lexical_read".to_string()),

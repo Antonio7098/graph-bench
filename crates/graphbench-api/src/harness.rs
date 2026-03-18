@@ -12,12 +12,11 @@ use graphbench_harness::{
     ensure_python_query_runtime_ready, graph_then_targeted_lexical_read,
     graph_tools::LiveGraphState,
     observability::{
-        build_observability_bundle, BlobStore, CapturedEvent, ObservabilityBundle,
+        build_observability_bundle, BlobStore, CapturedEvent,
         RecordedModelInvocation,
     },
     openrouter::OpenRouterClient,
     HarnessEvent, HarnessInput, HarnessRunConfig, HarnessRunner, ObjectiveState, ToolRegistry,
-    TurnLedger,
 };
 use sha2::Digest;
 use tracing::{info, warn};
@@ -31,6 +30,7 @@ pub struct BenchmarkConfig {
     pub task_spec_json: Option<serde_json::Value>,
     pub fixture_path: String,
     pub fixture_json: Option<serde_json::Value>,
+    pub graph_snapshot_json: Option<serde_json::Value>,
     pub model_id: Option<String>,
     pub api_key: Option<String>,
     pub strategy: String,
