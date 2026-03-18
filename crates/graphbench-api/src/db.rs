@@ -1437,17 +1437,22 @@ impl Database {
                 &turn.prompt_blob,
                 &turn.context_blob,
             ] {
-                let payload_type = if payload.path.contains("request") {
-                    "request"
-                } else if payload.path.contains("raw_response") {
-                    "raw_response"
-                } else if payload.path.contains("validated") {
-                    "validated_response"
-                } else if payload.path.contains("prompt") {
-                    "prompt"
-                } else {
-                    "context"
-                };
+                let payload_type =
+                    if std::ptr::eq(payload as *const _, &turn.request_blob as *const _) {
+                        "request"
+                    } else if std::ptr::eq(payload as *const _, &turn.raw_response_blob as *const _)
+                    {
+                        "raw_response"
+                    } else if std::ptr::eq(
+                        payload as *const _,
+                        &turn.validated_response_blob as *const _,
+                    ) {
+                        "validated_response"
+                    } else if std::ptr::eq(payload as *const _, &turn.prompt_blob as *const _) {
+                        "prompt"
+                    } else {
+                        "context"
+                    };
 
                 conn.execute(
                     "INSERT OR REPLACE INTO run_turn_payloads 
