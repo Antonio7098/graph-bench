@@ -1581,9 +1581,57 @@ impl Database {
                 "provider_request_id": provider_request_id,
                 "telemetry": telemetry,
                 "tool_traces": tool_traces,
+                "readiness_state": "",
+                "evidence_delta": Vec::<serde_json::Value>::new(),
             });
 
             turns_map.insert(turn_index, entry);
+        }
+
+        drop(rows);
+        drop(stmt);
+
+        let mut readiness_stmt = conn.prepare(
+            "SELECT turn_index, readiness_state, readiness_reason FROM run_turn_readiness WHERE run_id = ?"
+        )?;
+        let mut readiness_rows = readiness_stmt.query([run_id])?;
+        while let Some(row) = readiness_rows.next()? {
+            let turn_index: u32 = row.get(0)?;
+            let readiness_state: String = row.get(1)?;
+            let readiness_reason: String = row.get(2)?;
+            if let Some(entry) = turns_map.get_mut(&turn_index) {
+                entry["readiness_state"] = serde_json::json!(readiness_state);
+                entry["readiness_reason"] = serde_json::json!(readiness_reason);
+            }
+        }
+
+        drop(readiness_rows);
+        drop(readiness_stmt);
+
+        let mut evidence_stmt = conn.prepare(
+            "SELECT turn_index, evidence_index, evidence_id FROM run_turn_evidence_delta WHERE run_id = ? ORDER BY turn_index, evidence_index"
+        )?;
+        let mut evidence_rows = evidence_stmt.query([run_id])?;
+        let mut current_turn: Option<u32> = None;
+        let mut current_evidence: Vec<serde_json::Value> = Vec::new();
+        while let Some(row) = evidence_rows.next()? {
+            let turn_index: u32 = row.get(0)?;
+            let evidence_id: String = row.get(2)?;
+            if current_turn != Some(turn_index) {
+                if let Some(tidx) = current_turn {
+                    if let Some(entry) = turns_map.get_mut(&tidx) {
+                        entry["evidence_delta"] = serde_json::json!(current_evidence.clone());
+                    }
+                }
+                current_turn = Some(turn_index);
+                current_evidence = Vec::new();
+            }
+            current_evidence.push(serde_json::json!(evidence_id));
+        }
+        if let Some(tidx) = current_turn {
+            if let Some(entry) = turns_map.get_mut(&tidx) {
+                entry["evidence_delta"] = serde_json::json!(current_evidence);
+            }
         }
 
         let entries: Vec<serde_json::Value> = turns_map

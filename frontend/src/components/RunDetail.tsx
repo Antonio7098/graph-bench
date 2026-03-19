@@ -838,8 +838,8 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
                   <span className="turn-index">
                     {selectedTurnIndex === turn.turn_index ? "▼" : "▶"} Turn {turn.turn_index}
                   </span>
-                  <span className={`turn-state ${turn.readiness_state.replace("_", "-")}`}>
-                    {turn.readiness_state.replace("_", " ")}
+                  <span className={`turn-state ${(turn.readiness_state || 'unknown').replace("_", "-")}`}>
+                    {(turn.readiness_state || 'unknown').replace("_", " ")}
                   </span>
                 </div>
                 <div className="turn-telemetry">
@@ -857,7 +857,7 @@ export function RunDetail({ runId, onBack, detail: propDetail }: RunDetailProps)
                   </div>
                   <div className="telemetry-item">
                     <span>Evidence Δ:</span>
-                    <span className="telemetry-value">{turn.evidence_delta.length}</span>
+                    <span className="telemetry-value">{(turn.evidence_delta || []).length}</span>
                   </div>
                 </div>
                 {turn.readiness_reason && (

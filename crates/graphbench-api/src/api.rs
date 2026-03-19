@@ -103,6 +103,15 @@ async fn get_run(
                         if let Some(tc) = e.get("tool_traces") {
                             turn["tool_traces"] = tc.clone();
                         }
+                        if let Some(rs) = e.get("readiness_state") {
+                            turn["readiness_state"] = rs.clone();
+                        }
+                        if let Some(rr) = e.get("readiness_reason") {
+                            turn["readiness_reason"] = rr.clone();
+                        }
+                        if let Some(ed) = e.get("evidence_delta") {
+                            turn["evidence_delta"] = ed.clone();
+                        }
                         turn
                     })
                     .collect::<Vec<_>>()
