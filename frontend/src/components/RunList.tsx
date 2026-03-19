@@ -30,10 +30,12 @@ export function RunList({ onSelectRun, onRunComplete, onRunStarted, runs: propRu
   useEffect(() => {
     if (isDemo) return;
     const interval = setInterval(() => {
-      loadRuns();
+      apiClient.listRuns(Object.keys(filter).length > 0 ? filter : undefined)
+        .then(data => setRuns(data))
+        .catch(() => {});
     }, 3000);
     return () => clearInterval(interval);
-  }, [isDemo]);
+  }, [filter, isDemo]);
 
   async function loadRuns() {
     setLoading(true);

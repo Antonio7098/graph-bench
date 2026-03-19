@@ -75,14 +75,36 @@ async fn get_run(
     
     if let Some(run_summary) = runs.into_iter().find(|r| r.run_id == id) {
         // Try to get saved turn_ledger_data from DB (has full turn_trace with rendered_sections)
-        let turns_from_db = state.db.get_run_output(&id)
+        let db_result = state.db.get_run_output(&id);
+        let turns_from_db = db_result
             .ok()
             .flatten()
             .and_then(|data| data.get("entries").cloned())
             .and_then(|entries| entries.as_array().cloned())
             .map(|entries| {
                 entries.into_iter()
-                    .filter_map(|e| e.get("turn_trace").cloned())
+                    .map(|e| {
+                        let mut turn = serde_json::json!({
+                            "run_id": run_summary.run_id,
+                            "task_id": run_summary.task_id,
+                            "fixture_id": run_summary.fixture_id,
+                            "strategy_id": run_summary.strategy_id,
+                        });
+                        if let Some(tt) = e.get("turn_trace") {
+                            if let Some(obj) = tt.as_object() {
+                                for (k, v) in obj {
+                                    turn[k] = v.clone();
+                                }
+                            }
+                        }
+                        if let Some(t) = e.get("telemetry") {
+                            turn["telemetry"] = t.clone();
+                        }
+                        if let Some(tc) = e.get("tool_traces") {
+                            turn["tool_traces"] = tc.clone();
+                        }
+                        turn
+                    })
                     .collect::<Vec<_>>()
             });
 

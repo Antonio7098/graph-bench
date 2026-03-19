@@ -1183,11 +1183,14 @@ impl Database {
         for (turn_idx, entry) in turn_ledger.entries.iter().enumerate() {
             let turn_index = entry.turn_trace.turn_index;
 
+            let telemetry_json =
+                serde_json::to_string(&entry.turn_trace.telemetry).unwrap_or_default();
+
             // Basic turn data
             conn.execute(
                 "INSERT OR REPLACE INTO run_turns 
-                 (run_id, turn_index, graph_session_before, graph_session_after, rendered_prompt, rendered_context, replay_hash)
-                 VALUES (?, ?, ?, ?, ?, ?, ?)",
+                 (run_id, turn_index, graph_session_before, graph_session_after, rendered_prompt, rendered_context, replay_hash, telemetry_json)
+                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
                 params![
                     output.run_id,
                     turn_index,
@@ -1196,6 +1199,7 @@ impl Database {
                     entry.rendered_prompt,
                     entry.rendered_context,
                     entry.replay_hash,
+                    telemetry_json,
                 ],
             )?;
 
