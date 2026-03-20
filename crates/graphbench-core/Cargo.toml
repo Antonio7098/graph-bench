@@ -9,8 +9,8 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 anyhow = "1.0"
 sha2 = "0.10"
-ucm-core = { path = "/home/antonio/programming/Hivemind/unified-content-protocol/crates/ucm-core" }
-ucp-codegraph = { path = "/home/antonio/programming/Hivemind/unified-content-protocol/crates/ucp-codegraph" }
+ucm-core = "0.1.16"
+ucp-codegraph = "0.1.16"
 
 [lints]
 workspace = true

@@ -1,5 +1,6 @@
 #![allow(unsafe_code)]
 
+mod config;
 mod db;
 mod api;
 mod event_stream;
@@ -13,8 +14,9 @@ use axum::Router;
 use tower_http::cors::{Any, CorsLayer};
 use tracing_subscriber::{layer::SubscriberExt, util::SubscriberInitExt};
 
-use crate::db::Database;
 use crate::api::run_routes;
+use crate::config::{Config, OpenRouterSettings};
+use crate::db::Database;
 use crate::event_stream::EventStream;
 use crate::websocket::ws_handler;
 
@@ -23,12 +25,19 @@ pub struct AppState {
     pub db: Arc<Database>,
     pub event_stream: Arc<EventStream>,
     pub fixtures_dir: PathBuf,
+    pub openrouter: OpenRouterSettings,
 }
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     dotenv::dotenv().ok();
-    
+
+    let config_path = std::env::var("GRAPHBENCH_CONFIG").ok();
+    let config = Config::load(config_path.as_deref().map(std::path::Path::new))?;
+    let openrouter_settings = config
+        .api
+        .openrouter_settings(std::env::var("OPENROUTER_API_KEY").ok());
+
     tracing_subscriber::registry()
         .with(
             tracing_subscriber::EnvFilter::try_from_default_env()
@@ -38,20 +47,25 @@ async fn main() -> anyhow::Result<()> {
         .init();
 
     let port = std::env::var("PORT")
-        .unwrap_or_else(|_| "3001".to_string())
-        .parse::<u16>()?;
+        .ok()
+        .and_then(|value| value.parse::<u16>().ok())
+        .unwrap_or(config.api.port);
 
     let data_dir = std::env::var("DATA_DIR")
         .map(PathBuf::from)
-        .unwrap_or_else(|_| PathBuf::from("/home/antonio/programming/Hivemind/graph-bench/data"));
+        .unwrap_or_else(|_| config.api.data_dir.clone());
 
     let fixtures_dir = std::env::var("FIXTURES_DIR")
         .map(PathBuf::from)
-        .unwrap_or_else(|_| PathBuf::from("/home/antonio/programming/Hivemind/graph-bench/fixtures"));
+        .unwrap_or_else(|_| config.api.fixtures_dir.clone());
 
     std::fs::create_dir_all(&data_dir)?;
 
-    let db_path = data_dir.join("graphbench.db");
+    let db_path = config
+        .api
+        .database_path()
+        .canonicalize()
+        .unwrap_or_else(|_| data_dir.join("graphbench.db"));
     let db = Arc::new(Database::new(&db_path)?);
     
     // Mark any stale "running" runs as failed
@@ -65,6 +79,7 @@ async fn main() -> anyhow::Result<()> {
         db,
         event_stream,
         fixtures_dir,
+        openrouter: openrouter_settings,
     };
 
     let state = Arc::new(state);

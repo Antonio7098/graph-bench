@@ -3,9 +3,10 @@ use axum::{
     extract::{Path, State, Query},
     response::{IntoResponse, Json, Response},
     Router,
+    http::StatusCode,
 };
 use std::sync::Arc;
-use serde_json::json;
+use serde_json::{json, Value};
 
 use crate::db::RunFilter;
 use crate::AppState;
@@ -44,6 +45,52 @@ pub fn run_routes() -> Router<Arc<AppState>> {
         .route("/api/prompts/all", get(list_prompts_with_versions))
         .route("/api/prompts/:id", get(get_prompt))
         .route("/api/prompts/:id/versions", get(list_prompt_versions))
+        .route("/api/openrouter/models", get(list_openrouter_models))
+}
+
+async fn list_openrouter_models(
+    State(state): State<Arc<AppState>>,
+) -> Response {
+    let settings = state.openrouter.clone();
+    let Some(api_key) = settings.api_key.clone().filter(|key| !key.trim().is_empty()) else {
+        return (
+            StatusCode::SERVICE_UNAVAILABLE,
+            "OpenRouter API key is not configured on the server".to_string(),
+        )
+            .into_response();
+    };
+
+    let client = reqwest::Client::new();
+    match client
+        .get("https://openrouter.ai/api/v1/models")
+        .header("Authorization", format!("Bearer {}", api_key))
+        .header("HTTP-Referer", settings.referer.clone())
+        .header("X-Title", settings.app_title.clone())
+        .send()
+        .await
+    {
+        Ok(resp) => {
+            let status = resp.status();
+            match resp.json::<Value>().await {
+                Ok(body) if status.is_success() => Json(body).into_response(),
+                Ok(body) => (
+                    StatusCode::BAD_GATEWAY,
+                    format!("OpenRouter returned {}: {}", status, body),
+                )
+                    .into_response(),
+                Err(err) => (
+                    StatusCode::BAD_GATEWAY,
+                    format!("Failed to parse OpenRouter response: {}", err),
+                )
+                    .into_response(),
+            }
+        }
+        Err(err) => (
+            StatusCode::BAD_GATEWAY,
+            format!("Failed to contact OpenRouter: {}", err),
+        )
+            .into_response(),
+    }
 }
 
 async fn list_runs(
@@ -336,6 +383,19 @@ async fn start_run(
     
     let fixtures_dir = state.fixtures_dir.clone();
     
+    let openrouter_settings = state.openrouter.clone();
+    let resolved_api_key = req
+        .api_key
+        .clone()
+        .or_else(|| openrouter_settings.api_key.clone());
+    if resolved_api_key.is_none() {
+        return (
+            StatusCode::SERVICE_UNAVAILABLE,
+            "OpenRouter API key is not configured on the server".to_string(),
+        )
+            .into_response();
+    }
+
     let config = crate::harness::BenchmarkConfig {
         run_id: run_id.clone(),
         task_spec_path: task_spec_path_for_config.unwrap_or_else(|| "tasks/prepare-to-edit/task-01.task.json".to_string()),
@@ -344,7 +404,7 @@ async fn start_run(
         fixture_json,
         graph_snapshot_json,
         model_id: model_id_for_config,
-        api_key: req.api_key,
+        api_key: resolved_api_key,
         strategy: strategy.clone().unwrap_or_else(|| "graph_then_targeted_lexical_read".to_string()),
         turn_budget,
         timeout_ms,

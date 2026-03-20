@@ -1,0 +1,12 @@
+[api]
+# Port that the HTTP server listens on
+port = 3001
+# Directory where run data (including the SQLite DB) is stored
+data_dir = "./data"
+# Directory containing harness fixtures
+fixtures_dir = "./fixtures"
+# Optional explicit path to the SQLite database file. If omitted, defaults to `${data_dir}/graphbench.db`.
+database_path = "./data/graphbench.db"
+# Optional OpenRouter settings (api_key can also come from the OPENROUTER_API_KEY env var)
+openrouter_app_title = "GraphBench"
+openrouter_referer = "http://localhost:5173"

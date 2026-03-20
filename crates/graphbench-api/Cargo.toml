@@ -24,6 +24,8 @@ thiserror = "1"
 dotenv = "0.15"
 rand = "0.8"
 sha2 = "0.10"
+reqwest = { version = "0.11", default-features = false, features = ["json", "rustls-tls"] }
+toml = "0.8"
 
 graphbench-core = { path = "../graphbench-core" }
 graphbench-harness = { path = "../graphbench-harness" }

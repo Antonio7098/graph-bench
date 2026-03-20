@@ -1,0 +1,95 @@
+{
+  "id": "codegraph:stageflow:main",
+  "root": "blk_0000000000000000000000000",
+  "structure": {
+    "blk_0000000000000000000000000": [
+      "blk_stageflow_api",
+      "blk_stageflow_pipeline",
+      "blk_stageflow_stages"
+    ],
+    "blk_stageflow_api": [
+      "blk_stageflow_api_pipeline",
+      "blk_stageflow_api_stagecontext"
+    ],
+    "blk_stageflow_pipeline": [
+      "blk_stageflow_pipeline_dag",
+      "blk_stageflow_pipeline_registry"
+    ],
+    "blk_stageflow_stages": [
+      "blk_stageflow_stages_context",
+      "blk_stageflow_stages_inputs"
+    ]
+  },
+  "nodes": {
+    "blk_0000000000000000000000000": {
+      "id": "blk_0000000000000000000000000",
+      "kind": "root",
+      "summary": "Stageflow root directory",
+      "language": "python",
+      "path": "stageflow"
+    },
+    "blk_stageflow_api": {
+      "id": "blk_stageflow_api",
+      "kind": "module",
+      "summary": "Stageflow API module",
+      "language": "python",
+      "path": "stageflow/api.py"
+    },
+    "blk_stageflow_pipeline": {
+      "id": "blk_stageflow_pipeline",
+      "kind": "module",
+      "summary": "Stageflow pipeline module",
+      "language": "python",
+      "path": "stageflow/pipeline"
+    },
+    "blk_stageflow_stages": {
+      "id": "blk_stageflow_stages",
+      "kind": "module",
+      "summary": "Stageflow stages module",
+      "language": "python",
+      "path": "stageflow/stages"
+    },
+    "blk_stageflow_api_pipeline": {
+      "id": "blk_stageflow_api_pipeline",
+      "kind": "class",
+      "summary": "Pipeline class for building DAG-based pipelines",
+      "language": "python",
+      "path": "stageflow/api.py"
+    },
+    "blk_stageflow_api_stagecontext": {
+      "id": "blk_stageflow_api_stagecontext",
+      "kind": "class",
+      "summary": "StageContext class for stage execution context",
+      "language": "python",
+      "path": "stageflow/api.py"
+    },
+    "blk_stageflow_pipeline_dag": {
+      "id": "blk_stageflow_pipeline_dag",
+      "kind": "class",
+      "summary": "DAG class for managing stage dependencies",
+      "language": "python",
+      "path": "stageflow/pipeline/dag.py"
+    },
+    "blk_stageflow_pipeline_registry": {
+      "id": "blk_stageflow_pipeline_registry",
+      "kind": "class",
+      "summary": "Registry class for stage registration",
+      "language": "python",
+      "path": "stageflow/pipeline/registry.py"
+    },
+    "blk_stageflow_stages_context": {
+      "id": "blk_stageflow_stages_context",
+      "kind": "class",
+      "summary": "StageContext implementation",
+      "language": "python",
+      "path": "stageflow/stages/context.py"
+    },
+    "blk_stageflow_stages_inputs": {
+      "id": "blk_stageflow_stages_inputs",
+      "kind": "class",
+      "summary": "StageInputs for accessing stage outputs",
+      "language": "python",
+      "path": "stageflow/stages/inputs.py"
+    }
+  }
+}

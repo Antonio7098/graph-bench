@@ -4,6 +4,15 @@ import { apiClient, type RunSummary, type RunFilter } from "../api/client";
 import { mockRuns } from "../api/mock";
 import { Button } from "./Button";
 
+interface OpenRouterModel {
+  id: string;
+  name?: string;
+  description?: string;
+  context_length?: number;
+}
+
+const OPENROUTER_MODELS_ENDPOINT = "https://openrouter.ai/api/v1/models";
+
 interface RunListProps {
   onSelectRun: (runId: string) => void;
   onRunComplete?: (runId: string) => void;
@@ -214,7 +223,6 @@ function RunBenchmarkModal({ onClose, onRunComplete, onRunStarted }: RunBenchmar
   const [taskId, setTaskId] = useState("");
   const [fixtureId, setFixtureId] = useState("graphbench-internal");
   const [modelId, setModelId] = useState("");
-  const [apiKey, setApiKey] = useState("");
   const [strategy, setStrategy] = useState("graph_then_targeted_lexical_read");
   const [turnBudget, setTurnBudget] = useState("48");
   const [timeoutMs, setTimeoutMs] = useState("300000");
@@ -231,6 +239,9 @@ function RunBenchmarkModal({ onClose, onRunComplete, onRunStarted }: RunBenchmar
   const [availableFixtures, setAvailableFixtures] = useState<string[]>([]);
   const [loadingOptions, setLoadingOptions] = useState(true);
   const [optionsError, setOptionsError] = useState<string | null>(null);
+  const [openRouterModels, setOpenRouterModels] = useState<OpenRouterModel[]>([]);
+  const [modelsLoading, setModelsLoading] = useState(false);
+  const [modelsError, setModelsError] = useState<string | null>(null);
   const logsEndRef = useRef<HTMLDivElement>(null);
   const wsRef = useRef<WebSocket | null>(null);
 
@@ -257,6 +268,45 @@ function RunBenchmarkModal({ onClose, onRunComplete, onRunStarted }: RunBenchmar
       }
     }
     loadOptions();
+  }, []);
+
+  useEffect(() => {
+    let cancelled = false;
+
+    async function loadOpenRouterModels() {
+      setModelsLoading(true);
+      setModelsError(null);
+      try {
+        const response = await fetch(`${window.location.protocol}//${window.location.hostname}:3001/api/openrouter/models`);
+        if (!response.ok) {
+          const text = await response.text();
+          throw new Error(text || `Failed to fetch models: ${response.status}`);
+        }
+
+        const payload = (await response.json()) as { data?: OpenRouterModel[] };
+        if (!cancelled) {
+          const models = payload.data ?? [];
+          setOpenRouterModels(models);
+          setModelId(prev => prev || models[0]?.id || "");
+        }
+      } catch (e) {
+        if (!cancelled) {
+          const message = e instanceof Error ? e.message : "Unable to load models from OpenRouter";
+          setModelsError(message);
+          setOpenRouterModels([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setModelsLoading(false);
+        }
+      }
+    }
+
+    loadOpenRouterModels();
+
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   function addLog(message: string, type: LogLine["type"] = "info", data?: Record<string, unknown>) {
@@ -408,7 +458,6 @@ function RunBenchmarkModal({ onClose, onRunComplete, onRunStarted }: RunBenchmar
           task_id: taskId || undefined,
           fixture_id: fixtureId || undefined,
           model_id: modelId || undefined,
-          api_key: apiKey || undefined,
           strategy: strategy || undefined,
           turn_budget: turnBudget ? parseInt(turnBudget) : undefined,
           timeout_ms: timeoutMs ? parseInt(timeoutMs) : undefined,
@@ -549,24 +598,33 @@ function RunBenchmarkModal({ onClose, onRunComplete, onRunStarted }: RunBenchmar
                 </div>
 
                 <div className="form-group">
-                  <label>Model ID (optional)</label>
+                  <label>Model (OpenRouter)</label>
+                  <select
+                    value={openRouterModels.some(m => m.id === modelId) ? modelId : ""}
+                    onChange={(e) => setModelId(e.target.value)}
+                    disabled={modelsLoading || openRouterModels.length === 0}
+                  >
+                    <option value="">-- Select model --</option>
+                    {openRouterModels.map(model => (
+                      <option key={model.id} value={model.id}>
+                        {model.name || model.id}
+                      </option>
+                    ))}
+                  </select>
+                  {modelsLoading && <small style={{ color: "var(--color-text-muted)" }}>Loading OpenRouter models…</small>}
+                  {modelsError && (!modelsLoading) && (
+                    <small style={{ color: "#ef4444" }}>{modelsError}</small>
+                  )}
                   <input
                     type="text"
                     value={modelId}
                     onChange={(e) => setModelId(e.target.value)}
-                    placeholder="Leave empty for default model"
+                    placeholder="Custom model ID (optional)"
+                    style={{ marginTop: "0.5rem" }}
                   />
                 </div>
 
-                <div className="form-group">
-                  <label>API Key (optional)</label>
-                  <input
-                    type="password"
-                    value={apiKey}
-                    onChange={(e) => setApiKey(e.target.value)}
-                    placeholder="API key for model provider"
-                  />
-                </div>
+                
 
                 <div className="form-group">
                   <label>Turn Budget</label>

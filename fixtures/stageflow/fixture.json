@@ -1,0 +1,19 @@
+{
+  "fixture_id": "stageflow",
+  "schema_version": 1,
+  "repository": {
+    "source": "../../../stageflow",
+    "commit_sha": "main",
+    "mirror_policy": "workspace"
+  },
+  "graph": {
+    "snapshot_id": "sha256:placeholder",
+    "snapshot_format": "codegraph_portable_document",
+    "snapshot_ref": "graph.snapshot.json"
+  },
+  "languages": ["python"],
+  "metadata": {
+    "title": "Stageflow Fixture",
+    "notes": "The Stageflow pipeline orchestration framework for benchmarking"
+  }
+}
